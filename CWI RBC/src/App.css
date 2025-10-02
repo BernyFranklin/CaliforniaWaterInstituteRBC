@@ -1,42 +1,64 @@
 #root {
   max-width: 1280px;
+  min-width: 320px;
   margin: 0 auto;
+  font-family: 'Mona Sans', sans-serif;
+}
+
+body {
+  background-color: #fff;
+}
+
+.navbar {
+  background-color: #b1102b;
   padding: 2rem;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: black 0px 0px 10px -1px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  justify-content: flex-end;
+  align-self: flex-end;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.nav-links a {
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 500;
+  transition: transform 0.3s ease;
+}
+
+
+
+.nav-links a:hover {
+  text-decoration: underline;
+  transform: translateY(-2px);
+}
+
+@media screen and (max-width: 1000px) {
+  .navbar {
+    display: block;
+    text-align: center;
+    padding: 1rem;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .nav-links {
+    padding-top: 1rem;
+    flex-direction: column;
+    gap: 0;
+  }  
+
+  .nav-links a {
+    transition: none;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  .nav-links a:hover {
+    transform: none;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
