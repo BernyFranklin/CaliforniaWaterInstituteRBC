@@ -8,6 +8,7 @@ function App() {
     <>
       <Component.Navbar />
       <Component.Hero />
+      <Component.AboutSection />
       <Component.Footer />
     </>
   )
