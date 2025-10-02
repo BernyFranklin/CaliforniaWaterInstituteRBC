@@ -36,13 +36,14 @@ export function Hero() {
 export function Footer() {
     return (
         <footer className="footer">
+          <div className="footer-container" id="footer-top">
             <div class="footer-card" id="footer-info">
                 <h2 className="footer-title">California Water Institute</h2>
                 <p className="footer-text">The California Water Institute (CWI) is located at California State University, Fresno and focuses on all aspects of sustainable water resource management solutions through outreach, entrepreneurship, education, testing, and interdisciplinary research.</p>
                 <div className="footer-socials">
-                    <div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-x-twitter" /></div>
-                    <div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-youtube" /></div>
-                    <div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-linkedin" /></div>
+                    <a href="#"><div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-x-twitter" /></div></a>
+                    <a href="#"><div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-youtube" /></div></a>
+                    <a href="#"><div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-linkedin" /></div></a>
                 </div>
             </div>
             <div className="footer-card" id="footer-links">
@@ -52,6 +53,10 @@ export function Footer() {
                 <a href="#">Divison of Reasearch and Education</a>
                 <button className="footer-button">Subscribe</button>
             </div>
+          </div>
+          <div className="footer-container" id="footer-bottom">
+                <p>&copy; Fresno State 2025</p>
+          </div>
         </footer>
     )
 }
