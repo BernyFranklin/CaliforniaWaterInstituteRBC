@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <nav className="navbar">
         <span className="nav-logo">
-          <img src="./src/assets/logo-300x62.png" alt="CWI Logo" className="cwi-logo" />
+          <a href="#"><img src="./src/assets/logo-300x62.png" alt="CWI Logo" className="cwi-logo" /></a>
         </span>
         <span className="nav-links">
           <a href="#">About</a>
@@ -16,11 +16,22 @@ function Navbar() {
   )
 }
 
+function Hero() {
+  return (
+    <div className="hero">
+      <h1>California Water Institute</h1>
+      <p>Innovative Solutions for Sustainable Water Management</p>
+      <button className="hero-button">Learn More</button>
+    </div>
+  )
+}
+
 function App() {
   
   return (
     <>
       <Navbar />
+      <Hero />
     </>
   )
 }
