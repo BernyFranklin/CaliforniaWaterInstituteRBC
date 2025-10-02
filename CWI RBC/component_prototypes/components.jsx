@@ -36,7 +36,7 @@ export function Hero() {
 export function Footer() {
     return (
         <footer className="footer">
-            <div class="footer-card"id="footer-info">
+            <div class="footer-card" id="footer-info">
                 <h2 className="footer-title">California Water Institute</h2>
                 <p className="footer-text">The California Water Institute (CWI) is located at California State University, Fresno and focuses on all aspects of sustainable water resource management solutions through outreach, entrepreneurship, education, testing, and interdisciplinary research.</p>
                 <div className="footer-socials">
@@ -44,6 +44,13 @@ export function Footer() {
                     <div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-youtube" /></div>
                     <div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-linkedin" /></div>
                 </div>
+            </div>
+            <div className="footer-card" id="footer-links">
+                <h2 className="footer-title">Divisions</h2>
+                <a href="#">Center for Irrigation Technology (CIT)</a>
+                <a href="#">Water Energy and Technology Center (WET)</a>
+                <a href="#">Divison of Reasearch and Education</a>
+                <button className="footer-button">Subscribe</button>
             </div>
         </footer>
     )
