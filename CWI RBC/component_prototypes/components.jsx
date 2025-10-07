@@ -76,3 +76,62 @@ export function AboutSection() {
     </section>
   )
 }
+
+export function RechargeBasinCalculator() {
+  return (
+    <section className="has-shadow" id="calculator-section">
+      <div id="calculator-header">
+        <h2>Water Recharge Basin Calculator</h2>
+        <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
+      </div>
+      <ProgressBar />
+      <div id="calculator-form">
+        <form>
+          <fieldset className="form-fieldset">
+            <legend className="fieldset-label">Basin Size and Design</legend>
+            <label for="ac_pond">Acres of Pond Surface Area</label>
+            <input type="number" id="ac_pond" name="ac_pond" min="0" placeholder="160" />
+            <label for="length_pond">Length of Pond (ft)</label>
+            <input type="number" id="length_pond" name="length_pond" min="0" placeholder="2640" />
+            <label for="width_pond">Width of Pond (ft)</label>
+            <input type="number" id="width_pond" name="width_pond" min="0" placeholder="2640"/>
+            <label for="inside_slope_ratio">Inside Slope Ratio (N:1)</label>
+            <input type="number" id="inside_slope_ratio" name="inside_slope_ratio" min="0" placeholder="4"/>
+            <label for="outside_slope_ratio">Outside Slope Ratio (N:1)</label>
+            <input type="number" id="outside_slope_ratio" name="outside_slope_ratio" min="0" placeholder="2"/>
+            <label for="levee_width">Levee Width (ft)</label>
+            <input type="number" id="levee_width" name="levee_width" min="0" placeholder="8"/>
+            <label for="slope_across_pond">Slope Across Pond (N:1ft)</label>
+            <input type="number" id="slope_across_pond" name="slope_across_pond" min="0" placeholder="0.5" step="0.1"/>
+            <label for="freeboard_depth">Freeboard Depth (ft)</label>
+            <input type="number" id="freeboard_depth" name="freeboard_depth" min="0" placeholder="1"/>
+            <label for="infiltration_rate">Infiltration Rate (ft/day)</label>
+            <input type="number" id="infiltration_rate" name="infiltration_rate" min="0" placeholder="0.6"/>
+            <label for="soil_type">Soil Type</label>
+            <select id="soil_type" name="soil_type">
+              <option value="default" disabled selected>Select soil type</option>
+              <option value="sand">Sand</option>
+              <option value="sandy_fine_layering">Sandy with some fine layering</option>
+              <option value="loam">Loam</option>
+              <option value="loam_fine_layering">Loam with some fine layering</option>
+              <option value="silt_clay_loam">Silt or Clay Loam</option>
+              <option value="silt_clay_loam_fine_layering">Silt or Clay Loam with some fine layering</option>
+              <option value="clay_restrictive_layers">Clay soil with restrictive layers</option>
+            </select>
+          </fieldset>
+        </form>
+      </div>
+    </section>
+  )
+}
+
+export function ProgressBar() {
+  return (
+    <div id="progress-bar" class="progress-bar-container">
+      <span className="progress-bar progress-bar-fill" id="progress-bar-left">1. Basin Size and Design</span>
+      <span className="progress-bar progress-bar-fill" id="progress-bar-center">2. Water Availability</span>
+      <span className="progress-bar progress-bar-fill" id="progress-bar-center">3. Development Costs</span>
+      <span className="progress-bar progress-bar-empty" id="progress-bar-right">4. Water Costs</span>
+    </div>
+  )
+}
