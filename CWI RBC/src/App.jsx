@@ -7,6 +7,7 @@ function App() {
   return (
     <>
       <Component.Navbar />
+      <Component.Hero />
       <Component.RechargeBasinCalculator />
       <Component.Footer />
     </>

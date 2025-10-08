@@ -8,6 +8,10 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 library.add(fas, far, fab)
 
+export function Button({ className, text }) {
+  return <button className={className}>{text}</button>;
+}
+
 export function Navbar() {
   return (
     <nav className="navbar has-shadow">
@@ -28,10 +32,11 @@ export function Hero() {
     <div className="hero has-shadow">
       <h1>California Water Institute</h1>
       <p>Innovative Solutions for Sustainable Water Management</p>
-      <button className="hero-button">Learn More</button>
+      <Button className="hero-button" text="Learn More" />
     </div>
   )
 }
+
 
 export function Footer() {
     return (
@@ -51,7 +56,7 @@ export function Footer() {
                 <a href="#">Center for Irrigation Technology (CIT)</a>
                 <a href="#">Water Energy and Technology Center (WET)</a>
                 <a href="#">Divison of Reasearch and Education</a>
-                <button className="footer-button">Subscribe</button>
+                <Button className="footer-button" text="Contact Us" />
             </div>
           </div>
           <div className="footer-container" id="footer-bottom">
@@ -77,6 +82,51 @@ export function AboutSection() {
   )
 }
 
+export function BasinSizeAndDesign() {
+  const labels = [
+    { text: "Acres of Pond Surface Area", id: "ac_pond", type: "number", min: "0", placeholder: "160"},
+    { text: "Length of Pond (ft)", id: "length_pond", type: "number", min: "0", placeholder: "2640" },
+    { text: "Width of Pond (ft)", id: "width_pond", type: "number", min: "0", placeholder: "2640" },
+    { text: "Inside Slope Ratio (N:1)", id: "inside_slope_ratio", type: "number", min: "0", placeholder: "4" },
+    { text: "Outside Slope Ratio (N:1)", id: "outside_slope_ratio", type: "number", min: "0", placeholder: "2" },
+    { text: "Levee Width (ft)", id: "levee_width", type: "number", min: "0", placeholder: "8" },
+    { text: "Slope Across Pond (N:1ft)", id: "slope_across_pond", type: "number", min: "0", placeholder: "0.5", step: "0.1" },
+    { text: "Freeboard Depth (ft)", id: "freeboard_depth", type: "number", min: "0", placeholder: "1" },
+    { text: "Infiltration Rate (ft/day)", id: "infiltration_rate", type: "number", min: "0", placeholder: "0.6" } 
+  ]
+
+  const soilOptions = [
+    { value: "sand", text: "Sand" },
+    { value: "sandy_fine_layering", text: "Sandy with some fine layering" },
+    { value: "loam", text: "Loam" },
+    { value: "loam_fine_layering", text: "Loam with some fine layering" },
+    { value: "silt_clay_loam", text: "Silt or Clay Loam" },
+    { value: "silt_clay_loam_fine_layering", text: "Silt or Clay Loam with some fine layering" },
+    { value: "clay_restrictive_layers", text: "Clay soil with restrictive layers" }
+  ]
+
+  return (
+    <fieldset className="form-fieldset">
+      <legend className="fieldset-label">Basin Size and Design</legend>
+      {labels.map((label) => (
+        <div className="input-group">
+          <label for={label.id}>{label.text}</label>
+          <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
+        </div>
+      ))}
+      <div className="input-group">
+        <label for="soil_type">Soil Type</label>
+        <select id="soil_type" name="soil_type">
+          <option value="default" disabled selected>Select soil type</option>
+            {soilOptions.map((option) => (
+          <option value={option.value}>{option.text}</option>
+          ))}
+        </select>
+      </div>
+    </fieldset>
+  )
+}
+
 export function RechargeBasinCalculator() {
   return (
     <section className="has-shadow" id="calculator-section">
@@ -87,38 +137,7 @@ export function RechargeBasinCalculator() {
       <ProgressBar />
       <div id="calculator-form">
         <form>
-          <fieldset className="form-fieldset">
-            <legend className="fieldset-label">Basin Size and Design</legend>
-            <label for="ac_pond">Acres of Pond Surface Area</label>
-            <input type="number" id="ac_pond" name="ac_pond" min="0" placeholder="160" />
-            <label for="length_pond">Length of Pond (ft)</label>
-            <input type="number" id="length_pond" name="length_pond" min="0" placeholder="2640" />
-            <label for="width_pond">Width of Pond (ft)</label>
-            <input type="number" id="width_pond" name="width_pond" min="0" placeholder="2640"/>
-            <label for="inside_slope_ratio">Inside Slope Ratio (N:1)</label>
-            <input type="number" id="inside_slope_ratio" name="inside_slope_ratio" min="0" placeholder="4"/>
-            <label for="outside_slope_ratio">Outside Slope Ratio (N:1)</label>
-            <input type="number" id="outside_slope_ratio" name="outside_slope_ratio" min="0" placeholder="2"/>
-            <label for="levee_width">Levee Width (ft)</label>
-            <input type="number" id="levee_width" name="levee_width" min="0" placeholder="8"/>
-            <label for="slope_across_pond">Slope Across Pond (N:1ft)</label>
-            <input type="number" id="slope_across_pond" name="slope_across_pond" min="0" placeholder="0.5" step="0.1"/>
-            <label for="freeboard_depth">Freeboard Depth (ft)</label>
-            <input type="number" id="freeboard_depth" name="freeboard_depth" min="0" placeholder="1"/>
-            <label for="infiltration_rate">Infiltration Rate (ft/day)</label>
-            <input type="number" id="infiltration_rate" name="infiltration_rate" min="0" placeholder="0.6"/>
-            <label for="soil_type">Soil Type</label>
-            <select id="soil_type" name="soil_type">
-              <option value="default" disabled selected>Select soil type</option>
-              <option value="sand">Sand</option>
-              <option value="sandy_fine_layering">Sandy with some fine layering</option>
-              <option value="loam">Loam</option>
-              <option value="loam_fine_layering">Loam with some fine layering</option>
-              <option value="silt_clay_loam">Silt or Clay Loam</option>
-              <option value="silt_clay_loam_fine_layering">Silt or Clay Loam with some fine layering</option>
-              <option value="clay_restrictive_layers">Clay soil with restrictive layers</option>
-            </select>
-          </fieldset>
+          <BasinSizeAndDesign />
         </form>
       </div>
     </section>
