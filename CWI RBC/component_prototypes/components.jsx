@@ -84,19 +84,23 @@ export function AboutSection() {
 }
 
 export function RechargeBasinCalculator() {
+  const contents = [
+    <BasinSizeAndDesign />, <WaterAvailability />, <DevelopmentCosts />, <WaterCosts />
+  ]
+
+  const [content, setContent] = useState(0);
+
+
   return (
     <section className="has-shadow" id="calculator-section">
       <div id="calculator-header">
         <h2>Water Recharge Basin Calculator</h2>
         <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
       </div>
-      <ProgressBar />
+      <ProgressBar current={content} />
       <div id="calculator-form">
         <form>
-          <BasinSizeAndDesign />
-          <WaterAvailability />
-          <DevelopmentCosts />
-          <WaterCosts />
+          { contents[content] }
         </form>
         <ButtonBar />
       </div>
@@ -104,18 +108,36 @@ export function RechargeBasinCalculator() {
   )
 }
 
-export function ProgressBar() {
+function ProgressBar({ current }) {
+  const temp = current;
+  console.log("enter progressbar, current = ", temp);
+
+  const sections = [
+    { index: 0, id: "progress-bar-left", text: "Basin Size and Design" },
+    { index: 1, id: "progress-bar-center-left", text: "Water Availability" },
+    { index: 2, id: "progress-bar-center-right", text: "Development Costs" },
+    { index: 3, id: "progress-bar-right", text: "Water Costs" }
+  ]
+
+  const [progress, setProgress] = useState(0);
+
+  const sectionColor = (passed) => {
+    return (
+      ( passed <= temp) ? "progress-bar-fill" : "progress-bar-empty"
+    )
+  }
+
   return (
     <div id="progress-bar" className="progress-bar-container">
-      <span className="progress-bar progress-bar-fill" id="progress-bar-left">Basin Size and Design</span>
-      <span className="progress-bar progress-bar-fill" id="progress-bar-center">Water Availability</span>
-      <span className="progress-bar progress-bar-fill" id="progress-bar-center">Development Costs</span>
-      <span className="progress-bar progress-bar-empty" id="progress-bar-right">Water Costs</span>
+      {sections.map((section) => (
+        <span className={`progress-bar ${sectionColor(section.index)}`} id={section.id} key={section.id}>{section.text}</span> 
+        )
+      )}
     </div>
   )
 }
 
-export function ButtonBar() {
+function ButtonBar() {
   return (
     <div className="button-bar">
       <span className="button-bar-left">
@@ -128,7 +150,7 @@ export function ButtonBar() {
   )
 }
 
-export function BasinSizeAndDesign() {
+function BasinSizeAndDesign() {
   const labels = [
     { text: "Acres of Pond Surface Area", id: "ac_pond", type: "number", min: "0", placeholder: "160"},
     { text: "Length of Pond (ft)", id: "length_pond", type: "number", min: "0", placeholder: "2640" },
@@ -173,7 +195,7 @@ export function BasinSizeAndDesign() {
   )
 }
 
-export function WaterAvailability() {
+function WaterAvailability() {
   const labels = [
     { text: "Wet Year Frequency (%)",  id: "wet_year_freq", type: "number", min: "0", max: "100", placeholder: "30" },
     { text: "# of Wet Months Per Year", id: "num_wet_months", type: "number", min: "0", max: "12", placeholder: "4" }
@@ -192,7 +214,7 @@ export function WaterAvailability() {
   )
 }
 
-export function DevelopmentCosts() {
+function DevelopmentCosts() {
   const labels = [
     { text: "Land Cost Per Acre" , id: "land_cost_per_acre", type: "number", min: "0", placeholder: "6000" },
     { text: "Total ft of Pipeline", id: "pipeline_length", type: "number", min: "0", placeholder: "2640" },
@@ -213,7 +235,7 @@ export function DevelopmentCosts() {
   )
 }
 
-export function WaterCosts() {
+function WaterCosts() {
   const labels = [
     { text: "Cost of Reacharge Water ($/AF)" , id: "cost_recharge_water", type: "number", min: "0", placeholder: "35" },
     { text: "Value of Stored Water ($/AF)", id: "value_stored_water", type: "number", min: "0", placeholder: "200" },
@@ -237,12 +259,4 @@ export function ConceptDesign() {
   return (
     <h2>Concept Design Placeholder</h2>
   )
-}
-
-export function Main() {
-    return (
-        <>
-          <Navbar />
-        </>
-    )
 }
