@@ -348,6 +348,15 @@ span.progress-bar {
   padding: 0.5rem
 }
 
+#concept-design-section {
+  background-color: #fff;
+  color: #000;
+  padding: 3rem;
+  text-align: center;
+  margin: 0;
+  height: 100vh; /*Change later*/
+}
+
 @media screen and (max-width: 1000px) {
   .navbar {
     display: block;
@@ -358,7 +367,8 @@ span.progress-bar {
   .nav-links {
     padding-top: 1rem;
     justify-content: flex-start;
-    padding-left: 3rem;
+    align-items: center;
+    padding: 1rem 3rem;
   }  
 
   .nav-links a {

@@ -15,7 +15,9 @@ export function Hero() {
     <div className="hero has-shadow">
       <h1>California Water Institute</h1>
       <p>Innovative Solutions for Sustainable Water Management</p>
-      <Button className="red-button" text="Learn More" />
+      <a href="https://www.californiawater.org/news/" target="_blank">
+        <Button className="red-button" text="Learn More" />
+      </a>
     </div>
   )
 }
@@ -38,7 +40,9 @@ export function AboutSection() {
 
 export function ConceptDesign() {
   return (
-    <h2>Concept Design Placeholder</h2>
+    <div className="has-shadow" id="concept-design-section">
+      <h2>Concept Design Placeholder</h2>
+    </div>
   )
 }
 
