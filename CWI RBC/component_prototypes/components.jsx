@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -8,7 +9,8 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 library.add(fas, far, fab)
 
-export function Button({ className, text }) {
+
+function Button({ className, text }) {
   return <button className={className}>{text}</button>;
 }
 
@@ -41,7 +43,7 @@ export function Footer() {
     return (
         <footer className="footer has-shadow">
           <div className="footer-container" id="footer-top">
-            <div class="footer-card" id="footer-info">
+            <div className="footer-card" id="footer-info">
                 <h2 className="footer-title">California Water Institute</h2>
                 <p className="footer-text">The California Water Institute (CWI) is located at California State University, Fresno and focuses on all aspects of sustainable water resource management solutions through outreach, entrepreneurship, education, testing, and interdisciplinary research.</p>
                 <div className="footer-socials">
@@ -104,7 +106,7 @@ export function RechargeBasinCalculator() {
 
 export function ProgressBar() {
   return (
-    <div id="progress-bar" class="progress-bar-container">
+    <div id="progress-bar" className="progress-bar-container">
       <span className="progress-bar progress-bar-fill" id="progress-bar-left">Basin Size and Design</span>
       <span className="progress-bar progress-bar-fill" id="progress-bar-center">Water Availability</span>
       <span className="progress-bar progress-bar-fill" id="progress-bar-center">Development Costs</span>
@@ -153,17 +155,17 @@ export function BasinSizeAndDesign() {
     <fieldset className="form-fieldset">
       <legend className="fieldset-label">Basin Size and Design</legend>
       {labels.map((label) => (
-        <div className="input-group">
-          <label for={label.id}>{label.text}</label>
+        <div className="input-group" key={label.id}>
+          <label htmlFor={label.id}>{label.text}</label>
           <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
         </div>
       ))}
       <div className="input-group">
-        <label for="soil_type">Soil Type</label>
+        <label htmlFor="soil_type">Soil Type</label>
         <select id="soil_type" name="soil_type">
-          <option value="default" disabled selected>Select soil type</option>
+          <option value="default" disabled>Select soil type</option>
             {soilOptions.map((option) => (
-          <option value={option.value}>{option.text}</option>
+          <option value={option.value} key={option.value}>{option.text}</option>
           ))}
         </select>
       </div>
@@ -181,8 +183,8 @@ export function WaterAvailability() {
     <fieldset className="form-fieldset ">
       <legend className="fieldset-label">Water Availability</legend>
       {labels.map((label) => (
-        <div className="input-group">
-          <label for={label.id}>{label.text}</label>
+        <div className="input-group" key={label.id}>
+          <label htmlFor={label.id}>{label.text}</label>
           <input type={label.type} id={label.id} name={label.id} min={label.min} max={label.max} placeholder={label.placeholder} />
         </div>
       ))}
@@ -202,8 +204,8 @@ export function DevelopmentCosts() {
     <fieldset className="form-fieldset">
       <legend className="fieldset-label">Development Costs</legend>
       {labels.map((label) => (
-        <div className="input-group">
-          <label for={label.id}>{label.text}</label>
+        <div className="input-group" key={label.id}>
+          <label htmlFor={label.id}>{label.text}</label>
           <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
         </div>
       ))}
@@ -222,11 +224,25 @@ export function WaterCosts() {
     <fieldset className="form-fieldset">
       <legend className="fieldset-label">Water Costs</legend>
       {labels.map((label) => (
-        <div className="input-group">
-          <label for={label.id}>{label.text}</label>
+        <div className="input-group" key={label.id}>
+          <label htmlFor={label.id}>{label.text}</label>
           <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
         </div>
       ))}
     </fieldset>
   )
+}
+
+export function ConceptDesign() {
+  return (
+    <h2>Concept Design Placeholder</h2>
+  )
+}
+
+export function Main() {
+    return (
+        <>
+          <Navbar />
+        </>
+    )
 }
