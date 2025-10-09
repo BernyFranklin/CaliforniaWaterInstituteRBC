@@ -82,15 +82,6 @@ button:hover {
   margin: 0 0 1rem 0;
 }
 
-.hero button {
-  background-color: #b1102b;
-  color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.hero button:hover {
-  background-color: #8a0e20;
-}
 
 
 .footer-container {
@@ -129,7 +120,7 @@ button:hover {
   margin: 0;
   font-family: inherit;
   font-size: 1.25rem;
-
+  
 }
 
 .footer-socials {
@@ -162,14 +153,35 @@ button:hover {
   background-color: #aaa;
 }
 
-.footer button {
-  background-color: #7a00df;
+.red-button {
+  background-color: #b1102b;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.red-button:hover {
+  background-color: #8a0e20;
+}
+
+.purple-button {
+  background-color: #5344f4;
   margin-top: 1rem;
   transition: background-color 0.3s ease;
 }
 
-.footer button:hover {
+.purple-button:hover {
   background-color: #292547;
+}
+
+.gray-button {
+  background-color: #777;
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.gray-button:hover {
+  text-decoration: none;
+  cursor: default;
 }
 
 #footer-links a{
@@ -253,14 +265,14 @@ label,
 input,
 select {
   font-family: inherit;
-  font-size: 1.25rem;
   display: block;
   width: 30%;
   min-width: 250px;
 }
 
 label {
-  margin: 1rem 0 0 0
+  margin: 1rem 0 0 0;
+  font-size: 1rem;
 }
 input, select {
   background-color: #ddd;
@@ -268,6 +280,7 @@ input, select {
   border-radius: 5px;
   color: #333;
   padding: 0.5rem;
+  font-size: 1.25rem;
 }
 
 input:placeholder-shown {
@@ -298,9 +311,11 @@ input:placeholder-shown {
 span.progress-bar {
   border: solid 1px #ccc;
   width: 33%;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
   padding: 0.5rem;
   text-align: center;
+  align-items: center;
   line-height: 20px;
 }
 
@@ -311,6 +326,25 @@ span.progress-bar {
 
 .progress-bar-empty {
   background-color: #ced1d4;
+}
+
+.button-bar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 3rem;
+}
+
+.button-bar-left {
+  display: flex;
+  align-items: flex-start;
+  padding: 0.5rem;
+}
+
+.button-bar-right {
+  display: flex;
+  align-items: flex-end;
+  padding: 0.5rem
 }
 
 @media screen and (max-width: 1000px) {

@@ -32,11 +32,10 @@ export function Hero() {
     <div className="hero has-shadow">
       <h1>California Water Institute</h1>
       <p>Innovative Solutions for Sustainable Water Management</p>
-      <Button className="hero-button" text="Learn More" />
+      <Button className="red-button" text="Learn More" />
     </div>
   )
 }
-
 
 export function Footer() {
     return (
@@ -56,7 +55,7 @@ export function Footer() {
                 <a href="#">Center for Irrigation Technology (CIT)</a>
                 <a href="#">Water Energy and Technology Center (WET)</a>
                 <a href="#">Divison of Reasearch and Education</a>
-                <Button className="footer-button" text="Contact Us" />
+                <Button className="purple-button" text="Subscribe" />
             </div>
           </div>
           <div className="footer-container" id="footer-bottom">
@@ -79,6 +78,51 @@ export function AboutSection() {
         <p>CWI provides all stakeholders with convenient access to Fresno State’s extensive water research and development programs and services. The institute positions Fresno State as a leader in water research and sustainability by engaging the campus community and academic experts from all disciplines to address the most challenging water issues of our time.</p>
       </div>
     </section>
+  )
+}
+
+export function RechargeBasinCalculator() {
+  return (
+    <section className="has-shadow" id="calculator-section">
+      <div id="calculator-header">
+        <h2>Water Recharge Basin Calculator</h2>
+        <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
+      </div>
+      <ProgressBar />
+      <div id="calculator-form">
+        <form>
+          <BasinSizeAndDesign />
+          <WaterAvailability />
+          <DevelopmentCosts />
+          <WaterCosts />
+        </form>
+        <ButtonBar />
+      </div>
+    </section>
+  )
+}
+
+export function ProgressBar() {
+  return (
+    <div id="progress-bar" class="progress-bar-container">
+      <span className="progress-bar progress-bar-fill" id="progress-bar-left">Basin Size and Design</span>
+      <span className="progress-bar progress-bar-fill" id="progress-bar-center">Water Availability</span>
+      <span className="progress-bar progress-bar-fill" id="progress-bar-center">Development Costs</span>
+      <span className="progress-bar progress-bar-empty" id="progress-bar-right">Water Costs</span>
+    </div>
+  )
+}
+
+export function ButtonBar() {
+  return (
+    <div className="button-bar">
+      <span className="button-bar-left">
+        <Button className="button-bar-button gray-button" text="Back" />
+      </span>
+      <span className="button-bar-right">
+        <Button className="button-bar-button red-button" text="Next" />
+      </span>
+    </div>
   )
 }
 
@@ -127,30 +171,62 @@ export function BasinSizeAndDesign() {
   )
 }
 
-export function RechargeBasinCalculator() {
+export function WaterAvailability() {
+  const labels = [
+    { text: "Wet Year Frequency (%)",  id: "wet_year_freq", type: "number", min: "0", max: "100", placeholder: "30" },
+    { text: "# of Wet Months Per Year", id: "num_wet_months", type: "number", min: "0", max: "12", placeholder: "4" }
+  ]
+
   return (
-    <section className="has-shadow" id="calculator-section">
-      <div id="calculator-header">
-        <h2>Water Recharge Basin Calculator</h2>
-        <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
-      </div>
-      <ProgressBar />
-      <div id="calculator-form">
-        <form>
-          <BasinSizeAndDesign />
-        </form>
-      </div>
-    </section>
+    <fieldset className="form-fieldset ">
+      <legend className="fieldset-label">Water Availability</legend>
+      {labels.map((label) => (
+        <div className="input-group">
+          <label for={label.id}>{label.text}</label>
+          <input type={label.type} id={label.id} name={label.id} min={label.min} max={label.max} placeholder={label.placeholder} />
+        </div>
+      ))}
+    </fieldset>
   )
 }
 
-export function ProgressBar() {
+export function DevelopmentCosts() {
+  const labels = [
+    { text: "Land Cost Per Acre" , id: "land_cost_per_acre", type: "number", min: "0", placeholder: "6000" },
+    { text: "Total ft of Pipeline", id: "pipeline_length", type: "number", min: "0", placeholder: "2640" },
+    { text: "Cost per Cubic Yd of Earthwork", id: "earthwork_cost_per_cy", type: "number", min: "0", placeholder: "12" },
+    { text: "Length of Loan (Years)", id: "loan_length", type: "number", min: "0", placeholder: "10" },
+  ]
+
   return (
-    <div id="progress-bar" class="progress-bar-container">
-      <span className="progress-bar progress-bar-fill" id="progress-bar-left">1. Basin Size and Design</span>
-      <span className="progress-bar progress-bar-fill" id="progress-bar-center">2. Water Availability</span>
-      <span className="progress-bar progress-bar-fill" id="progress-bar-center">3. Development Costs</span>
-      <span className="progress-bar progress-bar-empty" id="progress-bar-right">4. Water Costs</span>
-    </div>
+    <fieldset className="form-fieldset">
+      <legend className="fieldset-label">Development Costs</legend>
+      {labels.map((label) => (
+        <div className="input-group">
+          <label for={label.id}>{label.text}</label>
+          <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
+        </div>
+      ))}
+    </fieldset>
+  )
+}
+
+export function WaterCosts() {
+  const labels = [
+    { text: "Cost of Reacharge Water ($/AF)" , id: "cost_recharge_water", type: "number", min: "0", placeholder: "35" },
+    { text: "Value of Stored Water ($/AF)", id: "value_stored_water", type: "number", min: "0", placeholder: "200" },
+    { text: "Cost of O&M ($/AF)", id: "cost_om", type: "number", min: "0", placeholder: "5" }
+  ]
+
+  return (
+    <fieldset className="form-fieldset">
+      <legend className="fieldset-label">Water Costs</legend>
+      {labels.map((label) => (
+        <div className="input-group">
+          <label for={label.id}>{label.text}</label>
+          <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
+        </div>
+      ))}
+    </fieldset>
   )
 }
