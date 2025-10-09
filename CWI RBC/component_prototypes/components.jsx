@@ -10,25 +10,6 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fas, far, fab)
 
 
-function Button({ className, text }) {
-  return <button className={className}>{text}</button>;
-}
-
-export function Navbar() {
-  return (
-    <nav className="navbar has-shadow">
-        <span className="nav-logo">
-          <a href="#"><img src="./src/assets/logo-300x62.png" alt="CWI Logo" className="cwi-logo" /></a>
-        </span>
-        <span className="nav-links">
-          <a href="#">About</a>
-          <a href="#">Concept Design</a>
-          <a href="#">Water Recharge Basin Calculator</a>
-        </span>
-    </nav>
-  )
-}
-
 export function Hero() {
   return (
     <div className="hero has-shadow">
@@ -37,34 +18,6 @@ export function Hero() {
       <Button className="red-button" text="Learn More" />
     </div>
   )
-}
-
-export function Footer() {
-    return (
-        <footer className="footer has-shadow">
-          <div className="footer-container" id="footer-top">
-            <div className="footer-card" id="footer-info">
-                <h2 className="footer-title">California Water Institute</h2>
-                <p className="footer-text">The California Water Institute (CWI) is located at California State University, Fresno and focuses on all aspects of sustainable water resource management solutions through outreach, entrepreneurship, education, testing, and interdisciplinary research.</p>
-                <div className="footer-socials">
-                    <a href="#"><div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-x-twitter" /></div></a>
-                    <a href="#"><div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-youtube" /></div></a>
-                    <a href="#"><div className="footer-icon"><FontAwesomeIcon icon="fa-brands fa-linkedin" /></div></a>
-                </div>
-            </div>
-            <div className="footer-card" id="footer-links">
-                <h2 className="footer-title">Divisions</h2>
-                <a href="#">Center for Irrigation Technology (CIT)</a>
-                <a href="#">Water Energy and Technology Center (WET)</a>
-                <a href="#">Divison of Reasearch and Education</a>
-                <Button className="purple-button" text="Subscribe" />
-            </div>
-          </div>
-          <div className="footer-container" id="footer-bottom">
-                <p>&copy; Fresno State 2025</p>
-          </div>
-        </footer>
-    )
 }
 
 export function AboutSection() {
@@ -83,6 +36,12 @@ export function AboutSection() {
   )
 }
 
+export function ConceptDesign() {
+  return (
+    <h2>Concept Design Placeholder</h2>
+  )
+}
+
 export function RechargeBasinCalculator() {
   const contents = [
     <BasinSizeAndDesign />, <WaterAvailability />, <DevelopmentCosts />, <WaterCosts />
@@ -90,6 +49,19 @@ export function RechargeBasinCalculator() {
 
   const [content, setContent] = useState(0);
 
+  const backButtonColor = (content === 0) ? "gray-button" : "red-button";
+  
+  function NextOrSubmitButton() {
+    const buttonText = (content === contents.length - 1) ? "Submit" : "Next";
+    return (<Button className="red-button" text={buttonText} />)
+  }
+  const handleBackClick = () => {
+    (content > 0) ? setContent(content - 1) : setContent(content);
+  }
+
+  const handleNextClick = () => {
+    (content < contents.length - 1) ? setContent(content + 1) : console.log("submit form");
+  }
 
   return (
     <section className="has-shadow" id="calculator-section">
@@ -102,15 +74,81 @@ export function RechargeBasinCalculator() {
         <form>
           { contents[content] }
         </form>
-        <ButtonBar />
+        <div className="button-bar">
+          <span className="button-bar-left">
+            <a onClick={handleBackClick}><Button className={`${backButtonColor}`} text="Back" /></a>
+          </span>
+          <span className="button-bar-right">
+            <a onClick={handleNextClick}><NextOrSubmitButton/></a>
+          </span>
+        </div>
       </div>
     </section>
   )
 }
 
+export function Footer() {
+  const links = [
+    { url: "https://www.fresnostate.edu/jcast/cit/", text: "Center for Irrigation Technology (CIT)" },
+    { url: "https://www.wetcenter.org/", text: "Water Energy and Technology Center (WET)" },
+    { url: "https://www.californiawater.org/#", text: "Divison of Reasearch and Education" }
+  ]
+
+  const icons = [
+    { key: "twitter",  url: "https://twitter.com/FSCWI", icon: "fa-brands fa-x-twitter" },
+    { key: "youtube",  url: "https://www.youtube.com/@FSCWI", icon: "fa-brands fa-youtube" },
+    { key: "linkedIn", url: "https://www.linkedin.com/company/california-water-institute/", icon: "fa-brands fa-linkedin" }
+  ]
+
+  return (
+    <footer className="footer has-shadow">
+      <div className="footer-container" id="footer-top">
+        <div className="footer-card" id="footer-info">
+          <h2 className="footer-title">California Water Institute</h2>
+          <p className="footer-text">The California Water Institute (CWI) is located at California State University, Fresno and focuses on all aspects of sustainable water resource management solutions through outreach, entrepreneurship, education, testing, and interdisciplinary research.</p>
+          <div className="footer-socials">
+            { icons.map((icon) => (
+              <a href={icon.url} key={icon.key} target="_blank"><div className="footer-icon"><FontAwesomeIcon icon={icon.icon} /></div></a>
+            ))}
+          </div>
+        </div>
+        <div className="footer-card">
+          <div id="footer-links">
+            <h2 className="footer-title">Divisions</h2>
+            { links.map((link) => (
+              <a href={link.url} key={link.text} target="_blank">{link.text}</a>
+            )) }
+          </div>
+          <a href="https://forms.office.com/pages/responsepage.aspx?id=RKUkUJQ5kUqDx6mSJwGg68X2U3RDDT5OmYMcCswoHoFUNlo2VVpaVUZJNkRFOElHTzdUMTdOWkhFUC4u&route=shorturl" id="footer-button" target="_blank"><Button className="purple-button" text="Subscribe" /></a>
+        </div>
+      </div>
+      <div className="footer-container" id="footer-bottom">
+        <p>&copy; Fresno State 2025</p>
+      </div>
+    </footer>
+    )
+}
+
+function Button({ className, text }) {
+  return <button className={className}>{text}</button>;
+}
+
+function Navbar() {
+  return (
+    <nav className="navbar has-shadow">
+        <span className="nav-logo">
+          <a href="#"><img src="./src/assets/logo-300x62.png" alt="CWI Logo" className="cwi-logo" /></a>
+        </span>
+        <span className="nav-links">
+          <a href="#">About</a>
+          <a href="#">Concept Design</a>
+          <a href="#">Water Recharge Basin Calculator</a>
+        </span>
+    </nav>
+  )
+}
+
 function ProgressBar({ current }) {
-  const temp = current;
-  console.log("enter progressbar, current = ", temp);
 
   const sections = [
     { index: 0, id: "progress-bar-left", text: "Basin Size and Design" },
@@ -119,11 +157,9 @@ function ProgressBar({ current }) {
     { index: 3, id: "progress-bar-right", text: "Water Costs" }
   ]
 
-  const [progress, setProgress] = useState(0);
-
-  const sectionColor = (passed) => {
+  const sectionColor = (index) => {
     return (
-      ( passed <= temp) ? "progress-bar-fill" : "progress-bar-empty"
+      ( index <= current) ? "progress-bar-fill" : "progress-bar-empty"
     )
   }
 
@@ -133,19 +169,6 @@ function ProgressBar({ current }) {
         <span className={`progress-bar ${sectionColor(section.index)}`} id={section.id} key={section.id}>{section.text}</span> 
         )
       )}
-    </div>
-  )
-}
-
-function ButtonBar() {
-  return (
-    <div className="button-bar">
-      <span className="button-bar-left">
-        <Button className="button-bar-button gray-button" text="Back" />
-      </span>
-      <span className="button-bar-right">
-        <Button className="button-bar-button red-button" text="Next" />
-      </span>
     </div>
   )
 }
@@ -255,8 +278,3 @@ function WaterCosts() {
   )
 }
 
-export function ConceptDesign() {
-  return (
-    <h2>Concept Design Placeholder</h2>
-  )
-}
