@@ -47,12 +47,72 @@ export function ConceptDesign() {
 }
 
 export function RechargeBasinCalculator({setContent}) {
+  
+  const [formContent, setFormContent] = useState(0);
+  
+  const [formData, setFormData] = useState({
+    ac_pond: '',
+    length_pond: '',
+    width_pond: '',
+    inside_slope_ratio: '',
+    outside_slope_ratio: '',
+    levee_width: '',
+    slope_across_pond: '',
+    freeboard_depth: '',
+    infiltration_rate: '',
+    soil_type: '',
+    wet_year_freq: '',
+    num_wet_months: '',
+    land_cost_per_acre: '',
+    pipeline_length: '',
+    earthwork_cost_per_cy: '',
+    loan_length: '',
+    cost_recharge_water: '',
+    value_stored_water: '',
+    cost_om: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  }
+  
   const contents = [
-    <BasinSizeAndDesign />, <WaterAvailability />, <DevelopmentCosts />, <WaterCosts />, <RoiResults />
+    <BasinSizeAndDesign formData={formData} handleChange={handleChange} />, <WaterAvailability />, <DevelopmentCosts />, <WaterCosts />, <RoiResults />
   ]
 
-  const [formContent, setFormContent] = useState(0);
+  return (
+    <section className="has-shadow" id="calculator-section">
+      <CalculatorHeader />
+      <ProgressBar current={formContent} />
+      <div id="calculator-form">
+        <form>
+          { contents[formContent] }
+        </form>
+        <ButtonBar 
+          formContent={formContent} 
+          setFormContent={setFormContent} 
+          contents={contents} 
+          setContent={setContent}
+        />
+      </div>
+    </section>
+  )
+}
 
+function CalculatorHeader() {
+  return (
+    <div id="calculator-header">
+      <h2>Water Recharge Basin Calculator</h2>
+      <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
+    </div>
+  )
+}
+
+function ButtonBar({formContent, setFormContent, contents, setContent}) {
   const backButtonColor = (formContent === 0) ? "gray-button" : "red-button";
   
   function NextOrSubmitButton() {
@@ -73,26 +133,14 @@ export function RechargeBasinCalculator({setContent}) {
   }
 
   return (
-    <section className="has-shadow" id="calculator-section">
-      <div id="calculator-header">
-        <h2>Water Recharge Basin Calculator</h2>
-        <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
-      </div>
-      <ProgressBar current={formContent} />
-      <div id="calculator-form">
-        <form>
-          { contents[formContent] }
-        </form>
-        <div className="button-bar">
-          <span className="button-bar-left">
-            <a onClick={handleBackClick}><Button className={`${backButtonColor}`} text="Back" /></a>
-          </span>
-          <span className="button-bar-right">
-            <a onClick={handleNextClick}><NextOrSubmitButton/></a>
-          </span>
-        </div>
-      </div>
-    </section>
+    <div className="button-bar">
+      <span className="button-bar-left">
+        <a onClick={handleBackClick}><Button className={`${backButtonColor}`} text="Back" /></a>
+      </span>
+      <span className="button-bar-right">
+        <a onClick={handleNextClick}><NextOrSubmitButton/></a>
+      </span>
+    </div>
   )
 }
 
@@ -204,17 +252,17 @@ function ProgressBar({ current }) {
   )
 }
 
-function BasinSizeAndDesign() {
+function BasinSizeAndDesign({ formData, handleChange }) {
   const labels = [
-    { text: "Acres of Pond Surface Area", id: "ac_pond", type: "number", min: "0", placeholder: "160"},
-    { text: "Length of Pond (ft)", id: "length_pond", type: "number", min: "0", placeholder: "2640" },
-    { text: "Width of Pond (ft)", id: "width_pond", type: "number", min: "0", placeholder: "2640" },
-    { text: "Inside Slope Ratio (N:1)", id: "inside_slope_ratio", type: "number", min: "0", placeholder: "4" },
-    { text: "Outside Slope Ratio (N:1)", id: "outside_slope_ratio", type: "number", min: "0", placeholder: "2" },
-    { text: "Levee Width (ft)", id: "levee_width", type: "number", min: "0", placeholder: "8" },
-    { text: "Slope Across Pond (N:1ft)", id: "slope_across_pond", type: "number", min: "0", placeholder: "0.5", step: "0.1" },
-    { text: "Freeboard Depth (ft)", id: "freeboard_depth", type: "number", min: "0", placeholder: "1" },
-    { text: "Infiltration Rate (ft/day)", id: "infiltration_rate", type: "number", min: "0", placeholder: "0.6" } 
+    { text: "Acres of Pond Surface Area", id: "ac_pond", type: "number", min: "0", value: formData.ac_pond, placeholder: "160"},
+    { text: "Length of Pond (ft)", id: "length_pond", type: "number", min: "0", value: formData.length_pond, placeholder: "2640" },
+    { text: "Width of Pond (ft)", id: "width_pond", type: "number", min: "0", value: formData.width_pond, placeholder: "2640" },
+    { text: "Inside Slope Ratio (N:1)", id: "inside_slope_ratio", type: "number", min: "0", value: formData.inside_slope_ratio, placeholder: "4" },
+    { text: "Outside Slope Ratio (N:1)", id: "outside_slope_ratio", type: "number", min: "0", value: formData.outside_slope_ratio, placeholder: "2" },
+    { text: "Levee Width (ft)", id: "levee_width", type: "number", min: "0", value: formData.levee_width, placeholder: "8" },
+    { text: "Slope Across Pond (N:1ft)", id: "slope_across_pond", type: "number", min: "0", value: formData.slope_across_pond, placeholder: "0.5", step: "0.1" },
+    { text: "Freeboard Depth (ft)", id: "freeboard_depth", type: "number", min: "0", value: formData.freeboard_depth, placeholder: "1" },
+    { text: "Infiltration Rate (ft/day)", id: "infiltration_rate", type: "number", min: "0", value: formData.infiltration_rate, placeholder: "0.6" } 
   ]
 
   const soilOptions = [
@@ -233,13 +281,22 @@ function BasinSizeAndDesign() {
       {labels.map((label) => (
         <div className="input-group" key={label.id}>
           <label htmlFor={label.id}>{label.text}</label>
-          <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
+          <input
+            type={label.type}
+            id={label.id}
+            name={label.id}
+            min={label.min}
+            value={label.value}
+            placeholder={label.placeholder}
+            step={label.step}
+            onChange={handleChange}
+          />
         </div>
       ))}
       <div className="input-group">
         <label htmlFor="soil_type">Soil Type</label>
-        <select id="soil_type" name="soil_type">
-          <option value="default" disabled>Select soil type</option>
+        <select id="soil_type" name="soil_type" value={formData.soil_type} onChange={handleChange}>
+          <option value="" disabled>Select soil type</option>
             {soilOptions.map((option) => (
           <option value={option.value} key={option.value}>{option.text}</option>
           ))}
