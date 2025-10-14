@@ -84,7 +84,7 @@ export function RechargeBasinCalculator({setContent}) {
     <BasinSizeAndDesign formData={formData} handleChange={handleChange} />, 
     <WaterAvailability  formData={formData} handleChange={handleChange} />, 
     <DevelopmentCosts   formData={formData} handleChange={handleChange} />, 
-    <WaterCosts />, 
+    <WaterCosts         formData={formData} handleChange={handleChange} />, 
     <RoiResults />
   ]
 
@@ -258,15 +258,70 @@ function ProgressBar({ current }) {
 
 function BasinSizeAndDesign({ formData, handleChange }) {
   const labels = [
-    { text: "Acres of Pond Surface Area", id: "ac_pond", type: "number", min: "0", value: formData.ac_pond, placeholder: "160"},
-    { text: "Length of Pond (ft)", id: "length_pond", type: "number", min: "0", value: formData.length_pond, placeholder: "2640" },
-    { text: "Width of Pond (ft)", id: "width_pond", type: "number", min: "0", value: formData.width_pond, placeholder: "2640" },
-    { text: "Inside Slope Ratio (N:1)", id: "inside_slope_ratio", type: "number", min: "0", value: formData.inside_slope_ratio, placeholder: "4" },
-    { text: "Outside Slope Ratio (N:1)", id: "outside_slope_ratio", type: "number", min: "0", value: formData.outside_slope_ratio, placeholder: "2" },
-    { text: "Levee Width (ft)", id: "levee_width", type: "number", min: "0", value: formData.levee_width, placeholder: "8" },
-    { text: "Slope Across Pond (N:1ft)", id: "slope_across_pond", type: "number", min: "0", value: formData.slope_across_pond, placeholder: "0.5", step: "0.1" },
-    { text: "Freeboard Depth (ft)", id: "freeboard_depth", type: "number", min: "0", value: formData.freeboard_depth, placeholder: "1" },
-    { text: "Infiltration Rate (ft/day)", id: "infiltration_rate", type: "number", min: "0", value: formData.infiltration_rate, placeholder: "0.6" } 
+    { text: "Acres of Pond Surface Area", 
+      id: "ac_pond", 
+      type: "number", 
+      min: "0", 
+      value: formData.ac_pond, 
+      placeholder: "160"
+    },
+    { text: "Length of Pond (ft)", 
+      id: "length_pond", 
+      type: "number", 
+      min: "0", 
+      value: formData.length_pond, 
+      placeholder: "2640" 
+    },
+    { text: "Width of Pond (ft)", 
+      id: "width_pond", 
+      type: "number", 
+      min: "0", 
+      value: formData.width_pond, 
+      placeholder: "2640" 
+    },
+    { text: "Inside Slope Ratio (N:1)", 
+      id: "inside_slope_ratio", 
+      type: "number", 
+      min: "0", 
+      value: formData.inside_slope_ratio, 
+      placeholder: "4" 
+    },
+    { text: "Outside Slope Ratio (N:1)", 
+      id: "outside_slope_ratio", 
+      type: "number", 
+      min: "0", 
+      value: formData.outside_slope_ratio, 
+      placeholder: "2" 
+    },
+    { text: "Levee Width (ft)", 
+      id: "levee_width", 
+      type: "number", 
+      min: "0", 
+      value: formData.levee_width, 
+      placeholder: "8" 
+    },
+    { text: "Slope Across Pond (N:1ft)", 
+      id: "slope_across_pond", 
+      type: "number", 
+      min: "0", 
+      value: formData.slope_across_pond, 
+      placeholder: "0.5", 
+      step: "0.1" 
+    },
+    { text: "Freeboard Depth (ft)", 
+      id: "freeboard_depth", 
+      type: "number", 
+      min: "0", 
+      value: formData.freeboard_depth, 
+      placeholder: "1" 
+    },
+    { text: "Infiltration Rate (ft/day)", 
+      id: "infiltration_rate", 
+      type: "number", 
+      min: "0", 
+      value: formData.infiltration_rate, 
+      placeholder: "0.6" 
+    } 
   ]
 
   const soilOptions = [
@@ -299,7 +354,11 @@ function BasinSizeAndDesign({ formData, handleChange }) {
       ))}
       <div className="input-group">
         <label htmlFor="soil_type">Soil Type</label>
-        <select id="soil_type" name="soil_type" value={formData.soil_type} onChange={handleChange}>
+        <select 
+          id="soil_type" 
+          name="soil_type" 
+          value={formData.soil_type} 
+          onChange={handleChange}>
           <option value="" disabled>Select soil type</option>
             {soilOptions.map((option) => (
           <option value={option.value} key={option.value}>{option.text}</option>
@@ -312,8 +371,22 @@ function BasinSizeAndDesign({ formData, handleChange }) {
 
 function WaterAvailability({ formData, handleChange }) {
   const labels = [
-    { text: "Wet Year Frequency (%)",  id: "wet_year_freq", type: "number", min: "0", value: formData.wet_year_freq, max: "100", placeholder: "30" },
-    { text: "# of Wet Months Per Year", id: "num_wet_months", type: "number", min: "0", value: formData.num_wet_months, max: "12", placeholder: "4" }
+    { text: "Wet Year Frequency (%)",  
+      id: "wet_year_freq", 
+      type: "number", 
+      min: "0", 
+      max: "100", 
+      value: formData.wet_year_freq, 
+      placeholder: "30" 
+    },
+    { text: "# of Wet Months Per Year", 
+      id: "num_wet_months", 
+      type: "number", 
+      min: "0", 
+      max: "12", 
+      value: formData.num_wet_months, 
+      placeholder: "4" 
+    }
   ]
 
   return (
@@ -340,10 +413,33 @@ function WaterAvailability({ formData, handleChange }) {
 
 function DevelopmentCosts( {formData, handleChange }) {
   const labels = [
-    { text: "Land Cost Per Acre" , id: "land_cost_per_acre", type: "number", min: "0", value: formData.land_cost_per_acre, placeholder: "6000" },
-    { text: "Total ft of Pipeline", id: "pipeline_length", type: "number", min: "0", value: formData.pipeline_length, placeholder: "2640" },
-    { text: "Cost per Cubic Yd of Earthwork", id: "earthwork_cost_per_cy", type: "number", min: "0", value: formData.earthwork_cost_per_cy, placeholder: "12" },
-    { text: "Length of Loan (Years)", id: "loan_length", type: "number", min: "0", value: formData.loan_length, placeholder: "10" },
+    { text: "Land Cost Per Acre" , 
+      id: "land_cost_per_acre", 
+      type: "number", min: "0", 
+      value: formData.land_cost_per_acre, 
+      placeholder: "6000" 
+    },
+    { text: "Total ft of Pipeline", 
+      id: "pipeline_length", 
+      type: "number", 
+      min: "0", 
+      value: formData.pipeline_length, 
+      placeholder: "2640" 
+    },
+    { text: "Cost per Cubic Yd of Earthwork", 
+      id: "earthwork_cost_per_cy", 
+      type: "number", 
+      min: "0", 
+      value: formData.earthwork_cost_per_cy, 
+      placeholder: "12" 
+    },
+    { text: "Length of Loan (Years)", 
+      id: "loan_length", 
+      type: "number", 
+      min: "0", 
+      value: formData.loan_length, 
+      placeholder: "10" 
+    },
   ]
 
   return (
@@ -367,11 +463,29 @@ function DevelopmentCosts( {formData, handleChange }) {
   )
 }
 
-function WaterCosts() {
+function WaterCosts({ formData, handleChange }) {
   const labels = [
-    { text: "Cost of Reacharge Water ($/AF)" , id: "cost_recharge_water", type: "number", min: "0", placeholder: "35" },
-    { text: "Value of Stored Water ($/AF)", id: "value_stored_water", type: "number", min: "0", placeholder: "200" },
-    { text: "Cost of O&M ($/AF)", id: "cost_om", type: "number", min: "0", placeholder: "5" }
+    { text: "Cost of Reacharge Water ($/AF)" , 
+      id: "cost_recharge_water", 
+      type: "number", 
+      min: "0", 
+      value: formData.cost_recharge_water, 
+      placeholder: "35" 
+    },
+    { text: "Value of Stored Water ($/AF)", 
+      id: "value_stored_water", 
+      type: "number", 
+      min: "0", 
+      value: formData.value_stored_water, 
+      placeholder: "200" 
+    },
+    { text: "Cost of O&M ($/AF)", 
+      id: "cost_om", 
+      type: "number", 
+      min: "0", 
+      value: formData.cost_om, 
+      placeholder: "5" 
+    }
   ]
 
   return (
@@ -380,7 +494,16 @@ function WaterCosts() {
       {labels.map((label) => (
         <div className="input-group" key={label.id}>
           <label htmlFor={label.id}>{label.text}</label>
-          <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
+          <input 
+            type={label.type} 
+            id={label.id} 
+            name={label.id} 
+            min={label.min} 
+            value={label.value}
+            placeholder={label.placeholder}
+            step={label.step}
+            onChange={handleChange} 
+          />
         </div>
       ))}
     </fieldset>
