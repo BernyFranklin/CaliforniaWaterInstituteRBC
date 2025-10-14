@@ -46,25 +46,30 @@ export function ConceptDesign() {
   )
 }
 
-export function RechargeBasinCalculator() {
+export function RechargeBasinCalculator({setContent}) {
   const contents = [
-    <BasinSizeAndDesign />, <WaterAvailability />, <DevelopmentCosts />, <WaterCosts />
+    <BasinSizeAndDesign />, <WaterAvailability />, <DevelopmentCosts />, <WaterCosts />, <RoiResults />
   ]
 
-  const [content, setContent] = useState(0);
+  const [formContent, setFormContent] = useState(0);
 
-  const backButtonColor = (content === 0) ? "gray-button" : "red-button";
+  const backButtonColor = (formContent === 0) ? "gray-button" : "red-button";
   
   function NextOrSubmitButton() {
-    const buttonText = (content === contents.length - 1) ? "Submit" : "Next";
+    const buttonText = (formContent === contents.length - 2) ? "Submit" : "Next";
     return (<Button className="red-button" text={buttonText} />)
   }
+
   const handleBackClick = () => {
-    (content > 0) ? setContent(content - 1) : setContent(content);
+    (formContent > 0) ? setFormContent(formContent - 1) : setFormContent(formContent);
+  }
+
+  const handleSubmitClick = () => {
+    setContent(3);
   }
 
   const handleNextClick = () => {
-    (content < contents.length - 1) ? setContent(content + 1) : console.log("submit form");
+    (formContent < contents.length - 2) ? setFormContent(formContent + 1) : handleSubmitClick();
   }
 
   return (
@@ -73,10 +78,10 @@ export function RechargeBasinCalculator() {
         <h2>Water Recharge Basin Calculator</h2>
         <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
       </div>
-      <ProgressBar current={content} />
+      <ProgressBar current={formContent} />
       <div id="calculator-form">
         <form>
-          { contents[content] }
+          { contents[formContent] }
         </form>
         <div className="button-bar">
           <span className="button-bar-left">
@@ -91,11 +96,19 @@ export function RechargeBasinCalculator() {
   )
 }
 
+export function RoiResults() {
+  return (
+    <div className="roi-results has-shadow" id="roi-results-section">
+      <h2>ROI Results Placeholder</h2>
+    </div>
+  )
+}
+
 export function Footer() {
   const links = [
     { url: "https://www.fresnostate.edu/jcast/cit/", text: "Center for Irrigation Technology (CIT)" },
-    { url: "https://www.wetcenter.org/", text: "Water Energy and Technology Center (WET)" },
-    { url: "https://www.californiawater.org/#", text: "Divison of Reasearch and Education" }
+    { url: "https://www.wetcenter.org/",             text: "Water Energy and Technology Center (WET)" },
+    { url: "https://www.californiawater.org/#",      text: "Divison of Reasearch and Education" }
   ]
 
   const icons = [
@@ -153,13 +166,15 @@ function Navbar() {
 }
 
 function ProgressBar({ current }) {
-
+  
   const sections = [
     { index: 0, id: "progress-bar-left", text: "Basin Size and Design" },
     { index: 1, id: "progress-bar-center-left", text: "Water Availability" },
     { index: 2, id: "progress-bar-center-right", text: "Development Costs" },
     { index: 3, id: "progress-bar-right", text: "Water Costs" }
   ]
+
+  const isSubmitted = (current > sections.length - 1) ? true : false;
 
   const sectionColor = (index) => {
     return (
@@ -169,10 +184,10 @@ function ProgressBar({ current }) {
 
   return (
     <div id="progress-bar" className="progress-bar-container">
-      {sections.map((section) => (
+      {
+        sections.map((section) => (
         <span className={`progress-bar ${sectionColor(section.index)}`} id={section.id} key={section.id}>{section.text}</span> 
-        )
-      )}
+      ))}
     </div>
   )
 }
@@ -281,4 +296,3 @@ function WaterCosts() {
     </fieldset>
   )
 }
-
