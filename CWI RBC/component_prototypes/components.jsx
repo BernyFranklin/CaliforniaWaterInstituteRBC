@@ -82,8 +82,8 @@ export function RechargeBasinCalculator({setContent}) {
   
   const contents = [
     <BasinSizeAndDesign formData={formData} handleChange={handleChange} />, 
-    <WaterAvailability formData={formData} handleChange={handleChange}/>, 
-    <DevelopmentCosts />, 
+    <WaterAvailability  formData={formData} handleChange={handleChange} />, 
+    <DevelopmentCosts   formData={formData} handleChange={handleChange} />, 
     <WaterCosts />, 
     <RoiResults />
   ]
@@ -338,12 +338,12 @@ function WaterAvailability({ formData, handleChange }) {
   )
 }
 
-function DevelopmentCosts() {
+function DevelopmentCosts( {formData, handleChange }) {
   const labels = [
-    { text: "Land Cost Per Acre" , id: "land_cost_per_acre", type: "number", min: "0", placeholder: "6000" },
-    { text: "Total ft of Pipeline", id: "pipeline_length", type: "number", min: "0", placeholder: "2640" },
-    { text: "Cost per Cubic Yd of Earthwork", id: "earthwork_cost_per_cy", type: "number", min: "0", placeholder: "12" },
-    { text: "Length of Loan (Years)", id: "loan_length", type: "number", min: "0", placeholder: "10" },
+    { text: "Land Cost Per Acre" , id: "land_cost_per_acre", type: "number", min: "0", value: formData.land_cost_per_acre, placeholder: "6000" },
+    { text: "Total ft of Pipeline", id: "pipeline_length", type: "number", min: "0", value: formData.pipeline_length, placeholder: "2640" },
+    { text: "Cost per Cubic Yd of Earthwork", id: "earthwork_cost_per_cy", type: "number", min: "0", value: formData.earthwork_cost_per_cy, placeholder: "12" },
+    { text: "Length of Loan (Years)", id: "loan_length", type: "number", min: "0", value: formData.loan_length, placeholder: "10" },
   ]
 
   return (
@@ -352,7 +352,15 @@ function DevelopmentCosts() {
       {labels.map((label) => (
         <div className="input-group" key={label.id}>
           <label htmlFor={label.id}>{label.text}</label>
-          <input type={label.type} id={label.id} name={label.id} min={label.min} placeholder={label.placeholder} />
+          <input 
+            type={label.type} 
+            id={label.id} 
+            name={label.id} 
+            min={label.min}
+            value={label.value} 
+            placeholder={label.placeholder}
+            step={label.step}
+            onChange={handleChange} />
         </div>
       ))}
     </fieldset>
