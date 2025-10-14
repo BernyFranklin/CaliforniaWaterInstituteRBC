@@ -81,7 +81,11 @@ export function RechargeBasinCalculator({setContent}) {
   }
   
   const contents = [
-    <BasinSizeAndDesign formData={formData} handleChange={handleChange} />, <WaterAvailability />, <DevelopmentCosts />, <WaterCosts />, <RoiResults />
+    <BasinSizeAndDesign formData={formData} handleChange={handleChange} />, 
+    <WaterAvailability formData={formData} handleChange={handleChange}/>, 
+    <DevelopmentCosts />, 
+    <WaterCosts />, 
+    <RoiResults />
   ]
 
   return (
@@ -306,10 +310,10 @@ function BasinSizeAndDesign({ formData, handleChange }) {
   )
 }
 
-function WaterAvailability() {
+function WaterAvailability({ formData, handleChange }) {
   const labels = [
-    { text: "Wet Year Frequency (%)",  id: "wet_year_freq", type: "number", min: "0", max: "100", placeholder: "30" },
-    { text: "# of Wet Months Per Year", id: "num_wet_months", type: "number", min: "0", max: "12", placeholder: "4" }
+    { text: "Wet Year Frequency (%)",  id: "wet_year_freq", type: "number", min: "0", value: formData.wet_year_freq, max: "100", placeholder: "30" },
+    { text: "# of Wet Months Per Year", id: "num_wet_months", type: "number", min: "0", value: formData.num_wet_months, max: "12", placeholder: "4" }
   ]
 
   return (
@@ -318,7 +322,16 @@ function WaterAvailability() {
       {labels.map((label) => (
         <div className="input-group" key={label.id}>
           <label htmlFor={label.id}>{label.text}</label>
-          <input type={label.type} id={label.id} name={label.id} min={label.min} max={label.max} placeholder={label.placeholder} />
+          <input 
+            type={label.type} 
+            id={label.id} 
+            name={label.id} 
+            min={label.min} 
+            max={label.max} 
+            value={label.value}
+            placeholder={label.placeholder}
+            step={label.step}
+            onChange={handleChange} />
         </div>
       ))}
     </fieldset>
