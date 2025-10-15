@@ -75,6 +75,7 @@ export function RechargeBasinCalculator() {
 
   const handleChange = (e) => {
     let { name, value } = e.target;
+    // Don't parse soil_type since it's a string
     if (name === "soil_type") {
       setFormData((prevData) => ({
         ...prevData,
@@ -82,9 +83,9 @@ export function RechargeBasinCalculator() {
       }));
       return;
     }
-
+    // Prevents error when input is cleared
     value = (value === '') ? '' : parseFloat(value);
-
+    // Sets state
     setFormData((prevData) => ({
       ...prevData,
       [name]: value
