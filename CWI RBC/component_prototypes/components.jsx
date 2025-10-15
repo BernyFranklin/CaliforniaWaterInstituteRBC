@@ -81,7 +81,7 @@ export function RechargeBasinCalculator() {
       }));
       return;
     }
-    
+
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -175,6 +175,26 @@ const calculateCostOfEarthwork = ({ earthwork_cost_per_cy }, total_volume_of_ear
   return total_volume_of_earthwork * earthwork_cost_per_cy;
 }
 
+const calculateOutsideLengthWettedArea = (perimeter) => {
+  return perimeter / 4;
+}
+
+const calculateLessOutsideLevee = ({ freeboard_depth, water_depth, outside_slope_ratio }) => {
+  return ((freeboard_depth + water_depth) * outside_slope_ratio) * 2;
+}
+
+const calculateLessTopLevee = ({ levee_width }) => {
+  return levee_width * 2;
+}
+
+const calculateLessInsideLevee = ({ freeboard_depth, water_depth, inside_slope_ratio }) => {
+  return ((freeboard_depth + water_depth) * inside_slope_ratio) * 2;
+}
+
+const calculatePlusWettedInsideLevee = ({ water_depth, inside_slope_ratio }) => {
+  return (water_depth * inside_slope_ratio) * 2;
+}
+
 export function RoiResults({ formData }) {
   const cuft_in_cuyd = 27;
   // Calculations Section from spreadsheet
@@ -186,7 +206,15 @@ export function RoiResults({ formData }) {
   const outside_of_levee = calculateOutsideOfLevee(formData, cuft_in_cuyd);
   const total_volume_of_earthwork = calculateTotalVolumeOfEarthwork(center_of_levee, inside_of_levee, outside_of_levee);
   const total_cost_of_earthwork = calculateCostOfEarthwork(formData, total_volume_of_earthwork);
-  console.log(total_cost_of_earthwork)
+  const outside_length_wetted_area = calculateOutsideLengthWettedArea(perimeter);
+  const less_outside_levee = calculateLessOutsideLevee(formData);
+  const less_top_levee = calculateLessTopLevee(formData);
+  const less_inside_levee = calculateLessInsideLevee(formData);
+  const plus_wetted_inside_levee = calculatePlusWettedInsideLevee(formData);
+  
+  
+  
+  
   
 
   return (
