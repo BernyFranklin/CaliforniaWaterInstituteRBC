@@ -46,7 +46,7 @@ export function ConceptDesign() {
   )
 }
 
-export function RechargeBasinCalculator({setContent}) {
+export function RechargeBasinCalculator() {
   
   const [formContent, setFormContent] = useState(0);
   
@@ -153,7 +153,6 @@ export function RoiResults({ formData }) {
   const area_sqmi = formData.ac_pond * sqmi_per_acre;
   const perimeter = (formData.width_pond * 2) + (formData.length_pond * 2);
   const center_of_levee = perimeter * (formData.freeboard_depth + formData.water_depth) * formData.levee_width / cuft_in_cuyd;
-  console.log("Center of levee: " + center_of_levee);
 
   return (
     <div className="roi-results" id="roi-results-section">

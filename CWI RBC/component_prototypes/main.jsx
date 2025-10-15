@@ -15,7 +15,7 @@ export function Main() {
   const [content, setContent] = useState(0);
   
   const contents = [
-    <Component.AboutSection />, <Component.ConceptDesign />, <Component.RechargeBasinCalculator setContent={setContent} />
+    <Component.AboutSection />, <Component.ConceptDesign />, <Component.RechargeBasinCalculator />
   ]
 
   const displayHero = () => {
