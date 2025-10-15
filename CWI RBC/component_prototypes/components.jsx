@@ -202,6 +202,20 @@ const calculateNetInsideLengthWettedArea = (outside_length_wetted_area, less_out
   return (outside_length_wetted_area - (less_outside_levee + less_top_levee + less_inside_levee) + plus_wetted_inside_levee);
 }
 
+const calculateWettedAreaSqYds = (net_inside_length_wetted_area) => {
+  const sqft_in_sqyd = 9;
+  return net_inside_length_wetted_area**2 / sqft_in_sqyd;
+}
+
+const calculateWettedAreaAcres = (wetted_area_sq_yds) => {
+  const sqyd_in_acre = 4840;
+  return wetted_area_sq_yds / sqyd_in_acre;
+}
+
+const calculateWettedAreaGrossPercent = ({ ac_pond }, wetted_area_acres) => {
+  return (wetted_area_acres / ac_pond) * 100;
+}
+
 export function RoiResults({ formData }) {
   const cuft_in_cuyd = 27;
   // Calculations Section from spreadsheet
@@ -219,7 +233,10 @@ export function RoiResults({ formData }) {
   const less_inside_levee = calculateLessInsideLevee(formData);
   const plus_wetted_inside_levee = calculatePlusWettedInsideLevee(formData);
   const net_inside_length_wetted_area = calculateNetInsideLengthWettedArea(outside_length_wetted_area, less_outside_levee, less_top_levee, less_inside_levee, plus_wetted_inside_levee);
-  console.log(net_inside_length_wetted_area);
+  const wetted_area_sq_yds = calculateWettedAreaSqYds(net_inside_length_wetted_area);
+  const wetted_area_acres = calculateWettedAreaAcres(wetted_area_sq_yds);
+  const wetted_area_gross_percent = calculateWettedAreaGrossPercent(formData, wetted_area_acres);
+  console.log(wetted_area_gross_percent);
   
   
   
