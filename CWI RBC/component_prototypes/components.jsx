@@ -59,6 +59,7 @@ export function RechargeBasinCalculator({setContent}) {
     levee_width: '',
     slope_across_pond: '',
     freeboard_depth: '',
+    water_depth: '',
     infiltration_rate: '',
     soil_type: '',
     wet_year_freq: '',
@@ -76,7 +77,7 @@ export function RechargeBasinCalculator({setContent}) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value
+      [name]: parseFloat(value)
     }));
   }
   
@@ -85,7 +86,7 @@ export function RechargeBasinCalculator({setContent}) {
     <WaterAvailability  formData={formData} handleChange={handleChange} />, 
     <DevelopmentCosts   formData={formData} handleChange={handleChange} />, 
     <WaterCosts         formData={formData} handleChange={handleChange} />, 
-    <RoiResults />
+    <RoiResults         formData={formData}/>
   ]
 
   return (
@@ -145,7 +146,15 @@ function ButtonBar({formContent, setFormContent, contents}) {
   )
 }
 
-export function RoiResults() {
+export function RoiResults({ formData }) {
+  // Calculations Section from spreadsheet
+  const sqmi_per_acre = 1/640;
+  const cuft_in_cuyd = 27;
+  const area_sqmi = formData.ac_pond * sqmi_per_acre;
+  const perimeter = (formData.width_pond * 2) + (formData.length_pond * 2);
+  const center_of_levee = perimeter * (formData.freeboard_depth + formData.water_depth) * formData.levee_width / cuft_in_cuyd;
+  console.log("Center of levee: " + center_of_levee);
+
   return (
     <div className="roi-results" id="roi-results-section">
       <h2>ROI Results Placeholder</h2>
@@ -311,6 +320,13 @@ function BasinSizeAndDesign({ formData, handleChange }) {
       min: "0", 
       value: formData.freeboard_depth, 
       placeholder: "1" 
+    },
+    { text: "Water Depth (ft)",
+      id: "water_depth", 
+      type: "number", 
+      min: "0", 
+      value: formData.water_depth, 
+      placeholder: "1"
     },
     { text: "Infiltration Rate (ft/day)", 
       id: "infiltration_rate", 
