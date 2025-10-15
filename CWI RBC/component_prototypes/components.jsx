@@ -146,13 +146,20 @@ function ButtonBar({formContent, setFormContent, contents}) {
   )
 }
 
+const calculateCenterOfLevee = ({freeboard_depth, water_depth, levee_width}, perimeter) => {
+  const cuft_in_cuyd = 27;
+
+  return (perimeter * (freeboard_depth + water_depth) * levee_width) / cuft_in_cuyd;
+}
+
 export function RoiResults({ formData }) {
   // Calculations Section from spreadsheet
   const sqmi_per_acre = 1/640;
   const cuft_in_cuyd = 27;
   const area_sqmi = formData.ac_pond * sqmi_per_acre;
   const perimeter = (formData.width_pond * 2) + (formData.length_pond * 2);
-  const center_of_levee = perimeter * (formData.freeboard_depth + formData.water_depth) * formData.levee_width / cuft_in_cuyd;
+  const center_of_levee = calculateCenterOfLevee(formData, perimeter);
+  console.log(center_of_levee);
 
   return (
     <div className="roi-results" id="roi-results-section">
