@@ -98,9 +98,8 @@ export function RechargeBasinCalculator({setContent}) {
         </form>
         <ButtonBar 
           formContent={formContent} 
-          setFormContent={setFormContent} 
-          contents={contents} 
-          setContent={setContent}
+          setFormContent={setFormContent}
+          contents={contents}
         />
       </div>
     </section>
@@ -116,7 +115,7 @@ function CalculatorHeader() {
   )
 }
 
-function ButtonBar({formContent, setFormContent, contents, setContent}) {
+function ButtonBar({formContent, setFormContent, contents}) {
   const backButtonColor = (formContent === 0) ? "gray-button" : "red-button";
   
   function NextOrSubmitButton() {
@@ -129,7 +128,7 @@ function ButtonBar({formContent, setFormContent, contents, setContent}) {
   }
 
   const handleSubmitClick = () => {
-    setContent(3);
+    setFormContent(4);
   }
 
   const handleNextClick = () => {
@@ -141,16 +140,14 @@ function ButtonBar({formContent, setFormContent, contents, setContent}) {
       <span className="button-bar-left">
         <a onClick={handleBackClick}><Button className={`${backButtonColor}`} text="Back" /></a>
       </span>
-      <span className="button-bar-right">
-        <a onClick={handleNextClick}><NextOrSubmitButton/></a>
-      </span>
+      {(formContent !== 4) && <span className="button-bar-right"><a onClick={handleNextClick}><NextOrSubmitButton/></a></span>}
     </div>
   )
 }
 
 export function RoiResults() {
   return (
-    <div className="roi-results has-shadow" id="roi-results-section">
+    <div className="roi-results" id="roi-results-section">
       <h2>ROI Results Placeholder</h2>
     </div>
   )
