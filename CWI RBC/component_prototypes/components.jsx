@@ -74,6 +74,14 @@ export function RechargeBasinCalculator() {
   });
 
   const handleChange = (e) => {
+    if (e.target.name === "soil_type") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [e.target.name]: e.target.value
+      }));
+      return;
+    }
+    
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -155,6 +163,18 @@ const calculateInsideOfLevee = ({freeboard_depth, water_depth, inside_slope_rati
   return (((2 * (freeboard_depth + water_depth) * inside_slope_ratio  * (width_pond + length_pond) * 2) / 2) / cuft_in_cuyd);
 }
 
+const calculateOutsideOfLevee = ({freeboard_depth, water_depth, outside_slope_ratio, width_pond, length_pond}, cuft_in_cuyd) => {
+  return (((2 * (freeboard_depth + water_depth) * outside_slope_ratio  * (width_pond + length_pond) * 2) / 2) / cuft_in_cuyd);
+}
+
+const calculateTotalVolumeOfEarthwork = (center_of_levee, inside_of_levee, outside_of_levee) => {
+  return center_of_levee + inside_of_levee + outside_of_levee;
+}
+
+const calculateCostOfEarthwork = ({ earthwork_cost_per_cy }, total_volume_of_earthwork) => {
+  return total_volume_of_earthwork * earthwork_cost_per_cy;
+}
+
 export function RoiResults({ formData }) {
   const cuft_in_cuyd = 27;
   // Calculations Section from spreadsheet
@@ -163,7 +183,10 @@ export function RoiResults({ formData }) {
   const perimeter = (formData.width_pond * 2) + (formData.length_pond * 2);
   const center_of_levee = calculateCenterOfLevee(formData, perimeter, cuft_in_cuyd);
   const inside_of_levee = calculateInsideOfLevee(formData, cuft_in_cuyd);
-  console.log(inside_of_levee);
+  const outside_of_levee = calculateOutsideOfLevee(formData, cuft_in_cuyd);
+  const total_volume_of_earthwork = calculateTotalVolumeOfEarthwork(center_of_levee, inside_of_levee, outside_of_levee);
+  const total_cost_of_earthwork = calculateCostOfEarthwork(formData, total_volume_of_earthwork);
+  console.log(total_cost_of_earthwork)
   
 
   return (
