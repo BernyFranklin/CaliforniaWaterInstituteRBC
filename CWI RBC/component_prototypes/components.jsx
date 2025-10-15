@@ -74,18 +74,20 @@ export function RechargeBasinCalculator() {
   });
 
   const handleChange = (e) => {
-    if (e.target.name === "soil_type") {
+    let { name, value } = e.target;
+    if (name === "soil_type") {
       setFormData((prevData) => ({
         ...prevData,
-        [e.target.name]: e.target.value
+        [name]: value
       }));
       return;
     }
 
-    const { name, value } = e.target;
+    value = (value === '') ? '' : parseFloat(value);
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: parseFloat(value)
+      [name]: value
     }));
   }
   
@@ -497,28 +499,28 @@ function DevelopmentCosts( {formData, handleChange }) {
     { text: "Land Cost Per Acre" , 
       id: "land_cost_per_acre", 
       type: "number", min: "0", 
-      value: toString(formData.land_cost_per_acre), 
+      value: formData.land_cost_per_acre, 
       placeholder: "6000" 
     },
     { text: "Total ft of Pipeline", 
       id: "pipeline_length", 
       type: "number", 
       min: "0", 
-      value: toString(formData.pipeline_length), 
+      value: formData.pipeline_length, 
       placeholder: "2640" 
     },
     { text: "Cost per Cubic Yd of Earthwork", 
       id: "earthwork_cost_per_cy", 
       type: "number", 
       min: "0", 
-      value: toString(formData.earthwork_cost_per_cy), 
+      value: formData.earthwork_cost_per_cy, 
       placeholder: "12" 
     },
     { text: "Length of Loan (Years)", 
       id: "loan_length", 
       type: "number", 
       min: "0", 
-      value: toString(formData.loan_length), 
+      value: formData.loan_length, 
       placeholder: "10" 
     },
   ]
