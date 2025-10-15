@@ -195,6 +195,10 @@ const calculatePlusWettedInsideLevee = ({ water_depth, inside_slope_ratio }) => 
   return (water_depth * inside_slope_ratio) * 2;
 }
 
+const calculateNetInsideLengthWettedArea = (outside_length_wetted_area, less_outside_levee, less_top_levee, less_inside_levee, plus_wetted_inside_levee) => {
+  return (outside_length_wetted_area - (less_outside_levee + less_top_levee + less_inside_levee) + plus_wetted_inside_levee);
+}
+
 export function RoiResults({ formData }) {
   const cuft_in_cuyd = 27;
   // Calculations Section from spreadsheet
@@ -211,6 +215,8 @@ export function RoiResults({ formData }) {
   const less_top_levee = calculateLessTopLevee(formData);
   const less_inside_levee = calculateLessInsideLevee(formData);
   const plus_wetted_inside_levee = calculatePlusWettedInsideLevee(formData);
+  const net_inside_length_wetted_area = calculateNetInsideLengthWettedArea(outside_length_wetted_area, less_outside_levee, less_top_levee, less_inside_levee, plus_wetted_inside_levee);
+  console.log(net_inside_length_wetted_area);
   
   
   
@@ -491,28 +497,28 @@ function DevelopmentCosts( {formData, handleChange }) {
     { text: "Land Cost Per Acre" , 
       id: "land_cost_per_acre", 
       type: "number", min: "0", 
-      value: formData.land_cost_per_acre, 
+      value: toString(formData.land_cost_per_acre), 
       placeholder: "6000" 
     },
     { text: "Total ft of Pipeline", 
       id: "pipeline_length", 
       type: "number", 
       min: "0", 
-      value: formData.pipeline_length, 
+      value: toString(formData.pipeline_length), 
       placeholder: "2640" 
     },
     { text: "Cost per Cubic Yd of Earthwork", 
       id: "earthwork_cost_per_cy", 
       type: "number", 
       min: "0", 
-      value: formData.earthwork_cost_per_cy, 
+      value: toString(formData.earthwork_cost_per_cy), 
       placeholder: "12" 
     },
     { text: "Length of Loan (Years)", 
       id: "loan_length", 
       type: "number", 
       min: "0", 
-      value: formData.loan_length, 
+      value: toString(formData.loan_length), 
       placeholder: "10" 
     },
   ]
