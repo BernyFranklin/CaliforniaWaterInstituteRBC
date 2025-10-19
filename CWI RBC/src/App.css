@@ -366,6 +366,17 @@ span.progress-bar {
   min-height: 100vh; /*Change later*/
 }
 
+.outputs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.outputs-table td, thead th {
+  text-align: right;
+}
+
+
 @media screen and (max-width: 1000px) {
   .navbar {
     display: block;

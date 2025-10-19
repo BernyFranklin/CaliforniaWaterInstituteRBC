@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -49,8 +49,7 @@ export function ConceptDesign() {
 export function RechargeBasinCalculator() {
   
   const [formContent, setFormContent] = useState(0);
-  
-  const [formData, setFormData] = useState({
+  const defaultFormData = {
     ac_pond: '',
     length_pond: '',
     width_pond: '',
@@ -71,8 +70,19 @@ export function RechargeBasinCalculator() {
     cost_recharge_water: '',
     value_stored_water: '',
     cost_om: ''
+  }
+  const [formData, setFormData] = useState(() => {
+    // Load saved data from localStorage or default values
+    const saved = localStorage.getItem("formData");
+    return saved ? JSON.parse(saved) : defaultFormData;
   });
 
+  // Save data whenever formData changes
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
+
+  // MAKE A RESET BUTTON THAT CLEARS LOCAL STORAGE AND SETS FORM DATA TO DEFAULT VALUES
   const handleChange = (e) => {
     let { name, value } = e.target;
     // Don't parse soil_type since it's a string
@@ -216,7 +226,8 @@ const calculateWettedAreaGrossPercent = ({ ac_pond }, wetted_area_acres) => {
   return (wetted_area_acres / ac_pond) * 100;
 }
 
-export function RoiResults({ formData }) {
+const getCalculationsData = (formData) => {
+  // Global Vars and Functions for Calculations 
   const cuft_in_cuyd = 27;
   // Calculations Section from spreadsheet
   const sqmi_per_acre = 1/640;
@@ -236,16 +247,158 @@ export function RoiResults({ formData }) {
   const wetted_area_sq_yds = calculateWettedAreaSqYds(net_inside_length_wetted_area);
   const wetted_area_acres = calculateWettedAreaAcres(wetted_area_sq_yds);
   const wetted_area_gross_percent = calculateWettedAreaGrossPercent(formData, wetted_area_acres);
-  console.log(wetted_area_gross_percent);
-  
-  
-  
-  
-  
+  // End of global vars and functions
+  return {
+    cuft_in_cuyd: cuft_in_cuyd,
+    sqmi_per_acre: sqmi_per_acre,
+    area_sqmi: area_sqmi,
+    perimeter: perimeter,
+    center_of_levee: center_of_levee,
+    inside_of_levee: inside_of_levee,
+    outside_of_levee: outside_of_levee,
+    total_volume_of_earthwork: total_volume_of_earthwork,
+    total_cost_of_earthwork: total_cost_of_earthwork,
+    outside_length_wetted_area: outside_length_wetted_area,
+    less_outside_levee: less_outside_levee,
+    less_top_levee: less_top_levee,
+    less_inside_levee: less_inside_levee,
+    plus_wetted_inside_levee: plus_wetted_inside_levee,
+    net_inside_length_wetted_area: net_inside_length_wetted_area,
+    wetted_area_sq_yds: wetted_area_sq_yds,
+    wetted_area_acres: wetted_area_acres,
+    wetted_area_gross_percent: wetted_area_gross_percent
+  };
+}
 
+function CalculationDataSection({formData}) {
+  const calculations = getCalculationsData(formData);
+  const dimensionData = [
+    { label: "Area", value: `${calculations.area_sqmi.toFixed(2)} sq mi` },
+    { label: "Perimeter", value: `${calculations.perimeter.toFixed(2)} ft` }
+  ];
+
+  const earthworkData = [
+    { label: "Center of Levee", value: `${calculations.center_of_levee.toFixed(2)} cu yd` },
+    { label: "Inside of Levee", value: `${calculations.inside_of_levee.toFixed(2)} cu yd` },
+    { label: "Outside of Levee", value: `${calculations.outside_of_levee.toFixed(2)} cu yd` },
+    { label: "Total Volume of Earthwork", value: `${calculations.total_volume_of_earthwork.toFixed(2)} cu yd` },
+    { label: "Total Cost of Earthwork", value: `$${calculations.total_cost_of_earthwork.toFixed(2)}` }
+  ];
+
+  const wettedAreaData = [
+    { label: "Outside Length", value: `${calculations.outside_length_wetted_area.toFixed(2)} ft` },
+    { label: "Less Outside Levee", value: `${calculations.less_outside_levee.toFixed(2)} ft` },
+    { label: "Less Top Levee", value: `${calculations.less_top_levee.toFixed(2)} ft` },
+    { label: "Less Inside Levee", value: `${calculations.less_inside_levee.toFixed(2)} ft` },
+    { label: "Plus Wetted Inside Levee", value: `${calculations.plus_wetted_inside_levee.toFixed(2)} ft` },
+    { label: "Net Inside Length", value: `${calculations.net_inside_length_wetted_area.toFixed(2)} ft` },
+    { label: "Wetted Area (sq yds)", value: `${calculations.wetted_area_sq_yds.toFixed(2)} sq yds` },
+    { label: "Wetted Area (acres)", value: `${calculations.wetted_area_acres.toFixed(2)} acres` },
+    { label: "Wetted Area (gross %)", value: `${calculations.wetted_area_gross_percent.toFixed(2)} %` }
+  ];
+
+  return (
+    <div className="calculation-data-section">
+      <fieldset className="calculation-fieldset">
+        <legend className="fieldset-label">Dimensions</legend>
+        {dimensionData.map((data) => (
+          <div className="display-group" key={data.label}>
+            <span className="display-label">{data.label}:</span>
+            <span className="display-value">{data.value}</span>
+          </div>
+        ))}
+      </fieldset>
+      <fieldset className="calculation-fieldset">
+        <legend className="fieldset-label">Earthwork</legend>
+        {earthworkData.map((data) => (
+          <div className="display-group" key={data.label}>
+            <span className="display-label">{data.label}:</span>
+            <span className="display-value">{data.value}</span>
+          </div>
+        ))}
+      </fieldset>
+      <fieldset className="calculation-fieldset">
+        <legend className="fieldset-label">Wetted Area</legend>
+        {wettedAreaData.map((data) => (
+          <div className="display-group" key={data.label}>
+            <span className="display-label">{data.label}:</span>
+            <span className="display-value">{data.value}</span>
+          </div>
+        ))}
+      </fieldset>
+    </div>
+  )
+}
+
+function OutputsDataSection({ formData }) {
+  const calculations = getCalculationsData(formData);
+  const landCost = formData.ac_pond * formData.land_cost_per_acre;
+  const pipelineInletCost = 20000;
+
+  const outputs = [
+    { label: "Land Purchase", 
+      quantity: formData.ac_pond, 
+      quantity_unit: "acres", 
+      unit_cost: formData.land_cost_per_acre, 
+      unit_cost_units: "acre",
+      cost: landCost, 
+      cost_per_acre: formData.land_cost_per_acre 
+    },
+    { label: "Earthwork",
+      quantity: calculations.total_volume_of_earthwork,
+      quantity_unit: "cubic yds",
+      unit_cost: formData.earthwork_cost_per_cy,
+      unit_cost_units: "cubic yd",
+      cost: calculations.total_cost_of_earthwork,
+      cost_per_acre: (calculations.total_cost_of_earthwork / formData.ac_pond)
+    },
+    { label: "Pipeline Inlets",
+      quantity: 1,
+      quantity_unit: "each",
+      unit_cost: pipelineInletCost,
+      unit_cost_units: "each",
+      cost: pipelineInletCost,
+      cost_per_acre: (pipelineInletCost / formData.ac_pond)
+    },
+  ]
+  return (
+    <div className="outputs-data-section">
+      <fieldset className="outputs-fieldset">
+        <legend className="fieldset-label">Outputs</legend>
+        <table className="outputs-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Quantity</th>
+              <th>Unit Cost</th>
+              <th>Cost</th>
+              <th>Cost per Acre</th>
+            </tr>
+          </thead>
+          <tbody>
+            {outputs.map((output) => (
+              <tr key={output.label}>
+                <th className="row-title">{output.label}</th>
+                <td>{output.quantity.toFixed(1)} /{output.quantity_unit}</td>
+                <td>${output.unit_cost.toLocaleString()} /{output.unit_cost_units}</td>
+                <td>${output.cost.toLocaleString()}</td>
+                <td>${output.cost_per_acre.toLocaleString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </fieldset>
+    </div>
+  )
+}
+
+export function RoiResults({ formData }) {
+  
   return (
     <div className="roi-results" id="roi-results-section">
       <h2>ROI Results Placeholder</h2>
+      <CalculationDataSection formData={formData} />
+      <OutputsDataSection formData={formData} />
     </div>
   )
 }
