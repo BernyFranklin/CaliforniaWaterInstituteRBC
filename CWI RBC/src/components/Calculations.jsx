@@ -380,7 +380,7 @@ export function OutputsDataSection({ formData }) {
 
   return (
     <div className="outputs-data-section">
-      <fieldset className="outputs-fieldset">
+      <fieldset className="calculation-fieldset">
         <legend className="fieldset-label">Outputs</legend>
         <table className="outputs-table">
           <thead>

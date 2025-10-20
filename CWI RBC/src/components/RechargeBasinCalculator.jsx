@@ -340,11 +340,13 @@ function WaterCosts({ formData, handleChange }) {
 function RoiResults({ formData }) {
   
   return (
-    <div className="roi-results" id="roi-results-section">
-      <h2>ROI Results Placeholder</h2>
-      <CalculationDataSection formData={formData} />
-      <OutputsDataSection formData={formData} />
-    </div>
+    <>
+      <h2 className="results-header">Results</h2>
+      <div className="roi-results" id="roi-results-section">
+        <CalculationDataSection formData={formData} />
+        <OutputsDataSection formData={formData} />
+      </div>
+    </>
   )
 }
 

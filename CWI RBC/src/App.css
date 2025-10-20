@@ -361,12 +361,26 @@ span.progress-bar {
   font-family: inherit;
   background-color: #fff;
   color: #000;
-  padding: 3rem;
+  padding: 0 1rem;
   text-align: center;
   margin: 0;
   min-height: 100vh; /*Change later*/
 }
 
+.display-group {
+  display: flex;
+  
+}
+.display-label {
+  justify-content: flex-start;
+  width: 25%;
+  font-weight: 600;
+}
+
+.display-value {
+  text-align: right;
+  width: 25%;
+}
 .outputs-table {
   width: 100%;
   border-collapse: collapse;
@@ -400,6 +414,21 @@ span.progress-bar {
   text-decoration: underline;
 }
 
+.calculation-fieldset {
+  border-radius: 5px;
+  border: 3px solid #ccc;
+  padding: 2rem;
+  margin-top: 0rem;
+  text-align: left;
+}
+
+.results-header {
+  font-family: inherit;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
 
 @media screen and (max-width: 1000px) {
   .navbar {
