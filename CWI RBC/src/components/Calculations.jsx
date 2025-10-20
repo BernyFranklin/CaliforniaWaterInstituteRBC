@@ -413,7 +413,7 @@ export function OutputsDataSection({ formData }) {
         <div className="disclaimer-text">
           <ul>
             <li>
-              Note: this tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Consult with your water district manager regarding the frequency of availability and cost of recharge water.
+              This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Consult with your water district manager regarding the frequency of availability and cost of recharge water.
             </li>
             <li>
               Engineering firms with experience in recharge basin design include:
