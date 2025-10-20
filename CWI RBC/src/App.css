@@ -369,17 +369,17 @@ span.progress-bar {
 
 .display-group {
   display: flex;
-  
+  text-wrap: nowrap;
 }
 .display-label {
   justify-content: flex-start;
-  width: 25%;
+  width: 50%;
   font-weight: 600;
 }
 
 .display-value {
   text-align: right;
-  width: 25%;
+  width: 50%;
 }
 .outputs-table {
   width: 100%;
@@ -398,8 +398,12 @@ span.progress-bar {
 .disclaimer-text {
   font-size: 0.9rem;
   color: #555;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   text-align: left;
+}
+
+.disclaimer-text li {
+  margin-bottom: 0;
 }
 
 .disclaimer-text a {
@@ -414,19 +418,34 @@ span.progress-bar {
   text-decoration: underline;
 }
 
+.calculation-data-section {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+}
+
 .calculation-fieldset {
   border-radius: 5px;
   border: 3px solid #ccc;
-  padding: 2rem;
+  padding: 1.25rem;
   margin-top: 0rem;
   text-align: left;
+}
+
+#dimensions-fieldset,
+#earthwork-fieldset,
+#wetted-area-fieldset {
+  width: 30%
+}
+
+#outputs-fieldset {
+  padding-top: 0;
 }
 
 .results-header {
   font-family: inherit;
   font-weight: 500;
-  margin: 0;
-  padding: 0;
+  padding: 1.5rem;
   text-align: center;
 }
 

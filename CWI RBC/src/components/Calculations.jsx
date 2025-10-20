@@ -295,34 +295,40 @@ return outputs;
 
 export function CalculationDataSection({formData}) {
   const calculations = getCalculationsData(formData);
+  const formatWithCommas = (num) => {
+    return num.toLocaleString( 'en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    });
+  }
   const dimensionData = [
-    { label: "Area", value: `${calculations.area_sqmi.toFixed(2)} sq mi` },
-    { label: "Perimeter", value: `${calculations.perimeter.toFixed(2)} ft` }
+    { label: "Area", value: `${formatWithCommas(calculations.area_sqmi)} sq mi` },
+    { label: "Perimeter", value: `${formatWithCommas(calculations.perimeter)} ft` }
   ];
 
   const earthworkData = [
-    { label: "Center of Levee", value: `${calculations.center_of_levee.toFixed(2)} cu yd` },
-    { label: "Inside of Levee", value: `${calculations.inside_of_levee.toFixed(2)} cu yd` },
-    { label: "Outside of Levee", value: `${calculations.outside_of_levee.toFixed(2)} cu yd` },
-    { label: "Total Volume of Earthwork", value: `${calculations.total_volume_of_earthwork.toFixed(2)} cu yd` },
-    { label: "Total Cost of Earthwork", value: `$${calculations.total_cost_of_earthwork.toFixed(2)}` }
+    { label: "Center of Levee", value: `${formatWithCommas(calculations.center_of_levee)} cu yd` },
+    { label: "Inside of Levee", value: `${formatWithCommas(calculations.inside_of_levee)} cu yd` },
+    { label: "Outside of Levee", value: `${formatWithCommas(calculations.outside_of_levee)} cu yd` },
+    { label: "Total Volume of Earthwork", value: `${formatWithCommas(calculations.total_volume_of_earthwork)} cu yd` },
+    { label: "Total Cost of Earthwork", value: `$${formatWithCommas(calculations.total_cost_of_earthwork)}` }
   ];
 
   const wettedAreaData = [
-    { label: "Outside Length", value: `${calculations.outside_length_wetted_area.toFixed(2)} ft` },
-    { label: "Less Outside Levee", value: `${calculations.less_outside_levee.toFixed(2)} ft` },
-    { label: "Less Top Levee", value: `${calculations.less_top_levee.toFixed(2)} ft` },
-    { label: "Less Inside Levee", value: `${calculations.less_inside_levee.toFixed(2)} ft` },
-    { label: "Plus Wetted Inside Levee", value: `${calculations.plus_wetted_inside_levee.toFixed(2)} ft` },
-    { label: "Net Inside Length", value: `${calculations.net_inside_length_wetted_area.toFixed(2)} ft` },
-    { label: "Wetted Area (sq yds)", value: `${calculations.wetted_area_sq_yds.toFixed(2)} sq yds` },
-    { label: "Wetted Area (acres)", value: `${calculations.wetted_area_acres.toFixed(2)} acres` },
-    { label: "Wetted Area (gross %)", value: `${calculations.wetted_area_gross_percent.toFixed(2)} %` }
+    { label: "Outside Length", value: `${formatWithCommas(calculations.outside_length_wetted_area)} ft` },
+    { label: "Less Outside Levee", value: `${formatWithCommas(calculations.less_outside_levee)} ft` },
+    { label: "Less Top Levee", value: `${formatWithCommas(calculations.less_top_levee)} ft` },
+    { label: "Less Inside Levee", value: `${formatWithCommas(calculations.less_inside_levee)} ft` },
+    { label: "Plus Wetted Inside Levee", value: `${formatWithCommas(calculations.plus_wetted_inside_levee)} ft` },
+    { label: "Net Inside Length", value: `${formatWithCommas(calculations.net_inside_length_wetted_area)} ft` },
+    { label: "Wetted Area (sq yds)", value: `${formatWithCommas(calculations.wetted_area_sq_yds)} sq yds` },
+    { label: "Wetted Area (acres)", value: `${formatWithCommas(calculations.wetted_area_acres)} acres` },
+    { label: "Wetted Area (gross %)", value: `${formatWithCommas(calculations.wetted_area_gross_percent)} %` }
   ];
 
   return (
     <div className="calculation-data-section">
-      <fieldset className="calculation-fieldset">
+      <fieldset className="calculation-fieldset" id="dimensions-fieldset">
         <legend className="fieldset-label">Dimensions</legend>
         {dimensionData.map((data) => (
           <div className="display-group" key={data.label}>
@@ -331,7 +337,7 @@ export function CalculationDataSection({formData}) {
           </div>
         ))}
       </fieldset>
-      <fieldset className="calculation-fieldset">
+      <fieldset className="calculation-fieldset" id="earthwork-fieldset">
         <legend className="fieldset-label">Earthwork</legend>
         {earthworkData.map((data) => (
           <div className="display-group" key={data.label}>
@@ -340,7 +346,7 @@ export function CalculationDataSection({formData}) {
           </div>
         ))}
       </fieldset>
-      <fieldset className="calculation-fieldset">
+      <fieldset className="calculation-fieldset" id="wetted-area-fieldset">
         <legend className="fieldset-label">Wetted Area</legend>
         {wettedAreaData.map((data) => (
           <div className="display-group" key={data.label}>
@@ -360,8 +366,8 @@ export function OutputsDataSection({ formData }) {
     return num.toLocaleString( 'en-US', {
       style: 'currency',
       currency: 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
     });
   }
 
@@ -380,7 +386,7 @@ export function OutputsDataSection({ formData }) {
 
   return (
     <div className="outputs-data-section">
-      <fieldset className="calculation-fieldset">
+      <fieldset className="calculation-fieldset" id="outputs-fieldset">
         <legend className="fieldset-label">Outputs</legend>
         <table className="outputs-table">
           <thead>
@@ -405,15 +411,25 @@ export function OutputsDataSection({ formData }) {
           </tbody>
         </table>
         <div className="disclaimer-text">
-          <p className="disclaimer-text">Note: this tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Consult with your water district manager regarding the frequency of availability and cost of recharge water.</p>
-          <p>Engineering firms with experience in recharge basin design include:</p>
           <ul>
-            {engineeringFirms.map((firm) => (
-              <li key={firm.name}><a href={firm.url} target="_blank">{firm.name}</a></li>
-            ))}
+            <li>
+              Note: this tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Consult with your water district manager regarding the frequency of availability and cost of recharge water.
+            </li>
+            <li>
+              Engineering firms with experience in recharge basin design include:
+              <ul>
+                {engineeringFirms.map((firm) => (
+                  <li key={firm.name}><a href={firm.url} target="_blank">{firm.name}</a></li>
+              ))}
+            </ul>
+            </li>
+            <li>
+              Annual loss of crop profits not included - If you assume almonds as the crop, the annual loss of profit is $0
+            </li>
+            <li>
+              Annual evaporation losses not included - assume that equals 30%
+            </li>
           </ul>
-          <p>Annual loss of crop profits not included - If you assume almonds as the crop, the annual loss of profit is $0</p>
-          <p>Annual evaporation losses not included - assume that equals 30%</p>
         </div>
       </fieldset>
     </div>
