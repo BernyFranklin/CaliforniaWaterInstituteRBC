@@ -358,6 +358,7 @@ span.progress-bar {
 }
 
 .roi-results {
+  font-family: inherit;
   background-color: #fff;
   color: #000;
   padding: 3rem;
@@ -374,6 +375,29 @@ span.progress-bar {
 
 .outputs-table td, thead th {
   text-align: right;
+}
+
+.outputs-row-title {
+  text-align: left;
+}
+
+.disclaimer-text {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.disclaimer-text a {
+  display: inline-block;
+  color: #193565;
+  transition: transform 0.3s ease;
+  text-decoration: none;
+}
+
+.disclaimer-text a:hover {
+  transform: translateY(-2px);
+  text-decoration: underline;
 }
 
 
