@@ -59,7 +59,7 @@ const calculateWettedAreaGrossPercent = ({ ac_pond }, wetted_area_acres) => {
   return (wetted_area_acres / ac_pond) * 100;
 }
 
-const getCalculationsData = (formData) => {
+export const getCalculationsData = (formData) => {
   // Global Vars and Functions for Calculations 
   const cuft_in_cuyd = 27;
   // Calculations Section from spreadsheet
@@ -109,26 +109,26 @@ const getEngineeringFirms = () => {
     ];
 }
 
-const getOutputCalculations = (formData) => {
-    // used for annual capital payment
-    const pmt = (rate, nper, pv) => {
-        if (rate === 0) return -(pv / nper);
-        return (rate * pv) / (1 - Math.pow(1 + rate, -nper));
-    }
+export const getOutputCalculations = (formData) => {
+  // used for annual capital payment
+  const pmt = (rate, nper, pv) => {
+    if (rate === 0) return -(pv / nper);
+    return (rate * pv) / (1 - Math.pow(1 + rate, -nper));
+  }
     
-    // Calculations and values for Outputs Section
-    const calculations = getCalculationsData(formData);
-    const landCost = formData.ac_pond * formData.land_cost_per_acre;
-    const pipelineInletCost = 20000;
-    const pipelineCostPerFt = 200;
-    const pipelineTotalCost = formData.pipeline_length * pipelineCostPerFt;
-    const fencingQty = 0;
-    const fencingCostPerFt = 6; // Placeholder value for fencing cost per ft
-    const fencingTotalCost = fencingQty * fencingCostPerFt;
-    const subtotal = landCost + calculations.total_cost_of_earthwork + pipelineInletCost + pipelineTotalCost + fencingTotalCost;
-    const engineeringPercentage = 0.2;
-    const engineeringCost = subtotal * engineeringPercentage;
-    const totalCostEstimate = subtotal + engineeringCost;
+  // Calculations and values for Outputs Section
+  const calculations = getCalculationsData(formData);
+  const landCost = formData.ac_pond * formData.land_cost_per_acre;
+  const pipelineInletCost = 20000;
+  const pipelineCostPerFt = 200;
+  const pipelineTotalCost = formData.pipeline_length * pipelineCostPerFt;
+  const fencingQty = 0;
+  const fencingCostPerFt = 6; // Placeholder value for fencing cost per ft
+  const fencingTotalCost = fencingQty * fencingCostPerFt;
+  const subtotal = landCost + calculations.total_cost_of_earthwork + pipelineInletCost + pipelineTotalCost + fencingTotalCost;
+  const engineeringPercentage = 0.2;
+  const engineeringCost = subtotal * engineeringPercentage;
+  const totalCostEstimate = subtotal + engineeringCost;
   const annualCapitalPayment = pmt(formData.annual_interest_rate / 100, formData.loan_length, totalCostEstimate);
   const avgAnnualRechargeDepth = formData.infiltration_rate * calculations.wetted_area_acres;
   const [annualEvapLossNotIncluded, setAnnualEvapLossNotIncluded] = useState(30); // Use for user manip later

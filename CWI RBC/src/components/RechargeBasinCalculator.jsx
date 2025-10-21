@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Button from './Button.jsx';
 import { CalculationDataSection, OutputsDataSection } from './Calculations';
+import ReturnOnInvestmentTable from './ReturnOnInvestmentTable.jsx';
 
 function CalculatorHeader() {
   return (
@@ -345,6 +346,7 @@ function RoiResults({ formData }) {
       <div className="roi-results" id="roi-results-section">
         <CalculationDataSection formData={formData} />
         <OutputsDataSection formData={formData} />
+        <ReturnOnInvestmentTable formData={formData} />
       </div>
     </>
   )
