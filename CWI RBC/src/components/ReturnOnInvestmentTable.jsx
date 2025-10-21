@@ -5,12 +5,12 @@ const tableRows = (lengthOfLoan, initialCost, annualCost, annualBenefit) => {
         { year: 0, costs: initialCost, benefits: 0, netBenefit: initialCost }
     ];
 
-    for (let i = 1; i < lengthOfLoan; i++) {
+    for (let i = 1; i <= lengthOfLoan; i++) {
         const obj = {
             year: i,
             costs: annualCost,
             benefits: annualBenefit,
-            netBenefit: (annualBenefit - annualCost),
+            netBenefit: (annualBenefit + annualCost),   // annualCost is negative
         };
         rows.push(obj);
     }
