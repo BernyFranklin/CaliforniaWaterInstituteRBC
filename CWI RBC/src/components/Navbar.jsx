@@ -14,7 +14,7 @@ export default function Navbar({setContent}) {
   return (
     <nav className="navbar has-shadow">
         <span className="nav-logo">
-          <a href="#"><img src="./src/assets/logo-300x62.png" alt="CWI Logo" className="cwi-logo" /></a>
+          <a onClick={handleAboutClick}><img src="./src/assets/logo-300x62.png" alt="CWI Logo" className="cwi-logo" /></a>
         </span>
         <span className="nav-links">
           <a onClick={handleAboutClick}>About</a>

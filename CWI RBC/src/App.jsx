@@ -14,14 +14,10 @@ function App() {
     <AboutSection />, <ConceptDesign />, <RechargeBasinCalculator />
     ]
   
-  const displayHero = () => {
-    return (content === 0) && <Hero />;
-  }
-  
   return (
     <>
       <Navbar setContent={setContent} />
-        {displayHero()}
+        {content === 0 && <Hero />}
         {contents[content]}
       <Footer />
     </>

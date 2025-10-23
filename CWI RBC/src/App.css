@@ -29,6 +29,10 @@ button:hover {
   margin:0;
 }
 
+.cwi-logo:hover {
+  cursor: pointer;
+}
+
 .navbar {
   background-color: #b1102b;
   padding: 3rem;
