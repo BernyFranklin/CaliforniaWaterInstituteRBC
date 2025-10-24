@@ -302,7 +302,7 @@ export function CalculationDataSection({formData}) {
     });
   }
   const dimensionData = [
-    { label: "Area", value: `${formatWithCommas(calculations.area_sqmi)} sq mi` },
+    { label: "Area", value: `${calculations.area_sqmi} sq mi` },
     { label: "Perimeter", value: `${formatWithCommas(calculations.perimeter)} ft` }
   ];
 

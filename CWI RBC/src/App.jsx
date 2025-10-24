@@ -9,7 +9,6 @@ import './App.css'
 
 function App() {
   const [content, setContent] = useState(0);
-  // needs concept design and recharge basin calculator
   const contents = [
     <AboutSection />, <ConceptDesign />, <RechargeBasinCalculator />
     ]
