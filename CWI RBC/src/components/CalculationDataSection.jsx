@@ -1,6 +1,42 @@
 import { getCalculationsData } from '../utils/calculations/aggregateCalculations.js';
 import { formatWithCommas } from '../utils/formatters.js';
 
+// Local component styles so this is standalone
+const styles = {
+  container: {
+    display: 'flex',
+    alignItems: 'stretch',
+    justifyContent: 'space-between',
+  },
+  fieldset: {
+    borderRadius: '5px',
+    border: '3px solid #ccc',
+    padding: '1.25rem',
+    marginTop: 0,
+    textAlign: 'left',
+    width: '32%',
+    boxSizing: 'border-box',
+  },
+  legend: {
+    fontFamily: 'inherit',
+    fontSize: '1.5rem',
+    padding: '0.5rem',
+  },
+  group: {
+    display: 'flex',
+    textWrap: 'nowrap',
+  },
+  label: {
+    justifyContent: 'flex-start',
+    width: '50%',
+    fontWeight: 600,
+  },
+  value: {
+    textAlign: 'right',
+    width: '50%',
+  },
+};
+
 export default function CalculationDataSection({ formData }) {
   const calculations = getCalculationsData(formData);
   const dimensionData = [
@@ -29,31 +65,31 @@ export default function CalculationDataSection({ formData }) {
   ];
 
   return (
-    <div className="calculation-data-section">
-      <fieldset className="calculation-fieldset" id="dimensions-fieldset">
-        <legend className="fieldset-label">Dimensions</legend>
+    <div className="calculation-data-section" style={styles.container}>
+      <fieldset className="calculation-fieldset" id="dimensions-fieldset" style={styles.fieldset}>
+        <legend className="fieldset-label" style={styles.legend}>Dimensions</legend>
         {dimensionData.map((data) => (
-          <div className="display-group" key={data.label}>
-            <span className="display-label">{data.label}:</span>
-            <span className="display-value">{data.value}</span>
+          <div className="display-group" style={styles.group} key={data.label}>
+            <span className="display-label" style={styles.label}>{data.label}:</span>
+            <span className="display-value" style={styles.value}>{data.value}</span>
           </div>
         ))}
       </fieldset>
-      <fieldset className="calculation-fieldset" id="earthwork-fieldset">
-        <legend className="fieldset-label">Earthwork</legend>
+      <fieldset className="calculation-fieldset" id="earthwork-fieldset" style={styles.fieldset}>
+        <legend className="fieldset-label" style={styles.legend}>Earthwork</legend>
         {earthworkData.map((data) => (
-          <div className="display-group" key={data.label}>
-            <span className="display-label">{data.label}:</span>
-            <span className="display-value">{data.value}</span>
+          <div className="display-group" style={styles.group} key={data.label}>
+            <span className="display-label" style={styles.label}>{data.label}:</span>
+            <span className="display-value" style={styles.value}>{data.value}</span>
           </div>
         ))}
       </fieldset>
-      <fieldset className="calculation-fieldset" id="wetted-area-fieldset">
-        <legend className="fieldset-label">Wetted Area</legend>
+      <fieldset className="calculation-fieldset" id="wetted-area-fieldset" style={styles.fieldset}>
+        <legend className="fieldset-label" style={styles.legend}>Wetted Area</legend>
         {wettedAreaData.map((data) => (
-          <div className="display-group" key={data.label}>
-            <span className="display-label">{data.label}:</span>
-            <span className="display-value">{data.value}</span>
+          <div className="display-group" style={styles.group} key={data.label}>
+            <span className="display-label" style={styles.label}>{data.label}:</span>
+            <span className="display-value" style={styles.value}>{data.value}</span>
           </div>
         ))}
       </fieldset>
