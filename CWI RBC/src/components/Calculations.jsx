@@ -21,6 +21,13 @@ import {
   calculateAllWettedArea
 } from '../utils/calculations/wettedAreaCalculations.js';
 
+import {
+  formatWithCommas,
+  toPrice,
+  formatQty,
+  formatUnits
+} from '../utils/formatters.js';
+
 // Earthwork calculations moved to ../utils/calculations/earthworkCalculations.js
 
 // Wetted area calculations moved to ../utils/calculations/wettedAreaCalculations.js
@@ -249,12 +256,6 @@ return outputs;
 
 export function CalculationDataSection({formData}) {
   const calculations = getCalculationsData(formData);
-  const formatWithCommas = (num) => {
-    return num.toLocaleString( 'en-US', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    });
-  }
   const dimensionData = [
     { label: "Area", value: `${calculations.area_sqmi} sq mi` },
     { label: "Perimeter", value: `${formatWithCommas(calculations.perimeter)} ft` }
