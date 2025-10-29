@@ -1,6 +1,6 @@
 import Button from '../Button.jsx';
 
-export default function ButtonBar({ formContent, setFormContent, contents }) {
+export default function ButtonBar({ formContent, setFormContent, contents, onReset }) {
   const backButtonColor = formContent === 0 ? 'gray-button' : 'red-button';
 
   function NextOrSubmitButton() {
@@ -26,6 +26,13 @@ export default function ButtonBar({ formContent, setFormContent, contents }) {
         <a onClick={handleBackClick}>
           <Button className={`${backButtonColor}`} text="Back" />
         </a>
+      </span>
+      <span className="button-bar-center">
+        {typeof onReset === 'function' && (
+          <a onClick={onReset}>
+            <Button className="red-button" text="Reset" />
+          </a>
+        )}
       </span>
       {formContent !== 4 && (
         <span className="button-bar-right">

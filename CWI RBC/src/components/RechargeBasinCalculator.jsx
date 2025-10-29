@@ -66,6 +66,17 @@ export default function RechargeBasinCalculator() {
   }, [setFormData])
   
   const handleSanitize = useCallback((fieldId, rawValue) => sanitizeValue(fieldId, rawValue), []);
+
+  const handleReset = useCallback(() => {
+    try {
+      localStorage.removeItem('formData');
+    } catch (e) {
+      // ignore storage errors
+    }
+    // Reset form data and step index
+    setFormData({ ...defaultFormData });
+    setFormContent(0);
+  }, [setFormData]);
   
   const contents = [
     <BasinSizeAndDesign formData={formData} handleChange={handleChange} onSanitize={handleSanitize} />, 
@@ -87,6 +98,7 @@ export default function RechargeBasinCalculator() {
           formContent={formContent} 
           setFormContent={setFormContent}
           contents={contents}
+          onReset={handleReset}
         />
       </div>
     </section>

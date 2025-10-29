@@ -274,6 +274,11 @@ span.progress-bar {
   padding: 0.5rem;
 }
 
+.button-bar-center {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
 .button-bar-right {
   display: flex;
   align-items: flex-end;
