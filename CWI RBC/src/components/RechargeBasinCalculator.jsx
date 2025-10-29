@@ -1,77 +1,13 @@
 import { useState, useCallback } from 'react';
 import Button from './Button.jsx';
-import CalculationDataSection from './CalculationDataSection.jsx';
-import OutputsDataSection from './OutputsDataSection.jsx';
-import ReturnOnInvestmentTable from './ReturnOnInvestmentTable.jsx';
+import CalculatorHeader from './calculator/CalculatorHeader.jsx';
+import ProgressBar from './calculator/ProgressBar.jsx';
+import ButtonBar from './calculator/ButtonBar.jsx';
+import RoiResults from './calculator/RoiResults.jsx';
 import FormSection from './forms/FormSection.jsx';
 import { usePersistentState } from '../utils/hooks/usePersistentState.js';
 import { defaultFormData } from '../utils/form/defaultFormData.js';
 
-function CalculatorHeader() {
-  return (
-    <div id="calculator-header">
-      <h2>Water Recharge Basin Calculator</h2>
-      <p>This calculator is intended to help farmers determine whether a recharge basin on or near their property is worthwhile. This tool provides only a preliminary cost estimate. Recharge basins should be professionally designed to reduce the risk of basin failure. Farmers should consult with your water district manager regarding the frequency of availability and cost of recharge water. At the moment, this calculator is still work in progress, and has been discussed at just one Technical Committee Meeting of the Water Blueprint. At the moment, the calculator assumes one basin on flat land. </p>
-    </div>
-  )
-}
-
-function ProgressBar({ current }) {
-  
-  const sections = [
-    { index: 0, id: "progress-bar-left", text: "Basin Size and Design" },
-    { index: 1, id: "progress-bar-center-left", text: "Water Availability" },
-    { index: 2, id: "progress-bar-center-right", text: "Development Costs" },
-    { index: 3, id: "progress-bar-right", text: "Water Costs" }
-  ]
-
-  // removed unused isSubmitted variable
-
-  const sectionColor = (index) => {
-    return (
-      ( index <= current) ? "progress-bar-fill" : "progress-bar-empty"
-    )
-  }
-
-  return (
-    <div id="progress-bar" className="progress-bar-container">
-      {
-        sections.map((section) => (
-        <span className={`progress-bar ${sectionColor(section.index)}`} id={section.id} key={section.id}>{section.text}</span> 
-      ))}
-    </div>
-  )
-}
-
-function ButtonBar({formContent, setFormContent, contents}) {
-  const backButtonColor = (formContent === 0) ? "gray-button" : "red-button";
-  
-  function NextOrSubmitButton() {
-    const buttonText = (formContent === contents.length - 2) ? "Submit" : "Next";
-    return (<Button className="red-button" text={buttonText} />)
-  }
-
-  const handleBackClick = () => {
-    (formContent > 0) ? setFormContent(formContent - 1) : setFormContent(formContent);
-  }
-
-  const handleSubmitClick = () => {
-    setFormContent(4);
-  }
-
-  const handleNextClick = () => {
-    (formContent < contents.length - 2) ? setFormContent(formContent + 1) : handleSubmitClick();
-  }
-
-  return (
-    <div className="button-bar">
-      <span className="button-bar-left">
-        <a onClick={handleBackClick}><Button className={`${backButtonColor}`} text="Back" /></a>
-      </span>
-      {(formContent !== 4) && <span className="button-bar-right"><a onClick={handleNextClick}><NextOrSubmitButton/></a></span>}
-    </div>
-  )
-}
 
 function BasinSizeAndDesign({ formData, handleChange }) {
   const labels = [
@@ -259,19 +195,6 @@ function WaterCosts({ formData, handleChange }) {
 }
 
 
-function RoiResults({ formData }) {
-  
-  return (
-    <>
-      <h2 className="results-header">Results</h2>
-      <div className="roi-results" id="roi-results-section">
-        <CalculationDataSection formData={formData} />
-        <OutputsDataSection formData={formData} />
-        <ReturnOnInvestmentTable formData={formData} />
-      </div>
-    </>
-  )
-}
 
 export default function RechargeBasinCalculator() {
   const [formContent, setFormContent] = useState(0);
