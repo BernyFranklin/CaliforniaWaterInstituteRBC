@@ -17,43 +17,13 @@ import {
   calculateAllEarthwork
 } from '../utils/calculations/earthworkCalculations.js';
 
+import {
+  calculateAllWettedArea
+} from '../utils/calculations/wettedAreaCalculations.js';
+
 // Earthwork calculations moved to ../utils/calculations/earthworkCalculations.js
 
-const calculateOutsideLengthWettedArea = (perimeter) => {
-  return perimeter / 4;
-}
-
-const calculateLessOutsideLevee = ({ freeboard_depth, water_depth, outside_slope_ratio }) => {
-  return ((freeboard_depth + water_depth) * outside_slope_ratio) * 2;
-}
-
-const calculateLessTopLevee = ({ levee_width }) => {
-  return levee_width * 2;
-}
-
-const calculateLessInsideLevee = ({ freeboard_depth, water_depth, inside_slope_ratio }) => {
-  return ((freeboard_depth + water_depth) * inside_slope_ratio) * 2;
-}
-
-const calculatePlusWettedInsideLevee = ({ water_depth, inside_slope_ratio }) => {
-  return (water_depth * inside_slope_ratio) * 2;
-}
-
-const calculateNetInsideLengthWettedArea = (outside_length_wetted_area, less_outside_levee, less_top_levee, less_inside_levee, plus_wetted_inside_levee) => {
-  return (outside_length_wetted_area - (less_outside_levee + less_top_levee + less_inside_levee) + plus_wetted_inside_levee);
-}
-
-const calculateWettedAreaSqYds = (net_inside_length_wetted_area) => {
-  return net_inside_length_wetted_area**2 / SQFT_IN_SQYD;
-}
-
-const calculateWettedAreaAcres = (wetted_area_sq_yds) => {
-  return wetted_area_sq_yds / SQYD_IN_ACRE;
-}
-
-const calculateWettedAreaGrossPercent = ({ ac_pond }, wetted_area_acres) => {
-  return (wetted_area_acres / ac_pond) * 100;
-}
+// Wetted area calculations moved to ../utils/calculations/wettedAreaCalculations.js
 
 export const getCalculationsData = (formData) => {
   // Calculations Section from spreadsheet
@@ -62,15 +32,10 @@ export const getCalculationsData = (formData) => {
   // Calculate all earthwork values using the earthwork module
   const earthworkResults = calculateAllEarthwork(formData);
   const { perimeter, center_of_levee, inside_of_levee, outside_of_levee, total_volume_of_earthwork, total_cost_of_earthwork } = earthworkResults;
-  const outside_length_wetted_area = calculateOutsideLengthWettedArea(perimeter);
-  const less_outside_levee = calculateLessOutsideLevee(formData);
-  const less_top_levee = calculateLessTopLevee(formData);
-  const less_inside_levee = calculateLessInsideLevee(formData);
-  const plus_wetted_inside_levee = calculatePlusWettedInsideLevee(formData);
-  const net_inside_length_wetted_area = calculateNetInsideLengthWettedArea(outside_length_wetted_area, less_outside_levee, less_top_levee, less_inside_levee, plus_wetted_inside_levee);
-  const wetted_area_sq_yds = calculateWettedAreaSqYds(net_inside_length_wetted_area);
-  const wetted_area_acres = calculateWettedAreaAcres(wetted_area_sq_yds);
-  const wetted_area_gross_percent = calculateWettedAreaGrossPercent(formData, wetted_area_acres);
+  
+  // Calculate all wetted area values using the wetted area module
+  const wettedAreaResults = calculateAllWettedArea(formData, perimeter);
+  const { outside_length_wetted_area, less_outside_levee, less_top_levee, less_inside_levee, plus_wetted_inside_levee, net_inside_length_wetted_area, wetted_area_sq_yds, wetted_area_acres, wetted_area_gross_percent } = wettedAreaResults;
   // End of global vars and functions
   return {
     cuft_in_cuyd: CUFT_IN_CUYD,
