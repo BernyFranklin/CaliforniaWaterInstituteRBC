@@ -1,4 +1,4 @@
-export default function InputField({ field, value, onChange }) {
+export default function InputField({ field, value, onChange, sanitizeValue }) {
   const { id, text, type = 'text', min, max, step, options } = field;
 
   if (type === 'select') {
@@ -20,6 +20,16 @@ export default function InputField({ field, value, onChange }) {
     );
   }
 
+  const handleBlur = (e) => {
+    if (typeof sanitizeValue !== 'function') return;
+    // Only sanitize numeric inputs; selects/others can skip
+    if (type !== 'number') return;
+    const sanitized = sanitizeValue(id, e.target.value);
+    if (sanitized !== e.target.value) {
+      onChange({ target: { name: id, value: sanitized } });
+    }
+  };
+
   return (
     <div className="input-group">
       <label htmlFor={id}>{text}</label>
@@ -30,8 +40,10 @@ export default function InputField({ field, value, onChange }) {
         min={min}
         max={max}
         step={step}
+        placeholder={field.placeholder}
         value={value}
         onChange={onChange}
+        onBlur={handleBlur}
       />
     </div>
   );
