@@ -13,26 +13,11 @@ import {
   FILL_RATE_MULTIPLIER
 } from '../utils/constants.js';
 
-const calculateCenterOfLevee = ({freeboard_depth, water_depth, levee_width}, perimeter, cuft_in_cuyd) => {
+import {
+  calculateAllEarthwork
+} from '../utils/calculations/earthworkCalculations.js';
 
-  return (perimeter * (freeboard_depth + water_depth) * levee_width) / cuft_in_cuyd;
-}
-
-const calculateInsideOfLevee = ({freeboard_depth, water_depth, inside_slope_ratio, width_pond, length_pond}, cuft_in_cuyd) => {
-  return (((2 * (freeboard_depth + water_depth) * inside_slope_ratio  * (width_pond + length_pond) * 2) / 2) / cuft_in_cuyd);
-}
-
-const calculateOutsideOfLevee = ({freeboard_depth, water_depth, outside_slope_ratio, width_pond, length_pond}, cuft_in_cuyd) => {
-  return (((2 * (freeboard_depth + water_depth) * outside_slope_ratio  * (width_pond + length_pond) * 2) / 2) / cuft_in_cuyd);
-}
-
-const calculateTotalVolumeOfEarthwork = (center_of_levee, inside_of_levee, outside_of_levee) => {
-  return center_of_levee + inside_of_levee + outside_of_levee;
-}
-
-const calculateCostOfEarthwork = ({ earthwork_cost_per_cy }, total_volume_of_earthwork) => {
-  return total_volume_of_earthwork * earthwork_cost_per_cy;
-}
+// Earthwork calculations moved to ../utils/calculations/earthworkCalculations.js
 
 const calculateOutsideLengthWettedArea = (perimeter) => {
   return perimeter / 4;
@@ -73,12 +58,10 @@ const calculateWettedAreaGrossPercent = ({ ac_pond }, wetted_area_acres) => {
 export const getCalculationsData = (formData) => {
   // Calculations Section from spreadsheet
   const area_sqmi = formData.ac_pond * SQMI_PER_ACRE;
-  const perimeter = (formData.width_pond * 2) + (formData.length_pond * 2);
-  const center_of_levee = calculateCenterOfLevee(formData, perimeter, CUFT_IN_CUYD);
-  const inside_of_levee = calculateInsideOfLevee(formData, CUFT_IN_CUYD);
-  const outside_of_levee = calculateOutsideOfLevee(formData, CUFT_IN_CUYD);
-  const total_volume_of_earthwork = calculateTotalVolumeOfEarthwork(center_of_levee, inside_of_levee, outside_of_levee);
-  const total_cost_of_earthwork = calculateCostOfEarthwork(formData, total_volume_of_earthwork);
+  
+  // Calculate all earthwork values using the earthwork module
+  const earthworkResults = calculateAllEarthwork(formData);
+  const { perimeter, center_of_levee, inside_of_levee, outside_of_levee, total_volume_of_earthwork, total_cost_of_earthwork } = earthworkResults;
   const outside_length_wetted_area = calculateOutsideLengthWettedArea(perimeter);
   const less_outside_levee = calculateLessOutsideLevee(formData);
   const less_top_levee = calculateLessTopLevee(formData);
