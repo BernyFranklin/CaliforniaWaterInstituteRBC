@@ -21,7 +21,7 @@ function ProgressBar({ current }) {
     { index: 3, id: "progress-bar-right", text: "Water Costs" }
   ]
 
-  const isSubmitted = (current > sections.length - 1) ? true : false;
+  // removed unused isSubmitted variable
 
   const sectionColor = (index) => {
     return (

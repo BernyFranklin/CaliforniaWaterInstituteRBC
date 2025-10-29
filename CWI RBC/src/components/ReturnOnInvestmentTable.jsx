@@ -1,4 +1,4 @@
-import { getCalculationsData, getOutputCalculations } from "./Calculations"
+import { getOutputCalculations } from "../utils/calculations/aggregateCalculations.js"
 
 const tableRows = (lengthOfLoan, initialCost, annualCost, annualBenefit) => {
     const rows = [
