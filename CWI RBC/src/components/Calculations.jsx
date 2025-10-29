@@ -1,4 +1,17 @@
 import { useState } from 'react';
+import {
+  CUFT_IN_CUYD,
+  SQMI_PER_ACRE,
+  SQFT_IN_SQYD,
+  SQYD_IN_ACRE,
+  FT_PER_DAY_TO_CFS,
+  PIPELINE_INLET_COST,
+  PIPELINE_COST_PER_FT,
+  FENCING_COST_PER_FT,
+  ENGINEERING_PERCENTAGE,
+  ANNUAL_EVAP_LOSS_DEFAULT,
+  FILL_RATE_MULTIPLIER
+} from '../utils/constants.js';
 
 const calculateCenterOfLevee = ({freeboard_depth, water_depth, levee_width}, perimeter, cuft_in_cuyd) => {
 
@@ -46,13 +59,11 @@ const calculateNetInsideLengthWettedArea = (outside_length_wetted_area, less_out
 }
 
 const calculateWettedAreaSqYds = (net_inside_length_wetted_area) => {
-  const sqft_in_sqyd = 9;
-  return net_inside_length_wetted_area**2 / sqft_in_sqyd;
+  return net_inside_length_wetted_area**2 / SQFT_IN_SQYD;
 }
 
 const calculateWettedAreaAcres = (wetted_area_sq_yds) => {
-  const sqyd_in_acre = 4840;
-  return wetted_area_sq_yds / sqyd_in_acre;
+  return wetted_area_sq_yds / SQYD_IN_ACRE;
 }
 
 const calculateWettedAreaGrossPercent = ({ ac_pond }, wetted_area_acres) => {
@@ -60,15 +71,12 @@ const calculateWettedAreaGrossPercent = ({ ac_pond }, wetted_area_acres) => {
 }
 
 export const getCalculationsData = (formData) => {
-  // Global Vars and Functions for Calculations 
-  const cuft_in_cuyd = 27;
   // Calculations Section from spreadsheet
-  const sqmi_per_acre = 1/640;
-  const area_sqmi = formData.ac_pond * sqmi_per_acre;
+  const area_sqmi = formData.ac_pond * SQMI_PER_ACRE;
   const perimeter = (formData.width_pond * 2) + (formData.length_pond * 2);
-  const center_of_levee = calculateCenterOfLevee(formData, perimeter, cuft_in_cuyd);
-  const inside_of_levee = calculateInsideOfLevee(formData, cuft_in_cuyd);
-  const outside_of_levee = calculateOutsideOfLevee(formData, cuft_in_cuyd);
+  const center_of_levee = calculateCenterOfLevee(formData, perimeter, CUFT_IN_CUYD);
+  const inside_of_levee = calculateInsideOfLevee(formData, CUFT_IN_CUYD);
+  const outside_of_levee = calculateOutsideOfLevee(formData, CUFT_IN_CUYD);
   const total_volume_of_earthwork = calculateTotalVolumeOfEarthwork(center_of_levee, inside_of_levee, outside_of_levee);
   const total_cost_of_earthwork = calculateCostOfEarthwork(formData, total_volume_of_earthwork);
   const outside_length_wetted_area = calculateOutsideLengthWettedArea(perimeter);
@@ -82,8 +90,8 @@ export const getCalculationsData = (formData) => {
   const wetted_area_gross_percent = calculateWettedAreaGrossPercent(formData, wetted_area_acres);
   // End of global vars and functions
   return {
-    cuft_in_cuyd: cuft_in_cuyd,
-    sqmi_per_acre: sqmi_per_acre,
+    cuft_in_cuyd: CUFT_IN_CUYD,
+    sqmi_per_acre: SQMI_PER_ACRE,
     area_sqmi: area_sqmi,
     perimeter: perimeter,
     center_of_levee: center_of_levee,
@@ -119,26 +127,24 @@ export const getOutputCalculations = (formData) => {
   // Calculations and values for Outputs Section
   const calculations = getCalculationsData(formData);
   const landCost = formData.ac_pond * formData.land_cost_per_acre;
-  const pipelineInletCost = 20000;
-  const pipelineCostPerFt = 200;
+  const pipelineInletCost = PIPELINE_INLET_COST;
+  const pipelineCostPerFt = PIPELINE_COST_PER_FT;
   const pipelineTotalCost = formData.pipeline_length * pipelineCostPerFt;
   const fencingQty = 0;
-  const fencingCostPerFt = 6; // Placeholder value for fencing cost per ft
+  const fencingCostPerFt = FENCING_COST_PER_FT; // Placeholder value for fencing cost per ft
   const fencingTotalCost = fencingQty * fencingCostPerFt;
   const subtotal = landCost + calculations.total_cost_of_earthwork + pipelineInletCost + pipelineTotalCost + fencingTotalCost;
-  const engineeringPercentage = 0.2;
-  const engineeringCost = subtotal * engineeringPercentage;
+  const engineeringCost = subtotal * ENGINEERING_PERCENTAGE;
   const totalCostEstimate = subtotal + engineeringCost;
   const annualCapitalPayment = pmt(formData.annual_interest_rate / 100, formData.loan_length, totalCostEstimate);
   const avgAnnualRechargeDepth = formData.infiltration_rate * calculations.wetted_area_acres;
-  const [annualEvapLossNotIncluded, setAnnualEvapLossNotIncluded] = useState(30); // Use for user manip later
+  const [annualEvapLossNotIncluded, setAnnualEvapLossNotIncluded] = useState(ANNUAL_EVAP_LOSS_DEFAULT); // Use for user manip later
   const netRecharge = (avgAnnualRechargeDepth * 30 * formData.num_wet_months * (formData.wet_year_freq / 100) * (1 - (annualEvapLossNotIncluded / 100)));
   const annualCapitalCostPerAF = annualCapitalPayment / netRecharge;
   const totalAnnualCostPerAF = annualCapitalCostPerAF + formData.cost_recharge_water + formData.cost_om;
   const netBenefitPerAF = formData.value_stored_water - totalAnnualCostPerAF;
-  const ftPerDayToCfs = 1.98
-  const rechargeFlowCfs = avgAnnualRechargeDepth / ftPerDayToCfs;
-  const fillRate54InPipe = rechargeFlowCfs * 1.5; // Placeholder value for fill rate in cfs
+  const rechargeFlowCfs = avgAnnualRechargeDepth / FT_PER_DAY_TO_CFS;
+  const fillRate54InPipe = rechargeFlowCfs * FILL_RATE_MULTIPLIER;
 
   
   const outputs = [
@@ -192,7 +198,7 @@ export const getOutputCalculations = (formData) => {
       cost: subtotal,
       cost_per_acre: subtotal / formData.ac_pond
     },
-    { label: `Engineering and Contingency (${engineeringPercentage * 100}%)`,
+    { label: `Engineering and Contingency (${ENGINEERING_PERCENTAGE * 100}%)`,
     quantity: null,
       quantity_unit: "",
       unit_cost: null,   

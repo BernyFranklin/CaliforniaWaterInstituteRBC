@@ -12,17 +12,6 @@ body {
   margin-bottom: 0;
 }
 
-button {
-  border: none;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.25rem;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-button:hover {
-  text-decoration: underline;;
-}
 
 .has-shadow {
   box-shadow: black 0px 0px 10px -1px;
@@ -158,36 +147,6 @@ button:hover {
   background-color: #aaa;
 }
 
-.red-button {
-  background-color: #b1102b;
-  color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.red-button:hover {
-  background-color: #8a0e20;
-}
-
-.purple-button {
-  background-color: #5344f4;
-  margin-top: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.purple-button:hover {
-  background-color: #292547;
-}
-
-.gray-button {
-  background-color: #777;
-  color: #fff;
-  transition: background-color 0.3s ease;
-}
-
-.gray-button:hover {
-  text-decoration: none;
-  cursor: default;
-}
 
 #footer-links a{
   display: flex;
