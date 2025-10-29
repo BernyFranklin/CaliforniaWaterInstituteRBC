@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// No React hooks needed in this module
 import {
   CUFT_IN_CUYD,
   SQMI_PER_ACRE,
@@ -21,6 +21,7 @@ import {
   calculateAllWettedArea
 } from '../utils/calculations/wettedAreaCalculations.js';
 
+import { pmt } from '../utils/calculations/financialCalculations.js';
 import {
   formatWithCommas,
   toPrice,
@@ -73,12 +74,6 @@ const getEngineeringFirms = () => {
 }
 
 export const getOutputCalculations = (formData) => {
-  // used for annual capital payment
-  const pmt = (rate, nper, pv) => {
-    if (rate === 0) return -(pv / nper);
-    return (rate * pv) / (1 - Math.pow(1 + rate, -nper));
-  }
-    
   // Calculations and values for Outputs Section
   const calculations = getCalculationsData(formData);
   const landCost = formData.ac_pond * formData.land_cost_per_acre;
@@ -93,7 +88,7 @@ export const getOutputCalculations = (formData) => {
   const totalCostEstimate = subtotal + engineeringCost;
   const annualCapitalPayment = pmt(formData.annual_interest_rate / 100, formData.loan_length, totalCostEstimate);
   const avgAnnualRechargeDepth = formData.infiltration_rate * calculations.wetted_area_acres;
-  const [annualEvapLossNotIncluded, setAnnualEvapLossNotIncluded] = useState(ANNUAL_EVAP_LOSS_DEFAULT); // Use for user manip later
+  const annualEvapLossNotIncluded = ANNUAL_EVAP_LOSS_DEFAULT; // Hook removed; pass as param in future UI if needed
   const netRecharge = (avgAnnualRechargeDepth * 30 * formData.num_wet_months * (formData.wet_year_freq / 100) * (1 - (annualEvapLossNotIncluded / 100)));
   const annualCapitalCostPerAF = annualCapitalPayment / netRecharge;
   const totalAnnualCostPerAF = annualCapitalCostPerAF + formData.cost_recharge_water + formData.cost_om;
