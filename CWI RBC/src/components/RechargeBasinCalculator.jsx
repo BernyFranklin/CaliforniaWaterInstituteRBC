@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Button from './Button.jsx';
-import { CalculationDataSection, OutputsDataSection } from './Calculations';
+import CalculationDataSection from './CalculationDataSection.jsx';
+import OutputsDataSection from './OutputsDataSection.jsx';
 import ReturnOnInvestmentTable from './ReturnOnInvestmentTable.jsx';
 
 function CalculatorHeader() {
