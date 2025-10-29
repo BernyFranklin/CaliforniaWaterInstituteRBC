@@ -315,26 +315,7 @@ export function CalculationDataSection({formData}) {
 }
 
 export function OutputsDataSection({ formData }) {
-  // helper functions
-  const toPrice = (num) => {
-    if (num === null) return "-";
-    return num.toLocaleString( 'en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    });
-  }
-
-  const formatQty = (num) => {
-    if (num === null) return "-";
-    return num.toFixed(1);
-  }
-
-  const formatUnits = (unit) => {
-    if (unit === "") return "";
-    return ` / ${unit}`;
-  }
+  // formatting helpers are imported from ../utils/formatters.js
 
   const engineeringFirms = getEngineeringFirms();
   const outputs = getOutputCalculations(formData);
