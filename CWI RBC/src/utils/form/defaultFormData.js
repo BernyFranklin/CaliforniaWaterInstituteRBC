@@ -1,0 +1,23 @@
+export const defaultFormData = {
+  ac_pond: '',
+  length_pond: '',
+  width_pond: '',
+  inside_slope_ratio: '',
+  outside_slope_ratio: '',
+  levee_width: '',
+  slope_across_pond: '',
+  freeboard_depth: '',
+  water_depth: '',
+  infiltration_rate: '',
+  soil_type: '',
+  wet_year_freq: '',
+  num_wet_months: '',
+  land_cost_per_acre: '',
+  pipeline_length: '',
+  earthwork_cost_per_cy: '',
+  annual_interest_rate: '',
+  loan_length: '',
+  cost_recharge_water: '',
+  value_stored_water: '',
+  cost_om: ''
+};

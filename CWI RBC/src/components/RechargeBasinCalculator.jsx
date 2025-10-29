@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Button from './Button.jsx';
 import CalculationDataSection from './CalculationDataSection.jsx';
 import OutputsDataSection from './OutputsDataSection.jsx';
 import ReturnOnInvestmentTable from './ReturnOnInvestmentTable.jsx';
+import FormSection from './forms/FormSection.jsx';
+import { usePersistentState } from '../utils/hooks/usePersistentState.js';
+import { defaultFormData } from '../utils/form/defaultFormData.js';
 
 function CalculatorHeader() {
   return (
@@ -146,48 +149,21 @@ function BasinSizeAndDesign({ formData, handleChange }) {
   ]
 
   const soilOptions = [
-    { value: "sand", text: "Sand" },
-    { value: "sandy_fine_layering", text: "Sandy with some fine layering" },
-    { value: "loam", text: "Loam" },
-    { value: "loam_fine_layering", text: "Loam with some fine layering" },
-    { value: "silt_clay_loam", text: "Silt or Clay Loam" },
-    { value: "silt_clay_loam_fine_layering", text: "Silt or Clay Loam with some fine layering" },
-    { value: "clay_restrictive_layers", text: "Clay soil with restrictive layers" }
-  ]
+    { value: 'sand', text: 'Sand' },
+    { value: 'sandy_fine_layering', text: 'Sandy with some fine layering' },
+    { value: 'loam', text: 'Loam' },
+    { value: 'loam_fine_layering', text: 'Loam with some fine layering' },
+    { value: 'silt_clay_loam', text: 'Silt or Clay Loam' },
+    { value: 'silt_clay_loam_fine_layering', text: 'Silt or Clay Loam with some fine layering' },
+    { value: 'clay_restrictive_layers', text: 'Clay soil with restrictive layers' },
+  ];
 
-  return (
-    <fieldset className="form-fieldset">
-      <legend className="fieldset-label">Basin Size and Design</legend>
-      {labels.map((label) => (
-        <div className="input-group" key={label.id}>
-          <label htmlFor={label.id}>{label.text}</label>
-          <input
-            type={label.type}
-            id={label.id}
-            name={label.id}
-            min={label.min}
-            value={label.value}
-            placeholder={label.placeholder}
-            step={label.step}
-            onChange={handleChange}
-          />
-        </div>
-      ))}
-      <div className="input-group">
-        <label htmlFor="soil_type">Soil Type</label>
-        <select 
-          id="soil_type" 
-          name="soil_type" 
-          value={formData.soil_type} 
-          onChange={handleChange}>
-          <option value="" disabled>Select soil type</option>
-            {soilOptions.map((option) => (
-          <option value={option.value} key={option.value}>{option.text}</option>
-          ))}
-        </select>
-      </div>
-    </fieldset>
-  )
+  const fields = [
+    ...labels,
+    { text: 'Soil Type', id: 'soil_type', type: 'select', options: soilOptions },
+  ];
+
+  return <FormSection legend="Basin Size and Design" fields={fields} formData={formData} onChange={handleChange} />;
 }
 
 function WaterAvailability({ formData, handleChange }) {
@@ -210,26 +186,7 @@ function WaterAvailability({ formData, handleChange }) {
     }
   ]
 
-  return (
-    <fieldset className="form-fieldset ">
-      <legend className="fieldset-label">Water Availability</legend>
-      {labels.map((label) => (
-        <div className="input-group" key={label.id}>
-          <label htmlFor={label.id}>{label.text}</label>
-          <input 
-            type={label.type} 
-            id={label.id} 
-            name={label.id} 
-            min={label.min} 
-            max={label.max} 
-            value={label.value}
-            placeholder={label.placeholder}
-            step={label.step}
-            onChange={handleChange} />
-        </div>
-      ))}
-    </fieldset>
-  )
+  return <FormSection legend="Water Availability" fields={labels} formData={formData} onChange={handleChange} />;
 }
 
 function DevelopmentCosts( {formData, handleChange }) {
@@ -270,25 +227,7 @@ function DevelopmentCosts( {formData, handleChange }) {
     },
   ]
 
-  return (
-    <fieldset className="form-fieldset">
-      <legend className="fieldset-label">Development Costs</legend>
-      {labels.map((label) => (
-        <div className="input-group" key={label.id}>
-          <label htmlFor={label.id}>{label.text}</label>
-          <input 
-            type={label.type} 
-            id={label.id} 
-            name={label.id} 
-            min={label.min}
-            value={label.value} 
-            placeholder={label.placeholder}
-            step={label.step}
-            onChange={handleChange} />
-        </div>
-      ))}
-    </fieldset>
-  )
+  return <FormSection legend="Development Costs" fields={labels} formData={formData} onChange={handleChange} />;
 }
 
 function WaterCosts({ formData, handleChange }) {
@@ -316,26 +255,7 @@ function WaterCosts({ formData, handleChange }) {
     }
   ]
 
-  return (
-    <fieldset className="form-fieldset">
-      <legend className="fieldset-label">Water Costs</legend>
-      {labels.map((label) => (
-        <div className="input-group" key={label.id}>
-          <label htmlFor={label.id}>{label.text}</label>
-          <input 
-            type={label.type} 
-            id={label.id} 
-            name={label.id} 
-            min={label.min} 
-            value={label.value}
-            placeholder={label.placeholder}
-            step={label.step}
-            onChange={handleChange} 
-          />
-        </div>
-      ))}
-    </fieldset>
-  )
+  return <FormSection legend="Water Costs" fields={labels} formData={formData} onChange={handleChange} />;
 }
 
 
@@ -354,44 +274,11 @@ function RoiResults({ formData }) {
 }
 
 export default function RechargeBasinCalculator() {
-  
   const [formContent, setFormContent] = useState(0);
-  const defaultFormData = {
-    ac_pond: '',
-    length_pond: '',
-    width_pond: '',
-    inside_slope_ratio: '',
-    outside_slope_ratio: '',
-    levee_width: '',
-    slope_across_pond: '',
-    freeboard_depth: '',
-    water_depth: '',
-    infiltration_rate: '',
-    soil_type: '',
-    wet_year_freq: '',
-    num_wet_months: '',
-    land_cost_per_acre: '',
-    pipeline_length: '',
-    earthwork_cost_per_cy: '',
-    annual_interest_rate: '',
-    loan_length: '',
-    cost_recharge_water: '',
-    value_stored_water: '',
-    cost_om: ''
-  }
-  const [formData, setFormData] = useState(() => {
-    // Load saved data from localStorage or default values
-    const saved = localStorage.getItem("formData");
-    return saved ? JSON.parse(saved) : defaultFormData;
-  });
-
-  // Save data whenever formData changes
-  useEffect(() => {
-    localStorage.setItem("formData", JSON.stringify(formData));
-  }, [formData]);
+  const [formData, setFormData] = usePersistentState('formData', defaultFormData);
 
   // TO-DO: MAKE A RESET BUTTON THAT CLEARS LOCAL STORAGE AND SETS FORM DATA TO DEFAULT VALUES
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     let { name, value } = e.target;
     // Don't parse soil_type since it's a string
     if (name === "soil_type") {
@@ -408,7 +295,7 @@ export default function RechargeBasinCalculator() {
       ...prevData,
       [name]: value
     }));
-  }
+  }, [setFormData])
   
   const contents = [
     <BasinSizeAndDesign formData={formData} handleChange={handleChange} />, 
