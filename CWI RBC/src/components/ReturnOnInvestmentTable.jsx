@@ -74,64 +74,129 @@ const calculateIRR = (lengthOfLoan, initialCost, annualNetBenefits, guessValue) 
 
 export default function ReturnOnInvestmentTable({ formData }) {
     const calculations = getOutputCalculations(formData);
-    
-    const loanLength = formData.loan_length;
-    let rechargeWaterCost = formData.cost_recharge_water;
-    let oAndMCost = formData.cost_om;
-    let netRecharge = calculations.find(item => item.label === 'Net Recharge (Applied Water - Evaporation Loss)').quantity;
-    let storedWaterValue = formData.value_stored_water;
 
-    const initialCost =  calculations.find(item => item.label === 'Total Cost Estimate').cost * -1;
+    const loanLength = formData.loan_length;
+    const rechargeWaterCost = formData.cost_recharge_water;
+    const oAndMCost = formData.cost_om;
+    const netRecharge = calculations.find(item => item.label === 'Net Recharge (Applied Water - Evaporation Loss)').quantity;
+    const storedWaterValue = formData.value_stored_water;
+
+    const initialCost = calculations.find(item => item.label === 'Total Cost Estimate').cost * -1;
     const annualCost = (rechargeWaterCost + oAndMCost) * netRecharge * -1;
     const annualBenefit = storedWaterValue * netRecharge;
     const npv = projectNPV(formData.annual_interest_rate / 100, initialCost, annualCost, loanLength);
     const totalBenefits = projectNPV(formData.annual_interest_rate / 100, 0, annualBenefit, loanLength);
     const annualNetBenefits = annualBenefit - annualCost;
     const totalNetBenefits = projectNPV(formData.annual_interest_rate / 100, initialCost, annualNetBenefits, loanLength);
-    const rows = tableRows(loanLength, initialCost, annualCost, annualBenefit); 
+    const rows = tableRows(loanLength, initialCost, annualCost, annualBenefit);
     const irr = (calculateIRR(loanLength, -initialCost, annualNetBenefits, 0.05)) * 100;
+
+    // Inline styles for standalone component
+    const styles = {
+        fieldset: {
+            borderRadius: '5px',
+            border: '3px solid #ccc',
+            padding: '1.25rem',
+            paddingTop: 0,
+            marginTop: 0,
+            textAlign: 'left',
+            boxSizing: 'border-box',
+        },
+        legend: {
+            fontFamily: 'inherit',
+            fontSize: '1.5rem',
+            padding: '0.5rem',
+        },
+        p: {
+            margin: '0.5rem 0 1rem 0',
+        },
+        table: {
+            width: '100%',
+            borderCollapse: 'collapse',
+            marginTop: '1rem',
+        },
+        th: {
+            textAlign: 'right',
+        },
+        thYear: {
+            textAlign: 'left',
+        },
+        td: {
+            textAlign: 'right',
+            padding: '0.5rem',
+        },
+        tdYear: {
+            textAlign: 'left',
+            padding: '0.5rem',
+        },
+        negative: {
+            color: '#b1102b',
+            fontWeight: 600,
+        },
+        summary: {
+            marginTop: '1rem',
+        },
+        displayGroup: {
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '0.5rem',
+            marginTop: '0.4rem',
+        },
+        displayLabel: {
+            fontWeight: 600,
+        },
+        displayValue: {
+            fontWeight: 600,
+        },
+    };
+
+    const valueStyle = (value, base = {}) => (value < 0 ? { ...base, ...styles.negative } : base);
 
     return (
         <div className="roi-section">
-            <fieldset className="calculation-fieldset" id="roi-fieldset">
-                <legend className="fieldset-label">Return on Investment</legend>
-                <p>Discount Rate: {formData.annual_interest_rate}%</p>
-                <table className="roi-table">
+            <fieldset className="calculation-fieldset" id="roi-fieldset" style={styles.fieldset}>
+                <legend className="fieldset-label" style={styles.legend}>Return on Investment</legend>
+                <p style={styles.p}>Discount Rate: {formData.annual_interest_rate}%</p>
+                <table className="roi-table" style={styles.table}>
                     <thead>
                         <tr>
-                            <th>Year</th>
-                            <th>Costs ($)</th>
-                            <th>Benefits ($)</th>
-                            <th>Net Benefits ($)</th>
+                            <th style={styles.thYear}>Year</th>
+                            <th style={styles.th}>Costs ($)</th>
+                            <th style={styles.th}>Benefits ($)</th>
+                            <th style={styles.th}>Net Benefits ($)</th>
                         </tr>
                     </thead>
                     <tbody>
                         {rows.map((row, index) => (
                             <tr key={index}>
-                                <td className="year-number">{row.year}</td>
-                                <td className="negative-value">{toPrice(row.costs)}</td>
-                                <td>{toPrice(row.benefits)}</td>
-                                <td className={setClassNameForValue(row.netBenefit, "")}>{toPrice(row.netBenefit)}</td>
+                                <td style={styles.tdYear}>{row.year}</td>
+                                <td style={{ ...styles.td, ...styles.negative }}>{toPrice(row.costs)}</td>
+                                <td style={styles.td}>{toPrice(row.benefits)}</td>
+                                <td style={{ ...styles.td, ...valueStyle(row.netBenefit) }}>{toPrice(row.netBenefit)}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-                <div className="roi-summary">
-                    <div className="display-group">
-                        <span className={"display-label"}>Net Present Value (NPV):</span><span className={setClassNameForValue(npv, "display-value")}>{toPrice(npv)}</span>
+                <div className="roi-summary" style={styles.summary}>
+                    <div className="display-group" style={styles.displayGroup}>
+                        <span className="display-label" style={styles.displayLabel}>Net Present Value (NPV):</span>
+                        <span className="display-value" style={valueStyle(npv, styles.displayValue)}>{toPrice(npv)}</span>
                     </div>
-                    <div className="display-group">
-                        <span className="display-label">Total Benefits over {loanLength} years:</span><span className={setClassNameForValue(totalBenefits, "display-value")}>{toPrice(totalBenefits)}</span>
+                    <div className="display-group" style={styles.displayGroup}>
+                        <span className="display-label" style={styles.displayLabel}>Total Benefits over {loanLength} years:</span>
+                        <span className="display-value" style={valueStyle(totalBenefits, styles.displayValue)}>{toPrice(totalBenefits)}</span>
                     </div>
-                    <div className="display-group">
-                        <span className="display-label">Total Net Benefits over {loanLength} years:</span><span className={setClassNameForValue(totalNetBenefits, "display-value")}>{toPrice(totalNetBenefits)}</span>
+                    <div className="display-group" style={styles.displayGroup}>
+                        <span className="display-label" style={styles.displayLabel}>Total Net Benefits over {loanLength} years:</span>
+                        <span className="display-value" style={valueStyle(totalNetBenefits, styles.displayValue)}>{toPrice(totalNetBenefits)}</span>
                     </div>
-                    <div className="display-group">
-                        <span className="display-label">Benefit-Cost Ratio:</span><span className={setClassNameForValue((totalBenefits / -npv), "display-value")}>{(totalBenefits / -npv).toFixed(2)}</span>
+                    <div className="display-group" style={styles.displayGroup}>
+                        <span className="display-label" style={styles.displayLabel}>Benefit-Cost Ratio:</span>
+                        <span className="display-value" style={styles.displayValue}>{(totalBenefits / -npv).toFixed(2)}</span>
                     </div>
-                    <div className="display-group">
-                        <span className="display-label"> Return on Investment:</span>
-                        <span className={setClassNameForValue(irr, "display-value")}>{irr.toFixed(2)}%</span>
+                    <div className="display-group" style={styles.displayGroup}>
+                        <span className="display-label" style={styles.displayLabel}> Return on Investment:</span>
+                        <span className="display-value" style={valueStyle(irr, styles.displayValue)}>{irr.toFixed(2)}%</span>
                     </div>
                 </div>
             </fieldset>

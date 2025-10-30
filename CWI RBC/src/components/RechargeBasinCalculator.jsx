@@ -44,8 +44,7 @@ function WaterCosts({ formData, handleChange, onSanitize }) {
 export default function RechargeBasinCalculator() {
   const [formContent, setFormContent] = useState(0);
   const [formData, setFormData] = usePersistentState('formData', defaultFormData);
-
-  // TO-DO: MAKE A RESET BUTTON THAT CLEARS LOCAL STORAGE AND SETS FORM DATA TO DEFAULT VALUES
+  
   const handleChange = useCallback((e) => {
     let { name, value } = e.target;
     // Don't parse soil_type since it's a string
