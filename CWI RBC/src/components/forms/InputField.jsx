@@ -1,11 +1,34 @@
 export default function InputField({ field, value, onChange, sanitizeValue }) {
   const { id, text, type = 'text', min, max, step, options } = field;
 
+  // Local styles to decouple from App.css label/input/select rules
+  const styles = {
+    group: {},
+    label: {
+      fontFamily: 'inherit',
+      display: 'block',
+      width: '30%',
+      minWidth: '250px',
+    },
+    control: {
+      fontFamily: 'inherit',
+      fontSize: '1.25rem',
+      color: '#333',
+      display: 'block',
+      width: '30%',
+      minWidth: '250px',
+      backgroundColor: '#ddd',
+      border: '1px solid #ccc',
+      borderRadius: '4px',
+      padding: '0.5rem',
+    },
+  };
+
   if (type === 'select') {
     return (
-      <div className="input-group">
-        <label htmlFor={id}>{text}</label>
-        <select id={id} name={id} value={value} onChange={onChange}>
+      <div className="input-group" style={styles.group}>
+        <label htmlFor={id} style={styles.label}>{text}</label>
+        <select id={id} name={id} value={value} onChange={onChange} style={styles.control}>
           <option value="" disabled>
             Select {text.toLowerCase()}
           </option>
@@ -31,8 +54,8 @@ export default function InputField({ field, value, onChange, sanitizeValue }) {
   };
 
   return (
-    <div className="input-group">
-      <label htmlFor={id}>{text}</label>
+    <div className="input-group" style={styles.group}>
+      <label htmlFor={id} style={styles.label}>{text}</label>
       <input
         type={type}
         id={id}
@@ -44,6 +67,7 @@ export default function InputField({ field, value, onChange, sanitizeValue }) {
         value={value}
         onChange={onChange}
         onBlur={handleBlur}
+        style={styles.control}
       />
     </div>
   );

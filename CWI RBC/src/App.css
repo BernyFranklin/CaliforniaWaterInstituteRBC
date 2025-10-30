@@ -194,27 +194,7 @@ body {
   padding: 0.5rem;
 }
 
-label, 
-input,
-select {
-  font-family: inherit;
-  display: block;
-  width: 30%;
-  min-width: 250px;
-}
 
-label {
-  margin: 1rem 0 0 0;
-  font-size: 1rem;
-}
-input, select {
-  background-color: #ddd;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  color: #333;
-  padding: 0.5rem;
-  font-size: 1.25rem;
-}
 
 input:placeholder-shown {
   color: #666;
