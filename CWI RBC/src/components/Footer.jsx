@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import Button from './Button.jsx'
 import { useMediaQuery } from '../utils/hooks/useMediaQuery.js'
+import { MAX_WIDTH_PX } from '../utils/constants.js'
 
 /* import all the icons in Free Solid, Free Regular, and Brands styles */
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -11,7 +12,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fas, far, fab)
 
 export default function Footer() {
-  const isSmall = useMediaQuery('(max-width: 1000px)');
+  const isSmall = useMediaQuery(`(max-width: ${MAX_WIDTH_PX}px)`);
   const links = [
     { url: "https://www.fresnostate.edu/jcast/cit/", text: "Center for Irrigation Technology (CIT)" },
     { url: "https://www.wetcenter.org/",             text: "Water Energy and Technology Center (WET)" },

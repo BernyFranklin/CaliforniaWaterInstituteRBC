@@ -22,3 +22,6 @@ export const ANNUAL_EVAP_LOSS_DEFAULT = 30; // percent
 
 // Pipeline specifications
 export const FILL_RATE_MULTIPLIER = 1.5; // for 54" pipe fill rate calculation
+
+// Max-width for dyanamic styles
+export const MAX_WIDTH_PX = 1000;

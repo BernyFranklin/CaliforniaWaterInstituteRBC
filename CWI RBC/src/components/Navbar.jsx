@@ -1,8 +1,9 @@
 import logo from '../assets/logo-300x62.png'
 import { useMediaQuery } from '../utils/hooks/useMediaQuery.js'
+import { MAX_WIDTH_PX } from '../utils/constants.js'
 
 export default function Navbar({setContent}) {
-  const isSmall = useMediaQuery('(max-width: 1000px)');
+  const isSmall = useMediaQuery(`(max-width: ${MAX_WIDTH_PX}px)`);
   const handleAboutClick = () => {
     setContent(0);
   };
