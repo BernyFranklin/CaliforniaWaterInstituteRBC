@@ -114,39 +114,46 @@ export default function ReturnOnInvestmentTable({ formData }) {
             width: '100%',
             borderCollapse: 'collapse',
             marginTop: '1rem',
+            textAlign: 'right',
         },
         th: {
             textAlign: 'right',
         },
         thYear: {
-            textAlign: 'left',
+            textAlign: 'center',
         },
         td: {
             textAlign: 'right',
             padding: '0.5rem',
+            border: 'solid 1px #ccc',
         },
         tdYear: {
-            textAlign: 'left',
+            textAlign: 'center',
             padding: '0.5rem',
+            border: 'solid 1px #ccc',
         },
         negative: {
             color: '#b1102b',
             fontWeight: 600,
         },
         summary: {
-            marginTop: '1rem',
+            margin: '2rem auto 0 auto',
+            width: '50%',
         },
         displayGroup: {
             display: 'flex',
-            alignItems: 'baseline',
-            gap: '0.5rem',
-            marginTop: '0.4rem',
+            textWrap: 'nowrap',
         },
         displayLabel: {
+            justifyContent: 'flex-start',
+            width: '50%',
             fontWeight: 600,
         },
         displayValue: {
+            justifyContent: 'flex-end',
+            width: '50%',
             fontWeight: 600,
+            textAlign: 'right',
         },
     };
 

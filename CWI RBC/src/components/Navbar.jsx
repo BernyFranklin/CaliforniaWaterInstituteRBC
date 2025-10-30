@@ -1,6 +1,8 @@
 import logo from '../assets/logo-300x62.png'
+import { useMediaQuery } from '../utils/hooks/useMediaQuery.js'
 
 export default function Navbar({setContent}) {
+  const isSmall = useMediaQuery('(max-width: 1000px)');
   const handleAboutClick = () => {
     setContent(0);
   };
@@ -16,11 +18,12 @@ export default function Navbar({setContent}) {
   const styles = {
     nav: {
       backgroundColor: '#b1102b',
-      padding: '3rem',
+      padding: isSmall ? '1rem' : '3rem',
       marginBottom: 0,
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      display: isSmall ? 'block' : 'flex',
+      justifyContent: isSmall ? undefined : 'space-between',
+      alignItems: isSmall ? undefined : 'center',
+      textAlign: isSmall ? 'center' : undefined,
       boxShadow: 'black 0px 0px 10px -1px',
     },
     logoImg: {
@@ -32,8 +35,11 @@ export default function Navbar({setContent}) {
     links: {
       display: 'flex',
       gap: '2rem',
-      justifyContent: 'flex-end',
+      justifyContent: isSmall ? 'flex-start' : 'flex-end',
+      alignItems: isSmall ? 'center' : undefined,
       alignSelf: 'flex-end',
+      paddingTop: isSmall ? '1rem' : undefined,
+      padding: isSmall ? '1rem 3rem' : undefined,
     },
     link: {
       display: 'inline-block',
@@ -41,18 +47,22 @@ export default function Navbar({setContent}) {
       textDecoration: 'none',
       fontSize: '1.25rem',
       fontWeight: 500,
-      transition: 'transform 0.3s ease',
+      transition: isSmall ? 'none' : 'transform 0.3s ease',
       cursor: 'pointer',
     },
   };
 
   const handleLinkEnter = (e) => {
     e.currentTarget.style.textDecoration = 'underline';
-    e.currentTarget.style.transform = 'translateY(-2px)';
+    if (!isSmall) {
+      e.currentTarget.style.transform = 'translateY(-2px)';
+    }
   };
   const handleLinkLeave = (e) => {
     e.currentTarget.style.textDecoration = 'none';
-    e.currentTarget.style.transform = '';
+    if (!isSmall) {
+      e.currentTarget.style.transform = '';
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import Button from './Button.jsx'
+import { useMediaQuery } from '../utils/hooks/useMediaQuery.js'
 
 /* import all the icons in Free Solid, Free Regular, and Brands styles */
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -10,6 +11,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 library.add(fas, far, fab)
 
 export default function Footer() {
+  const isSmall = useMediaQuery('(max-width: 1000px)');
   const links = [
     { url: "https://www.fresnostate.edu/jcast/cit/", text: "Center for Irrigation Technology (CIT)" },
     { url: "https://www.wetcenter.org/",             text: "Water Energy and Technology Center (WET)" },
@@ -35,6 +37,8 @@ export default function Footer() {
       padding: '3rem',
       display: 'flex',
       justifyContent: 'flex-start',
+      flexDirection: isSmall ? 'column' : 'row',
+      gap: isSmall ? '1rem' : undefined,
     },
     topContainer: {
       backgroundColor: '#193565',
@@ -47,7 +51,7 @@ export default function Footer() {
       fontFamily: 'inherit',
     },
     card: {
-      width: 'calc(50% - 6rem)',
+      width: isSmall ? 'calc(100% - 6rem)' : 'calc(50% - 6rem)',
     },
     title: {
       margin: 0,
@@ -66,7 +70,7 @@ export default function Footer() {
       padding: '1rem 0',
     },
     socialLink: {
-      transition: 'transform 0.2s ease',
+      transition: isSmall ? 'none' : 'transform 0.2s ease',
       display: 'inline-block',
     },
     icon: {
@@ -92,18 +96,18 @@ export default function Footer() {
       gap: '0.5rem',
       marginTop: '1rem',
       color: '#fff',
-      textDecoration: 'underline',
+      textDecoration: isSmall ? 'none' : 'underline',
       fontSize: '1rem',
       fontWeight: 500,
-      transition: 'transform 0.3s ease',
+      transition: isSmall ? 'none' : 'transform 0.3s ease',
     },
   };
 
   const handleSocialEnter = (e) => {
-    e.currentTarget.style.transform = 'translateY(-2px)';
+    if (!isSmall) e.currentTarget.style.transform = 'translateY(-2px)';
   };
   const handleSocialLeave = (e) => {
-    e.currentTarget.style.transform = '';
+    if (!isSmall) e.currentTarget.style.transform = '';
   };
   const handleIconEnter = (e) => {
     e.currentTarget.style.backgroundColor = '#aaa';
@@ -112,14 +116,15 @@ export default function Footer() {
     e.currentTarget.style.backgroundColor = '#fff';
   };
   const handleLinkEnter = (e) => {
-    e.currentTarget.style.transform = 'translateY(-2px)';
+    e.currentTarget.style.textDecoration = 'underline';
+    if (!isSmall) e.currentTarget.style.transform = 'translateY(-2px)';
   };
   const handleLinkLeave = (e) => {
-    e.currentTarget.style.transform = '';
+    if (!isSmall) e.currentTarget.style.transform = '';
   };
 
   return (
-    <footer className="footer has-shadow" style={styles.footer}>
+    <footer className="footer" style={styles.footer}>
       <div
         className="footer-container"
         id="footer-top"

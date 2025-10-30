@@ -44,6 +44,15 @@ function WaterCosts({ formData, handleChange, onSanitize }) {
 export default function RechargeBasinCalculator() {
   const [formContent, setFormContent] = useState(0);
   const [formData, setFormData] = usePersistentState('formData', defaultFormData);
+  const styles = {
+    container: {
+      boxShadow: 'black 0px 0px 10px -1px',
+      margin: 0,
+      backgroundColor: '#fff',
+      color: '#000',
+      padding: '3rem',
+    },
+  };
   
   const handleChange = useCallback((e) => {
     let { name, value } = e.target;
@@ -86,7 +95,7 @@ export default function RechargeBasinCalculator() {
   ]
 
   return (
-    <section className="has-shadow" id="calculator-section">
+    <section id="calculator-section" style={styles.container}>
       <CalculatorHeader />
       <ProgressBar current={formContent} />
       <div id="calculator-form">
