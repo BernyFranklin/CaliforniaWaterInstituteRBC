@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import Button from './Button.jsx';
 import CalculatorHeader from './calculator/CalculatorHeader.jsx';
 import ProgressBar from './calculator/ProgressBar.jsx';
+import AreaOfInterest from './AreaOfInterest.jsx';
 import ButtonBar from './calculator/ButtonBar.jsx';
 import RoiResults from './calculator/RoiResults.jsx';
 import FormSection from './forms/FormSection.jsx';
@@ -87,6 +88,7 @@ export default function RechargeBasinCalculator() {
   }, [setFormData]);
   
   const contents = [
+    <AreaOfInterest />,
     <BasinSizeAndDesign formData={formData} handleChange={handleChange} onSanitize={handleSanitize} />, 
     <WaterAvailability  formData={formData} handleChange={handleChange} onSanitize={handleSanitize} />, 
     <DevelopmentCosts   formData={formData} handleChange={handleChange} onSanitize={handleSanitize} />, 

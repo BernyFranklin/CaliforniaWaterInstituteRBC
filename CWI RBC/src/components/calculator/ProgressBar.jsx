@@ -1,8 +1,9 @@
 export default function ProgressBar({ current }) {
   const sections = [
-    { index: 0, id: 'progress-bar-left', text: 'Basin Size and Design' },
-    { index: 1, id: 'progress-bar-center-left', text: 'Water Availability' },
-    { index: 2, id: 'progress-bar-center-right', text: 'Development Costs' },
+    { index: 0, id: 'progress-bar-left', text: 'Area of Interest' },
+    { index: 1, id: 'progress-bar-center', text: 'Basin Size and Design' },
+    { index: 1, id: 'progress-bar-center', text: 'Water Availability' },
+    { index: 2, id: 'progress-bar-center', text: 'Development Costs' },
     { index: 3, id: 'progress-bar-right', text: 'Water Costs' },
   ];
 
