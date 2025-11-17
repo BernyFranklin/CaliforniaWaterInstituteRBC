@@ -1,9 +1,7 @@
 import Button from '../Button.jsx';
 
 export default function ButtonBar({ formContent, setFormContent, contents, onReset }) {
-  const backButtonColor = formContent === 0 ? 'gray-button' : 'red-button';
-
-  // Local inline styles to remove dependence on App.css for layout
+  
   const styles = {
     container: {
       display: 'flex',
@@ -29,8 +27,11 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
     },
   };
 
+  const backButtonColor = formContent === 0 ? 'gray-button' : 'red-button';
+  const lastSectionIndex = contents.length - 1;
+
   function NextOrSubmitButton() {
-    const buttonText = formContent === contents.length - 2 ? 'Submit' : 'Next';
+    const buttonText = formContent === lastSectionIndex - 1 ? 'Submit' : 'Next';
     return <Button className="red-button" text={buttonText} />;
   }
 
@@ -39,11 +40,11 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
   };
 
   const handleSubmitClick = () => {
-    setFormContent(4);
+    setFormContent(lastSectionIndex);
   };
 
   const handleNextClick = () => {
-    formContent < contents.length - 2 ? setFormContent(formContent + 1) : handleSubmitClick();
+    formContent < lastSectionIndex - 1 ? setFormContent(formContent + 1) : handleSubmitClick();
   };
 
   return (
@@ -60,7 +61,7 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
           </a>
         )}
       </span>
-      {formContent !== 4 && (
+      {formContent !== lastSectionIndex && (
         <span className="button-bar-right" style={styles.right}>
           <a onClick={handleNextClick}>
             <NextOrSubmitButton />
