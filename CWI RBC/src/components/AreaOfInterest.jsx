@@ -40,7 +40,7 @@ export default function AreaOfInterest() {
             padding: '0.5rem',
         },
         container: {
-            height: '600px',
+            height: '500px',
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
@@ -64,6 +64,7 @@ export default function AreaOfInterest() {
         },
         list: {
             display: 'block',
+            fontSize: '1.1rem',
         },
         tableHead: {
             fontWeight: 'bold',
