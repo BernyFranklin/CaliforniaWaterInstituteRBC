@@ -1,0 +1,22 @@
+### Test the soil endpoint
+POST http://localhost:5000/soil
+Content-Type: application/json
+
+{
+  "north": 36.7508,
+  "south": 36.7488,
+  "east": -119.7130,
+  "west": -119.7178
+}
+
+### Test validation error (missing coordinates)
+POST http://localhost:5000/soil
+Content-Type: application/json
+
+{
+  "north": 36.7508,
+  "south": 36.7488
+}
+
+### Test basic server response
+GET http://localhost:5000/

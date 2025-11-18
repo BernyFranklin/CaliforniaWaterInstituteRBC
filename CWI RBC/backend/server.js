@@ -1,7 +1,7 @@
-const express = require("express");
-const axios = require("axios");
-const cors = require("cors");
-const xml2js = require("xml2js");
+import express from "express";
+import axios from "axios";
+import cors from "cors";
+import xml2js from "xml2js";
 
 const app = express();
 app.use(express.json());
@@ -48,18 +48,28 @@ function parseAndSortSoils(reportJSON) {
 
 app.get("/", (_req, res) => res.send("Soil API running"));
 
-app.get("/soil", async (_req, res) => {
+app.post("/soil", async (req, res) => {
   try {
-    // Hard coded 40 acres in NW of Fresno (lon, lat). 
-	// GeoJSON needs the ring closed so make sure the first and last entries match.
-	// Retrieve real values from a map api.
+    // Extract coordinates from request body
+    const { north, south, east, west } = req.body;
+    
+    // Validate required coordinates
+    if (!north || !south || !east || !west) {
+      return res.status(400).json({ 
+        error: "Missing coordinates", 
+        required: ["north", "south", "east", "west"] 
+      });
+    }
+    
+    // Convert to GeoJSON ring format (lon, lat order)
+    // Ring must be closed (first and last coordinates match)
     const ring = [
-      [-119.7178, 36.7508],
-      [-119.7130, 36.7508],
-      [-119.7130, 36.7488],
-      [-119.7178, 36.7488],
-      [-119.7178, 36.7508] // close ring
-
+      [west, north],   // top-left
+      [east, north],   // top-right
+      [east, south],   // bottom-right
+      [west, south],   // bottom-left
+      [west, north]    // close ring
+    ];
     // Build GeoJSON (FeatureCollection is recommended; properties can be used with FILTER later)
     const geojson = {
       type: "FeatureCollection",
