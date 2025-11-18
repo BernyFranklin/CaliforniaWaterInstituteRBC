@@ -194,8 +194,16 @@ app.post("/soil", async (req, res) => {
 	// Parse the JSON into a usable object (seperate symbol from its description)
 	const soils = parseAndSortSoils(REPORTJSON);
 	
-	// Return successful with the symbol of the most prolific soil type
-	return res.status(200).json(soils[0].symbol);
+	// Return successful with comprehensive soil data
+	return res.status(200).json({
+		dominantSoil: {
+			symbol: soils[0].symbol,
+			description: soils[0].desc,
+			acres: soils[0].acres
+		},
+		allSoils: soils,
+		totalArea: soils.reduce((sum, soil) => sum + soil.acres, 0)
+	});
 
   } 
   // Catch errors not related to business logic

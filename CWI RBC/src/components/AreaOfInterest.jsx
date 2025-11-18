@@ -18,7 +18,10 @@ window.type = true; // Fixes leaflet issue for drawing rectangles.
 
 export default function AreaOfInterest() {
     const [selectedArea, setSelectedArea] = useState(null);
-    
+    const [soilData, setSoilData] = useState(null);
+    const [isLoadingSoil, setIsLoadingSoil] = useState(false);
+    const [soilError, setSoilError] = useState(null);
+    // Styles
     const styles = {
         fieldset: {
             borderRadius: '5px',
@@ -74,6 +77,36 @@ export default function AreaOfInterest() {
             textAlign: 'right',
         }
     };
+    // Function to fetch soil data from backend
+    const fetchSoilData = async (coordinates) => {
+        setIsLoadingSoil(true);
+        setSoilError(null);
+        
+        try {
+            const response = await fetch('http://localhost:5000/soil', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(coordinates)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const soilResult = await response.text();
+            setSoilData(soilResult);
+            console.log('Soil type detected:', soilResult);
+            
+        } catch (error) {
+            console.error('Failed to fetch soil data:', error);
+            setSoilError(error.message);
+        } finally {
+            setIsLoadingSoil(false);
+        }
+    };
+    
     
     const onCreate = (e) => {
         // Extract the layer and get coordinates
@@ -88,6 +121,9 @@ export default function AreaOfInterest() {
             };
 
             setSelectedArea(coordinates);
+            
+            // Automatically fetch soil data for the selected area
+            fetchSoilData(coordinates);
         }
     };
     const onEdit = (e) => {
@@ -104,12 +140,17 @@ export default function AreaOfInterest() {
                 };
 
                 setSelectedArea(coordinates);
+                
+                // Automatically fetch soil data for the updated area
+                fetchSoilData(coordinates);
             }
         });
     };
     const onDelete = (e) => {
-        // Clear the selected area when shapes are deleted
+        // Clear the selected area and soil data when shapes are deleted
         setSelectedArea(null);
+        setSoilData(null);
+        setSoilError(null);
     };
 
     return (
