@@ -10,6 +10,7 @@ window.type = true; // Fixes leaflet issue for drawing rectangles.
 // https://github.com/Leaflet/Leaflet.draw/issues/1026
 
 export default function AreaOfInterest() {
+    const [selectedArea, setSelectedArea] = useState(null);
     
     const styles = {
         fieldset: {
@@ -46,11 +47,29 @@ export default function AreaOfInterest() {
             padding: '1rem',
             backgroundColor: '#f0f0f0',
             borderRadius: '5px',
+        },
+        square: {
+            fontSize: '1.5rem',
         }
     };
     
     const onCreate = (e) => {
-        console.log(e);
+        console.log('Draw event:', e);
+        
+        // Extract the layer and get coordinates
+        const layer = e.layer;
+        if (layer && typeof layer.getBounds === 'function') {
+            const bounds = layer.getBounds();
+            const coordinates = {
+                north: bounds.getNorth(),
+                south: bounds.getSouth(),
+                east: bounds.getEast(),
+                west: bounds.getWest()
+            };
+            
+            console.log('Rectangle coordinates:', coordinates);
+            setSelectedArea(coordinates);
+        }
     };
     const onEdit = (e) => {
         console.log(e);
@@ -58,11 +77,11 @@ export default function AreaOfInterest() {
     const onDelete = (e) => {
         console.log(e);
     };
+
     return (
         <fieldset style={styles.fieldset}>
             <legend style={styles.legend}>Area of Interest</legend>
-            <p>Please select the area of land for the water resource assessment by drawing a rectangle on the map.</p>
-            
+            <p>Please click the <span style={styles.square}>■</span> to select the area of land for the water resource assessment by drawing a rectangle on the map.</p>
             
             <div style={styles.container}>
                 <MapContainer
@@ -90,6 +109,20 @@ export default function AreaOfInterest() {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         />
                 </MapContainer>
+                
+                {selectedArea && (
+                    <div style={styles.selectedArea}>
+                        <strong>Selected Area Coordinates:</strong>
+                        <br />
+                        North: {selectedArea.north.toFixed(6)}°
+                        <br />
+                        South: {selectedArea.south.toFixed(6)}°
+                        <br />
+                        East: {selectedArea.east.toFixed(6)}°
+                        <br />
+                        West: {selectedArea.west.toFixed(6)}°
+                    </div>
+                )}
             </div>
         </fieldset>
     );
