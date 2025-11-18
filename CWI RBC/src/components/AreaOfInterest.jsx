@@ -23,9 +23,9 @@ export default function AreaOfInterest() {
         fieldset: {
             borderRadius: '5px',
             border: '3px solid #ccc',
-            padding: '0 2rem 2rem 2rem',
+            padding: '0 1rem 4rem 1rem',
             display: 'flex',
-            flexDirection: 'row',
+            flexDirection: 'column',
             flexWrap: 'wrap',
             gap: '2rem',
             alignItems: 'center',
@@ -39,7 +39,6 @@ export default function AreaOfInterest() {
         container: {
             height: '600px',
             width: '100%',
-            marginTop: '20px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -48,15 +47,31 @@ export default function AreaOfInterest() {
         map: {
             height: '100%',
             width: '80%',
+            borderRadius: '5px',
+            boxShadow: 'black 0px 0px 10px -1px',
         },
         selectedArea: {
-            margin: '1rem',
+            margin: '1rem auto 0 auto',
             padding: '1rem',
             backgroundColor: '#f0f0f0',
             borderRadius: '5px',
         },
         square: {
             fontSize: '1.5rem',
+        },
+        list: {
+            display: 'block',
+        },
+        tableHead: {
+            fontWeight: 'bold',
+        },
+        controls: {
+            textAlign: 'left',
+            width: '80%',
+            marginBottom: '-2rem',
+        },
+        alignRight: {
+            textAlign: 'right',
         }
     };
     
@@ -100,15 +115,22 @@ export default function AreaOfInterest() {
     return (
         <fieldset style={styles.fieldset}>
             <legend style={styles.legend}>Area of Interest</legend>
-            <ul>
+            <h3 style={styles.controls}>Controls</h3>
+            <ul style={styles.list}>
                 <li>
-                    To Draw AOI: Click the <span><FontAwesomeIcon icon="fa-solid fa-square" /></span> to select the area of land for the water resource assessment by drawing a rectangle on the map.
+                    <span><FontAwesomeIcon icon="fa-solid fa-plus" /></span>: Zoom in on the map.
                 </li>
                 <li>
-                    To Edit AOI: Click the <span><FontAwesomeIcon icon="fa-solid fa-pen-to-square" /></span> to edit the area by dragging either the corners or the center of the selected area and selecting "Save".
+                    <span><FontAwesomeIcon icon="fa-solid fa-minus" /></span>: Zoom out on the map.
                 </li>
                 <li>
-                    To Delete AOI: Click the <span><FontAwesomeIcon icon="fa-regular fa-trash-can" /></span> and select "Clear All" to delete the selected area.
+                    <span><FontAwesomeIcon icon="fa-solid fa-square" /></span>: Draw a rectangle to select the area of land for the water resource assessment by drawing a rectangle on the map.
+                </li>
+                <li>
+                    <span><FontAwesomeIcon icon="fa-solid fa-pen-to-square" /></span>: Edit the area by dragging either the corners or the center of the selected area and selecting "Save".
+                </li>
+                <li>
+                    <span><FontAwesomeIcon icon="fa-regular fa-trash-can" /></span>: Select "Clear All" to delete the selected area.
                 </li>
             </ul>
             
@@ -138,21 +160,37 @@ export default function AreaOfInterest() {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         />
                 </MapContainer>
-                
-                {selectedArea && (
-                    <div style={styles.selectedArea}>
-                        <strong>Selected Area Coordinates:</strong>
-                        <br />
-                        North: {selectedArea.north.toFixed(6)}°
-                        <br />
-                        South: {selectedArea.south.toFixed(6)}°
-                        <br />
-                        East: {selectedArea.east.toFixed(6)}°
-                        <br />
-                        West: {selectedArea.west.toFixed(6)}°
-                    </div>
-                )}
             </div>
+            
+            {selectedArea && (
+                <div style={styles.selectedArea}>
+                    <table>
+                        <thead style={styles.tableHead}>
+                            <tr>
+                                <td>Selected Area Coordinates</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>North:</td>
+                                <td style={styles.alignRight}>{selectedArea.north.toFixed(6)}°</td>
+                            </tr>
+                            <tr>
+                                <td>South:</td>
+                                <td style={styles.alignRight}>{selectedArea.south.toFixed(6)}°</td>
+                            </tr>
+                            <tr>
+                                <td>East:</td>
+                                <td style={styles.alignRight}>{selectedArea.east.toFixed(6)}°</td>
+                            </tr>
+                            <tr>
+                                <td>West:</td>
+                                <td style={styles.alignRight}>{selectedArea.west.toFixed(6)}°</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </fieldset>
     );
 }
