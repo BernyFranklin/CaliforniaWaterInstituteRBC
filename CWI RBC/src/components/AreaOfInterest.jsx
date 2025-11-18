@@ -5,6 +5,13 @@ import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet/dist/leaflet.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+
+library.add(fas, far, fab)
 
 window.type = true; // Fixes leaflet issue for drawing rectangles.
 // https://github.com/Leaflet/Leaflet.draw/issues/1026
@@ -54,8 +61,6 @@ export default function AreaOfInterest() {
     };
     
     const onCreate = (e) => {
-        console.log('Draw event:', e);
-        
         // Extract the layer and get coordinates
         const layer = e.layer;
         if (layer && typeof layer.getBounds === 'function') {
@@ -66,22 +71,46 @@ export default function AreaOfInterest() {
                 east: bounds.getEast(),
                 west: bounds.getWest()
             };
-            
-            console.log('Rectangle coordinates:', coordinates);
+
             setSelectedArea(coordinates);
         }
     };
     const onEdit = (e) => {
-        console.log(e);
+        // The edited event contains layers in e.layers
+        const layers = e.layers;
+        layers.eachLayer((layer) => {
+            if (layer && typeof layer.getBounds === 'function') {
+                const bounds = layer.getBounds();
+                const coordinates = {
+                    north: bounds.getNorth(),
+                    south: bounds.getSouth(),
+                    east: bounds.getEast(),
+                    west: bounds.getWest()
+                };
+
+                setSelectedArea(coordinates);
+            }
+        });
     };
     const onDelete = (e) => {
-        console.log(e);
+        // Clear the selected area when shapes are deleted
+        setSelectedArea(null);
     };
 
     return (
         <fieldset style={styles.fieldset}>
             <legend style={styles.legend}>Area of Interest</legend>
-            <p>Please click the <span style={styles.square}>■</span> to select the area of land for the water resource assessment by drawing a rectangle on the map.</p>
+            <ul>
+                <li>
+                    To Draw AOI: Click the <span><FontAwesomeIcon icon="fa-solid fa-square" /></span> to select the area of land for the water resource assessment by drawing a rectangle on the map.
+                </li>
+                <li>
+                    To Edit AOI: Click the <span><FontAwesomeIcon icon="fa-solid fa-pen-to-square" /></span> to edit the area by dragging either the corners or the center of the selected area and selecting "Save".
+                </li>
+                <li>
+                    To Delete AOI: Click the <span><FontAwesomeIcon icon="fa-regular fa-trash-can" /></span> and select "Clear All" to delete the selected area.
+                </li>
+            </ul>
             
             <div style={styles.container}>
                 <MapContainer
@@ -93,8 +122,8 @@ export default function AreaOfInterest() {
                         <EditControl 
                         position="topleft" 
                         onCreated={onCreate}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
+                        onEdited={onEdit}
+                        onDeleted={onDelete}
                         draw={{
                             rectangle: true,
                             polyline: false,
