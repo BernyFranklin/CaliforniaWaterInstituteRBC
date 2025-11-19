@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, FeatureGroup} from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+
 import L from 'leaflet';
 import 'leaflet-draw';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -96,9 +97,9 @@ export default function AreaOfInterest() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            const soilResult = await response.text();
+            const soilResult = await response.json();
             setSoilData(soilResult);
-            console.log('Soil type detected:', soilResult);
+            console.log('Soil type detected:', soilResult.dominantSoil.description);
             
         } catch (error) {
             console.error('Failed to fetch soil data:', error);
@@ -127,6 +128,7 @@ export default function AreaOfInterest() {
             fetchSoilData(coordinates);
         }
     };
+    
     const onEdit = (e) => {
         // The edited event contains layers in e.layers
         const layers = e.layers;
@@ -147,6 +149,7 @@ export default function AreaOfInterest() {
             }
         });
     };
+    
     const onDelete = (e) => {
         // Clear the selected area and soil data when shapes are deleted
         setSelectedArea(null);
