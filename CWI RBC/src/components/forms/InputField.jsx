@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 export default function InputField({ field, value, onChange, sanitizeValue }) {
-  const { id, text, type = 'text', min, max, step, options } = field;
+  const { id, text, type = 'text', min, max, step, options, infoText } = field;
 
   // Local styles to decouple from App.css label/input/select rules
   const styles = {
@@ -10,9 +12,11 @@ export default function InputField({ field, value, onChange, sanitizeValue }) {
     },
     label: {
       fontFamily: 'inherit',
-      display: 'block',
+      display: 'flex',
+      alignItems: 'center',
       width: '100%',
       marginBottom: '0.25rem',
+      gap: '0.5rem',
     },
     control: {
       fontFamily: 'inherit',
@@ -26,12 +30,70 @@ export default function InputField({ field, value, onChange, sanitizeValue }) {
       padding: '0.5rem',
       boxSizing: 'border-box',
     },
+    infoIcon: {
+      color: '#193565',
+      cursor: 'help',
+      fontSize: '1rem',
+      position: 'relative',
+    },
+    tooltip: {
+      position: 'absolute',
+      bottom: '100%',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      backgroundColor: '#333',
+      color: 'white',
+      padding: '0.5rem',
+      borderRadius: '4px',
+      fontSize: '0.875rem',
+      whiteSpace: 'nowrap',
+      minWidth: '400px',
+      whiteSpace: 'normal',
+      zIndex: 1000,
+      opacity: 0,
+      visibility: 'hidden',
+      transition: 'opacity 0.3s, visibility 0.3s',
+      marginBottom: '5px',
+    },
+    iconWrapper: {
+      position: 'relative',
+      display: 'inline-block',
+    },
   };
 
   if (type === 'select') {
     return (
       <div className="input-group" style={styles.group}>
-        <label htmlFor={id} style={styles.label}>{text}</label>
+        <label htmlFor={id} style={styles.label}>
+          {text}
+          {infoText && (
+            <span 
+              style={styles.iconWrapper}
+              onMouseEnter={(e) => {
+                const tooltip = e.currentTarget.querySelector('.tooltip');
+                if (tooltip) {
+                  tooltip.style.opacity = '1';
+                  tooltip.style.visibility = 'visible';
+                }
+              }}
+              onMouseLeave={(e) => {
+                const tooltip = e.currentTarget.querySelector('.tooltip');
+                if (tooltip) {
+                  tooltip.style.opacity = '0';
+                  tooltip.style.visibility = 'hidden';
+                }
+              }}
+            >
+              <FontAwesomeIcon 
+                icon="fa-solid fa-circle-info" 
+                style={styles.infoIcon}
+              />
+              <div className="tooltip" style={styles.tooltip}>
+                {infoText}
+              </div>
+            </span>
+          )}
+        </label>
         <select id={id} name={id} value={value} onChange={onChange} style={styles.control}>
           <option value="" disabled>
             Select {text.toLowerCase()}
@@ -59,7 +121,36 @@ export default function InputField({ field, value, onChange, sanitizeValue }) {
 
   return (
     <div className="input-group" style={styles.group}>
-      <label htmlFor={id} style={styles.label}>{text}</label>
+      <label htmlFor={id} style={styles.label}>
+        {text}
+        {infoText && (
+          <span 
+            style={styles.iconWrapper}
+            onMouseEnter={(e) => {
+              const tooltip = e.currentTarget.querySelector('.tooltip');
+              if (tooltip) {
+                tooltip.style.opacity = '1';
+                tooltip.style.visibility = 'visible';
+              }
+            }}
+            onMouseLeave={(e) => {
+              const tooltip = e.currentTarget.querySelector('.tooltip');
+              if (tooltip) {
+                tooltip.style.opacity = '0';
+                tooltip.style.visibility = 'hidden';
+              }
+            }}
+          >
+            <FontAwesomeIcon 
+              icon="fa-solid fa-circle-info" 
+              style={styles.infoIcon}
+            />
+            <div className="tooltip" style={styles.tooltip}>
+              {infoText}
+            </div>
+          </span>
+        )}
+      </label>
       <input
         type={type}
         id={id}

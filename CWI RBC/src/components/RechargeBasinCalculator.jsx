@@ -8,7 +8,7 @@ import RoiResults from './calculator/RoiResults.jsx';
 import FormSection from './forms/FormSection.jsx';
 import { usePersistentState } from '../utils/hooks/usePersistentState.js';
 import { defaultFormData } from '../utils/form/defaultFormData.js';
-import { sections } from '../utils/form/sectionsSchema.js';
+import { sections, soilOptions } from '../utils/form/sectionsSchema.js';
 import { sanitizeValue } from '../utils/form/validate.js';
 
 
@@ -57,14 +57,20 @@ export default function RechargeBasinCalculator() {
   
   const handleChange = useCallback((e) => {
     let { name, value } = e.target;
-    // Don't parse soil_type since it's a string
+    
+    // Handle soil_type selection and auto-populate infiltration_rate
     if (name === "soil_type") {
+      const selectedSoil = soilOptions.find(soil => soil.value === value);
+      
       setFormData((prevData) => ({
         ...prevData,
-        [name]: value
+        [name]: value,
+        // Auto-populate infiltration rate if soil type is found
+        ...(selectedSoil && { infiltration_rate: selectedSoil.infiltrationRate })
       }));
       return;
     }
+    
     // Prevents error when input is cleared
     value = (value === '') ? '' : parseFloat(value);
     // Sets state

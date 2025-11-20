@@ -25,7 +25,7 @@ export const sections = {
       { text: 'Freeboard Depth (ft)', id: 'freeboard_depth', type: 'number', min: 0, placeholder: '1' },
       { text: 'Water Depth (ft)', id: 'water_depth', type: 'number', min: 0, placeholder: '1' },
       { text: 'Soil Type', id: 'soil_type', type: 'select', options: soilOptions },
-      { text: 'Infiltration Rate (ft/day)', id: 'infiltration_rate', type: 'number', min: 0, placeholder: '0.6' },
+      { text: 'Infiltration Rate (ft/day)', id: 'infiltration_rate', type: 'number', min: 0, placeholder: '0.6', infoText: 'This value is automatically set based on your selected soil type. You can modify it if you have site-specific data.' },
     ],
   },
   waterAvailability: {
