@@ -94,7 +94,7 @@ export default function RechargeBasinCalculator() {
   }, [setFormData]);
   
   const contents = [
-    <AreaOfInterest />,
+    <AreaOfInterest formData={formData} setFormData={setFormData} />,
     <BasinSizeAndDesign formData={formData} handleChange={handleChange} onSanitize={handleSanitize} />, 
     <WaterAvailability  formData={formData} handleChange={handleChange} onSanitize={handleSanitize} />, 
     <DevelopmentCosts   formData={formData} handleChange={handleChange} onSanitize={handleSanitize} />, 

@@ -40,7 +40,7 @@ const styles = {
 export default function CalculationDataSection({ formData }) {
   const calculations = getCalculationsData(formData);
   const dimensionData = [
-    { label: 'Area', value: `${calculations.area_sqmi} sq mi` },
+    { label: 'Area', value: `${calculations.area_sqmi.toLocaleString()} sq mi` },
     { label: 'Perimeter', value: `${formatWithCommas(calculations.perimeter)} ft` }
   ];
 

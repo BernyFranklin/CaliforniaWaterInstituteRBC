@@ -17,7 +17,7 @@ library.add(fas, far, fab)
 window.type = true; // Fixes leaflet issue for drawing rectangles.
 // https://github.com/Leaflet/Leaflet.draw/issues/1026
 
-export default function AreaOfInterest() {
+export default function AreaOfInterest({ formData, setFormData }) {
     const [selectedArea, setSelectedArea] = useState(null);
     const [soilData, setSoilData] = useState(null);
     const [isLoadingSoil, setIsLoadingSoil] = useState(false);
@@ -159,7 +159,7 @@ export default function AreaOfInterest() {
             // Calculate dimensions
             const dimensions = calculateDimensions(coordinates);
             
-            // Store coordinates with dimensions
+            // Store coordinates with dimensions for local display
             const areaData = {
                 ...coordinates,
                 ...dimensions
@@ -167,8 +167,22 @@ export default function AreaOfInterest() {
 
             setSelectedArea(areaData);
             
+            // Update formData with calculated values
+            setFormData(prevData => ({
+                ...prevData,
+                ac_pond: dimensions.acreage,
+                length_pond: dimensions.length,
+                width_pond: dimensions.width,
+                pipeline_length: 2 * (dimensions.length + dimensions.width),
+            }));
+            
             // Log calculated dimensions
             console.log('Calculated dimensions:', dimensions);
+            console.log('Updated formData with:', {
+                ac_pond: dimensions.acreage,
+                length_pond: dimensions.length,
+                width_pond: dimensions.width
+            });
             
             // Automatically fetch soil data for the selected area
             fetchSoilData(coordinates);
@@ -191,7 +205,7 @@ export default function AreaOfInterest() {
                 // Calculate dimensions
                 const dimensions = calculateDimensions(coordinates);
                 
-                // Store coordinates with dimensions
+                // Store coordinates with dimensions for local display
                 const areaData = {
                     ...coordinates,
                     ...dimensions
@@ -199,8 +213,21 @@ export default function AreaOfInterest() {
 
                 setSelectedArea(areaData);
                 
+                // Update formData with calculated values
+                setFormData(prevData => ({
+                    ...prevData,
+                    ac_pond: dimensions.acreage,
+                    length_pond: dimensions.length,
+                    width_pond: dimensions.width
+                }));
+                
                 // Log calculated dimensions
                 console.log('Updated dimensions:', dimensions);
+                console.log('Updated formData with:', {
+                    ac_pond: dimensions.acreage,
+                    length_pond: dimensions.length,
+                    width_pond: dimensions.width
+                });
                 
                 // Automatically fetch soil data for the updated area
                 fetchSoilData(coordinates);
