@@ -22,6 +22,40 @@ export default function AreaOfInterest() {
     const [soilData, setSoilData] = useState(null);
     const [isLoadingSoil, setIsLoadingSoil] = useState(false);
     const [soilError, setSoilError] = useState(null);
+    
+    // Function to calculate distance between two lat/lng points using Haversine formula
+    const calculateDistance = (lat1, lng1, lat2, lng2) => {
+        const R = 6371000; // Earth's radius in meters
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distanceInMeters = R * c;
+        const distanceInFeet = distanceInMeters * 3.28084; // Convert to feet
+        return Math.round(distanceInFeet);
+    };
+    
+    // Function to calculate rectangle dimensions from coordinates
+    const calculateDimensions = (coordinates) => {
+        const { north, south, east, west } = coordinates;
+        
+        // Calculate length (east-west distance at the northern edge)
+        const length = calculateDistance(north, west, north, east);
+        
+        // Calculate width (north-south distance at the western edge)
+        const width = calculateDistance(north, west, south, west);
+        
+        // Calculate acreage (length * width / 43,560 sq ft per acre)
+        const acreage = (length * width) / 43560;
+        
+        return { 
+            length, 
+            width, 
+            acreage: Math.round(acreage * 100) / 100 // Round to 2 decimal places
+        };
+    };
     // Styles
     const styles = {
         fieldset: {
@@ -99,7 +133,7 @@ export default function AreaOfInterest() {
             
             const soilResult = await response.json();
             setSoilData(soilResult);
-            console.log('Soil type detected:', soilResult.dominantSoil.description);
+            console.log('Soil type detected:', soilResult);
             
         } catch (error) {
             console.error('Failed to fetch soil data:', error);
@@ -121,8 +155,20 @@ export default function AreaOfInterest() {
                 east: bounds.getEast(),
                 west: bounds.getWest()
             };
+            
+            // Calculate dimensions
+            const dimensions = calculateDimensions(coordinates);
+            
+            // Store coordinates with dimensions
+            const areaData = {
+                ...coordinates,
+                ...dimensions
+            };
 
-            setSelectedArea(coordinates);
+            setSelectedArea(areaData);
+            
+            // Log calculated dimensions
+            console.log('Calculated dimensions:', dimensions);
             
             // Automatically fetch soil data for the selected area
             fetchSoilData(coordinates);
@@ -141,8 +187,20 @@ export default function AreaOfInterest() {
                     east: bounds.getEast(),
                     west: bounds.getWest()
                 };
+                
+                // Calculate dimensions
+                const dimensions = calculateDimensions(coordinates);
+                
+                // Store coordinates with dimensions
+                const areaData = {
+                    ...coordinates,
+                    ...dimensions
+                };
 
-                setSelectedArea(coordinates);
+                setSelectedArea(areaData);
+                
+                // Log calculated dimensions
+                console.log('Updated dimensions:', dimensions);
                 
                 // Automatically fetch soil data for the updated area
                 fetchSoilData(coordinates);
@@ -212,10 +270,31 @@ export default function AreaOfInterest() {
                     <table>
                         <thead style={styles.tableHead}>
                             <tr>
-                                <td>Selected Area Coordinates</td>
+                                <td>Selected Area Information</td>
+                                <td></td>
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td><strong>Dimensions:</strong></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Length:</td>
+                                <td style={styles.alignRight}>{selectedArea.length?.toLocaleString()} ft</td>
+                            </tr>
+                            <tr>
+                                <td>Width:</td>
+                                <td style={styles.alignRight}>{selectedArea.width?.toLocaleString()} ft</td>
+                            </tr>
+                            <tr>
+                                <td>Acreage:</td>
+                                <td style={styles.alignRight}>{selectedArea.acreage} acres</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Coordinates:</strong></td>
+                                <td></td>
+                            </tr>
                             <tr>
                                 <td>North:</td>
                                 <td style={styles.alignRight}>{selectedArea.north.toFixed(6)}°</td>
