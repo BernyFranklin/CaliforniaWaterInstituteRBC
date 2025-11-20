@@ -3,24 +3,28 @@ export default function InputField({ field, value, onChange, sanitizeValue }) {
 
   // Local styles to decouple from App.css label/input/select rules
   const styles = {
-    group: {},
+    group: {
+      display: 'flex',
+      flexDirection: 'column',
+      width: '30%', // Force consistent width for all field groups
+    },
     label: {
       fontFamily: 'inherit',
       display: 'block',
-      width: '30%',
-      minWidth: '250px',
+      width: '100%',
+      marginBottom: '0.25rem',
     },
     control: {
       fontFamily: 'inherit',
       fontSize: '1.25rem',
       color: '#333',
       display: 'block',
-      width: '30%',
-      minWidth: '250px',
+      width: '100%',
       backgroundColor: '#ddd',
       border: '1px solid #ccc',
       borderRadius: '4px',
       padding: '0.5rem',
+      boxSizing: 'border-box',
     },
   };
 

@@ -1,13 +1,13 @@
 // Shared form schema for Recharge Basin Calculator sections
 
 export const soilOptions = [
-  { value: 'sand', text: 'Sand' },
-  { value: 'sandy_fine_layering', text: 'Sandy with some fine layering' },
-  { value: 'loam', text: 'Loam' },
-  { value: 'loam_fine_layering', text: 'Loam with some fine layering' },
-  { value: 'silt_clay_loam', text: 'Silt or Clay Loam' },
-  { value: 'silt_clay_loam_fine_layering', text: 'Silt or Clay Loam with some fine layering' },
-  { value: 'clay_restrictive_layers', text: 'Clay soil with restrictive layers' },
+  { value: 'sand', text: 'Sand', infiltrationRate: 1.0 },
+  { value: 'sandy_fine_layering', text: 'Sandy with some fine layering', infiltrationRate: 0.7 },
+  { value: 'loam', text: 'Loam', infiltrationRate: 0.6 },
+  { value: 'loam_fine_layering', text: 'Loam with some fine layering', infiltrationRate: 0.5 },
+  { value: 'silt_clay_loam', text: 'Silt or Clay Loam', infiltrationRate: 0.4 },
+  { value: 'silt_clay_loam_fine_layering', text: 'Silt or Clay Loam with some fine layering', infiltrationRate: 0.3 },
+  { value: 'clay_restrictive_layers', text: 'Clay soil with restrictive layers', infiltrationRate: 0.05 },
 ];
 
 export const sections = {
@@ -24,8 +24,8 @@ export const sections = {
       { text: 'Slope Across Pond (N:1ft)', id: 'slope_across_pond', type: 'number', min: 0, step: 0.1, placeholder: '0.5' },
       { text: 'Freeboard Depth (ft)', id: 'freeboard_depth', type: 'number', min: 0, placeholder: '1' },
       { text: 'Water Depth (ft)', id: 'water_depth', type: 'number', min: 0, placeholder: '1' },
-      { text: 'Infiltration Rate (ft/day)', id: 'infiltration_rate', type: 'number', min: 0, placeholder: '0.6' },
       { text: 'Soil Type', id: 'soil_type', type: 'select', options: soilOptions },
+      { text: 'Infiltration Rate (ft/day)', id: 'infiltration_rate', type: 'number', min: 0, placeholder: '0.6' },
     ],
   },
   waterAvailability: {
