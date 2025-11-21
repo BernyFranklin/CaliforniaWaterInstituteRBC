@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, FeatureGroup} from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+import { soilOptions } from '../utils/form/sectionsSchema.js';
 
 import L from 'leaflet';
 import 'leaflet-draw';
@@ -142,6 +143,63 @@ export default function AreaOfInterest({ formData, setFormData }) {
         }
     };
     
+    // Soil matching utility function
+    const matchSoilType = (soilDescription) => {
+        if (!soilDescription) return null;
+        
+        // Create keyword-to-soil mapping for better matching
+        const soilKeywords = {
+            'sand': ['sand', 'sandy'],
+            'silt': ['silt', 'silty'],
+            'clay': ['clay'],
+            'loam': ['loam'],
+            'peat': ['peat', 'organic'],
+            'gravel': ['gravel', 'gravelly', 'rocky', 'rock', 'stone'],
+            'chalk': ['chalk', 'limestone', 'calcareous']
+        };
+        
+        const desc = soilDescription.toLowerCase();
+        let maxScore = 0;
+        let bestMatch = null;
+        
+        // Score each soil option based on keyword matches
+        soilOptions.forEach(option => {
+            const soilType = option.value;
+            const keywords = soilKeywords[soilType] || [soilType];
+            
+            let score = 0;
+            keywords.forEach(keyword => {
+                if (desc.includes(keyword)) {
+                    // Give higher score for exact keyword matches
+                    score += keyword === soilType ? 2 : 1;
+                }
+            });
+            
+            // Bonus for primary keywords appearing first
+            if (keywords.some(k => desc.startsWith(k))) {
+                score += 1;
+            }
+            
+            if (score > maxScore) {
+                maxScore = score;
+                bestMatch = soilType;
+            }
+        });
+        
+        // Fallback logic for common soil combinations
+        if (!bestMatch || maxScore === 0) {
+            if (desc.includes('sand') && desc.includes('clay')) return 'loam';
+            if (desc.includes('sand') && desc.includes('silt')) return 'loam';
+            if (desc.includes('clay') && desc.includes('silt')) return 'loam';
+            if (desc.includes('sand')) return 'sand';
+            if (desc.includes('clay')) return 'clay';
+            if (desc.includes('silt')) return 'silt';
+            return 'loam'; // Default fallback
+        }
+        
+        return bestMatch;
+    };
+    
     
     const onCreate = (e) => {
         // Extract the layer and get coordinates
@@ -174,14 +232,6 @@ export default function AreaOfInterest({ formData, setFormData }) {
                 width_pond: dimensions.width,
                 pipeline_length: 2 * (dimensions.length + dimensions.width),
             }));
-            
-            // Log calculated dimensions
-            console.log('Calculated dimensions:', dimensions);
-            console.log('Updated formData with:', {
-                ac_pond: dimensions.acreage,
-                length_pond: dimensions.length,
-                width_pond: dimensions.width
-            });
             
             // Automatically fetch soil data for the selected area
             fetchSoilData(coordinates);
@@ -240,6 +290,28 @@ export default function AreaOfInterest({ formData, setFormData }) {
         setSoilData(null);
         setSoilError(null);
     };
+
+    // Auto-populate soil type when soilData changes
+    useEffect(() => {
+        if (soilData) {
+            const matchedSoilType = matchSoilType(soilData);
+            
+            if (matchedSoilType) {
+                // Find the soil option to get its infiltration rate
+                const soilOption = soilOptions.find(opt => opt.value === matchedSoilType);
+                
+                setFormData(prevData => ({
+                    ...prevData,
+                    soil_type: matchedSoilType,
+                    infil_rate_soil: soilOption ? soilOption.infiltrationRate : ''
+                }));
+                
+                console.log('Matched soil type:', matchedSoilType);
+                console.log('Set infiltration rate:', soilOption?.infiltrationRate);
+                console.log('Original soil description:', soilData);
+            }
+        }
+    }, [soilData, setFormData]);
 
     return (
         <fieldset style={styles.fieldset}>
