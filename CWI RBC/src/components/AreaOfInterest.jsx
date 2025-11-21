@@ -23,39 +23,6 @@ export default function AreaOfInterest({ formData, setFormData }) {
     const [isLoadingSoil, setIsLoadingSoil] = useState(false);
     const [soilError, setSoilError] = useState(null);
     
-    // Function to calculate distance between two lat/lng points using Haversine formula
-    const calculateDistance = (lat1, lng1, lat2, lng2) => {
-        const R = 6371000; // Earth's radius in meters
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLng = (lng2 - lng1) * Math.PI / 180;
-        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                Math.sin(dLng/2) * Math.sin(dLng/2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        const distanceInMeters = R * c;
-        const distanceInFeet = distanceInMeters * 3.28084; // Convert to feet
-        return Math.round(distanceInFeet);
-    };
-    
-    // Function to calculate rectangle dimensions from coordinates
-    const calculateDimensions = (coordinates) => {
-        const { north, south, east, west } = coordinates;
-        
-        // Calculate length (east-west distance at the northern edge)
-        const length = calculateDistance(north, west, north, east);
-        
-        // Calculate width (north-south distance at the western edge)
-        const width = calculateDistance(north, west, south, west);
-        
-        // Calculate acreage (length * width / 43,560 sq ft per acre)
-        const acreage = (length * width) / 43560;
-        
-        return { 
-            length, 
-            width, 
-            acreage: Math.round(acreage * 100) / 100 // Round to 2 decimal places
-        };
-    };
     // Styles
     const styles = {
         fieldset: {
@@ -68,7 +35,7 @@ export default function AreaOfInterest({ formData, setFormData }) {
             gap: '2rem',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            },
+        },
             legend: {
             fontFamily: 'inherit',
             fontSize: '1.5rem',
@@ -113,6 +80,39 @@ export default function AreaOfInterest({ formData, setFormData }) {
             textAlign: 'right',
         }
     };
+    // Function to calculate distance between two lat/lng points using Haversine formula
+    const calculateDistance = (lat1, lng1, lat2, lng2) => {
+        const R = 6371000; // Earth's radius in meters
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distanceInMeters = R * c;
+        const distanceInFeet = distanceInMeters * 3.28084; // Convert to feet
+        return Math.round(distanceInFeet);
+    };
+    
+    // Function to calculate rectangle dimensions from coordinates
+    const calculateDimensions = (coordinates) => {
+        const { north, south, east, west } = coordinates;
+        
+        // Calculate length (east-west distance at the northern edge)
+        const length = calculateDistance(north, west, north, east);
+        
+        // Calculate width (north-south distance at the western edge)
+        const width = calculateDistance(north, west, south, west);
+        
+        // Calculate acreage (length * width / 43,560 sq ft per acre)
+        const acreage = (length * width) / 43560;
+        
+        return { 
+            length, 
+            width, 
+            acreage: Math.round(acreage * 100) / 100 // Round to 2 decimal places
+        };
+    };
     // Function to fetch soil data from backend
     const fetchSoilData = async (coordinates) => {
         setIsLoadingSoil(true);
@@ -132,8 +132,7 @@ export default function AreaOfInterest({ formData, setFormData }) {
             }
             
             const soilResult = await response.json();
-            setSoilData(soilResult);
-            console.log('Soil type detected:', soilResult);
+            setSoilData(soilResult.dominantSoil.description);
             
         } catch (error) {
             console.error('Failed to fetch soil data:', error);
@@ -337,6 +336,10 @@ export default function AreaOfInterest({ formData, setFormData }) {
                             <tr>
                                 <td>West:</td>
                                 <td style={styles.alignRight}>{selectedArea.west.toFixed(6)}°</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Soil Detected:</strong></td>
+                                <td style={styles.alignRight}>{soilData}</td>
                             </tr>
                         </tbody>
                     </table>

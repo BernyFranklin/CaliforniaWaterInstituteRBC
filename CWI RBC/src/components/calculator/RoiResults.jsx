@@ -4,12 +4,6 @@ import ReturnOnInvestmentTable from '../ReturnOnInvestmentTable.jsx';
 
 export default function RoiResults({ formData }) {
   const styles = {
-    header: {
-      fontFamily: 'inherit',
-      fontWeight: 500,
-      padding: '1.5rem',
-      textAlign: 'center',
-    },
     container: {
       fontFamily: 'inherit',
       backgroundColor: '#fff',
@@ -22,7 +16,6 @@ export default function RoiResults({ formData }) {
   };
   return (
     <>
-      <h2 className="results-header" style={styles.header}>Results</h2>
       <div className="roi-results" id="roi-results-section" style={styles.container}>
         <CalculationDataSection formData={formData} />
         <OutputsDataSection formData={formData} />

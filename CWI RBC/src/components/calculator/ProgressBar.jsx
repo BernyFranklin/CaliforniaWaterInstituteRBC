@@ -5,6 +5,7 @@ export default function ProgressBar({ current }) {
     { index: 2, id: 'progress-bar-3', text: 'Water Availability' },
     { index: 3, id: 'progress-bar-4', text: 'Development Costs' },
     { index: 4, id: 'progress-bar-5', text: 'Water Costs' },
+    { index: 5, id: 'progress-bar-6', text: 'Results' },
   ];
 
   const sectionColor = (index) => (index <= current ? 'progress-bar-fill' : 'progress-bar-empty');
