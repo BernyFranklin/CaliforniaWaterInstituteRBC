@@ -23,6 +23,7 @@ export default function AreaOfInterest({ formData, setFormData }) {
     const [soilData, setSoilData] = useState(null);
     const [isLoadingSoil, setIsLoadingSoil] = useState(false);
     const [soilError, setSoilError] = useState(null);
+    const [soilType, setSoilType] = useState(null);
     
     // Styles
     const styles = {
@@ -70,7 +71,9 @@ export default function AreaOfInterest({ formData, setFormData }) {
             fontSize: '1.1rem',
         },
         tableHead: {
+            textAlign: 'center',
             fontWeight: 'bold',
+            fontSize: '1.3rem',
         },
         controls: {
             textAlign: 'left',
@@ -150,12 +153,12 @@ export default function AreaOfInterest({ formData, setFormData }) {
         // Create keyword-to-soil mapping for better matching
         const soilKeywords = {
             'sand': ['sand', 'sandy'],
-            'silt': ['silt', 'silty'],
-            'clay': ['clay'],
+            'sandy_fine_layering': ['sand', 'sandy', 'fine', 'layering'],
             'loam': ['loam'],
-            'peat': ['peat', 'organic'],
-            'gravel': ['gravel', 'gravelly', 'rocky', 'rock', 'stone'],
-            'chalk': ['chalk', 'limestone', 'calcareous']
+            'loam_fine_layering': ['loam', 'fine', 'layering'],
+            'silt_clay_loam': ['silt', 'silty', 'clay', 'loam'],
+            'silt_clay_loam_fine_layering': ['silt', 'silty', 'clay', 'loam', 'fine', 'layering'],
+            'clay_restrictive_layers': ['clay', 'restrictive', 'layers']
         };
         
         const desc = soilDescription.toLowerCase();
@@ -192,8 +195,6 @@ export default function AreaOfInterest({ formData, setFormData }) {
             if (desc.includes('sand') && desc.includes('silt')) return 'loam';
             if (desc.includes('clay') && desc.includes('silt')) return 'loam';
             if (desc.includes('sand')) return 'sand';
-            if (desc.includes('clay')) return 'clay';
-            if (desc.includes('silt')) return 'silt';
             return 'loam'; // Default fallback
         }
         
@@ -270,14 +271,6 @@ export default function AreaOfInterest({ formData, setFormData }) {
                     width_pond: dimensions.width
                 }));
                 
-                // Log calculated dimensions
-                console.log('Updated dimensions:', dimensions);
-                console.log('Updated formData with:', {
-                    ac_pond: dimensions.acreage,
-                    length_pond: dimensions.length,
-                    width_pond: dimensions.width
-                });
-                
                 // Automatically fetch soil data for the updated area
                 fetchSoilData(coordinates);
             }
@@ -299,16 +292,13 @@ export default function AreaOfInterest({ formData, setFormData }) {
             if (matchedSoilType) {
                 // Find the soil option to get its infiltration rate
                 const soilOption = soilOptions.find(opt => opt.value === matchedSoilType);
-                
                 setFormData(prevData => ({
                     ...prevData,
                     soil_type: matchedSoilType,
-                    infil_rate_soil: soilOption ? soilOption.infiltrationRate : ''
+                    infiltration_rate: soilOption ? soilOption.infiltrationRate : ''
                 }));
-                
-                console.log('Matched soil type:', matchedSoilType);
-                console.log('Set infiltration rate:', soilOption?.infiltrationRate);
-                console.log('Original soil description:', soilData);
+
+                setSoilType(soilOption ? soilOption.text : null);
             }
         }
     }, [soilData, setFormData]);
@@ -366,15 +356,14 @@ export default function AreaOfInterest({ formData, setFormData }) {
             {selectedArea && (
                 <div style={styles.selectedArea}>
                     <table>
-                        <thead style={styles.tableHead}>
+                        <thead>
                             <tr>
-                                <td>Selected Area Information</td>
-                                <td></td>
+                                <th style={styles.tableHead} colSpan={2}>Selected Area Information</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><strong>Dimensions:</strong></td>
+                                <td><strong>Dimensions</strong></td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -390,7 +379,7 @@ export default function AreaOfInterest({ formData, setFormData }) {
                                 <td style={styles.alignRight}>{selectedArea.acreage} acres</td>
                             </tr>
                             <tr>
-                                <td><strong>Coordinates:</strong></td>
+                                <td><strong>Coordinates</strong></td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -412,6 +401,10 @@ export default function AreaOfInterest({ formData, setFormData }) {
                             <tr>
                                 <td><strong>Soil Detected:</strong></td>
                                 <td style={styles.alignRight}>{soilData}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Best Soil Match:</strong></td>
+                                <td style={styles.alignRight}>{soilType}</td>
                             </tr>
                         </tbody>
                     </table>
