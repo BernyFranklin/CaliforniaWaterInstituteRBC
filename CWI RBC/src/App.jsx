@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Hero from './components/Hero.jsx'
 import AboutSection from './components/About.jsx'
 import ConceptDesign from './components/ConceptDesign.jsx'
 import RechargeBasinCalculator from './components/RechargeBasinCalculator.jsx'
@@ -12,6 +11,7 @@ function App() {
     <Router>
       <Navbar />
       <Routes>
+        <Route path="/" element={<AboutSection />} />
         <Route path="/about" element={<AboutSection />} />
         <Route path="/concept-design" element={<ConceptDesign />} />
         <Route path="/calculator" element={<RechargeBasinCalculator />} />

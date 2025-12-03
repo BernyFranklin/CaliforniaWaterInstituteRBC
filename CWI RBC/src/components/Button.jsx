@@ -47,7 +47,7 @@ const buttonStyles = {
   }
 };
 
-export default function Button({ className, text }) {
+export default function Button({ className, text, onClick }) {
   // Combine base styles with variant styles
   const getButtonStyle = (variant) => {
     const baseStyle = { ...buttonStyles.base };
@@ -93,9 +93,11 @@ export default function Button({ className, text }) {
 
   return (
     <button 
+      type="button"
       style={getButtonStyle(className)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={onClick}
     >
       {text}
     </button>
