@@ -23,15 +23,15 @@ export default function RoiResults({ formData }) {
       try {
         html2canvas = (await import('html2canvas')).default;
         jsPDF = (await import('jspdf')).jsPDF;
-        console.log('PDF libraries loaded successfully'); // Debug log
-      } catch (importError) {
+      } 
+      catch (importError) {
         alert('PDF export libraries not found. Please install by running: npm install jspdf html2canvas');
         console.error('Missing PDF libraries. Run: npm install jspdf html2canvas', importError);
         return;
       }
 
       const element = resultsRef.current;
-      console.log('Element to capture:', element); // Debug log
+      
       
       if (!element) {
         console.error('Results element not found');
@@ -42,7 +42,7 @@ export default function RoiResults({ formData }) {
       // Add a temporary class for PDF-specific styling
       element.classList.add('pdf-export');
       
-      console.log('Capturing element with html2canvas...'); // Debug log
+      
       
       // Configure html2canvas options for better quality
       const canvas = await html2canvas(element, {
@@ -56,9 +56,6 @@ export default function RoiResults({ formData }) {
 
       // Remove the temporary class
       element.classList.remove('pdf-export');
-
-      console.log('Canvas captured, creating PDF...'); // Debug log
-      console.log('Canvas dimensions:', canvas.width, 'x', canvas.height); // Debug log
 
       const imgData = canvas.toDataURL('image/png');
       
@@ -86,8 +83,6 @@ export default function RoiResults({ formData }) {
         imgWidth = contentHeight * canvasAspectRatio;
       }
       
-      console.log('Calculated image dimensions:', imgWidth, 'x', imgHeight); // Debug log
-      
       // Add title
       pdf.setFontSize(16);
       pdf.text('Recharge Basin Calculator Results', margin, 25);
@@ -108,16 +103,12 @@ export default function RoiResults({ formData }) {
         const scaledHeight = contentHeight;
         const xPosition = margin + (contentWidth - scaledWidth) / 2; // Center horizontally
         
-        console.log('Scaling image to fit page:', scaledWidth, 'x', scaledHeight); // Debug log
         pdf.addImage(imgData, 'PNG', xPosition, 45, scaledWidth, scaledHeight);
       }
 
       // Save the PDF
       const fileName = `recharge-basin-results-${new Date().toISOString().split('T')[0]}.pdf`;
-      console.log('Saving PDF as:', fileName); // Debug log
       pdf.save(fileName);
-      
-      console.log('PDF export completed successfully'); // Debug log
       
     } catch (error) {
       console.error('Failed to generate PDF:', error);
