@@ -1,4 +1,4 @@
-
+import Hero from './Hero.jsx';
 // Styles object containing all component-specific styles
 const styles = {
   section: {
@@ -53,6 +53,7 @@ const styles = {
 export default function AboutSection() {
   return (
     <section style={styles.section}>
+      <Hero />
       <div style={styles.header}>
         <h2 style={styles.headerTitle}>About CWI</h2>
         <p style={styles.headerParagraph}>The California Water Institute is separated into three divisions: The Center for Irrigation Technology (CIT), The Water, Energy and Technology Center (WET), and the Division of Research & Education.</p>

@@ -1,20 +1,10 @@
+import { Link } from 'react-router-dom'
 import logo from '../assets/logo-300x62.png'
 import { useMediaQuery } from '../utils/hooks/useMediaQuery.js'
 import { MAX_WIDTH_PX } from '../utils/constants.js'
 
-export default function Navbar({setContent}) {
+export default function Navbar() {
   const isSmall = useMediaQuery(`(max-width: ${MAX_WIDTH_PX}px)`);
-  const handleAboutClick = () => {
-    setContent(0);
-  };
-  
-  const handleConceptDesignClick = () => {
-    setContent(1);
-  };
-  
-  const handleCalculatorClick = () => {
-    setContent(2);
-  };
 
   const styles = {
     nav: {
@@ -69,14 +59,14 @@ export default function Navbar({setContent}) {
   return (
     <nav className="navbar has-shadow" style={styles.nav}>
       <span className="nav-logo">
-        <a onClick={handleAboutClick}>
+        <Link to="/about">
           <img src={logo} alt="CWI Logo" className="cwi-logo" style={styles.logoImg} />
-        </a>
+        </Link>
       </span>
       <span className="nav-links" style={styles.links}>
-        <a onClick={handleAboutClick} style={styles.link} onMouseEnter={handleLinkEnter} onMouseLeave={handleLinkLeave}>About</a>
-        <a onClick={handleConceptDesignClick} style={styles.link} onMouseEnter={handleLinkEnter} onMouseLeave={handleLinkLeave}>Concept Design</a>
-        <a onClick={handleCalculatorClick} style={styles.link} onMouseEnter={handleLinkEnter} onMouseLeave={handleLinkLeave}>Water Recharge Basin Calculator</a>
+        <Link to="/about" style={styles.link} onMouseEnter={handleLinkEnter} onMouseLeave={handleLinkLeave}>About</Link>
+        <Link to="/concept-design" style={styles.link} onMouseEnter={handleLinkEnter} onMouseLeave={handleLinkLeave}>Concept Design</Link>
+        <Link to="/calculator" style={styles.link} onMouseEnter={handleLinkEnter} onMouseLeave={handleLinkLeave}>Water Recharge Basin Calculator</Link>
       </span>
     </nav>
   )

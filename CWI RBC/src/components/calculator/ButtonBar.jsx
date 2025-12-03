@@ -2,8 +2,18 @@ import Button from '../Button.jsx';
 
 import { useState } from 'react';
 
-export default function ButtonBar({ formContent, setFormContent, contents, onReset, validateCurrentSection }) {
+export default function ButtonBar({ formContent, navigate, sectionMap, contents, onReset, validateCurrentSection }) {
   const [validationError, setValidationError] = useState(null);
+  
+  // Reverse mapping for navigation
+  const sectionNames = Object.keys(sectionMap);
+  
+  const navigateToSection = (sectionIndex) => {
+    const sectionName = sectionNames[sectionIndex];
+    if (sectionName) {
+      navigate(`/calculator/${sectionName}`);
+    }
+  };
   
   const styles = {
     container: {
@@ -53,12 +63,14 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
 
   const handleBackClick = () => {
     setValidationError(null); // Clear validation error when going back
-    formContent > 0 ? setFormContent(formContent - 1) : setFormContent(formContent);
+    if (formContent > 0) {
+      navigateToSection(formContent - 1);
+    }
   };
 
   const handleSubmitClick = () => {
     setValidationError(null); // Clear validation error when submitting
-    setFormContent(lastSectionIndex);
+    navigateToSection(lastSectionIndex);
   };
 
   const handleNextClick = () => {
@@ -75,7 +87,11 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
       return;
     }
     
-    formContent < lastSectionIndex - 1 ? setFormContent(formContent + 1) : handleSubmitClick();
+    if (formContent < lastSectionIndex - 1) {
+      navigateToSection(formContent + 1);
+    } else {
+      handleSubmitClick();
+    }
   };
 
   return (

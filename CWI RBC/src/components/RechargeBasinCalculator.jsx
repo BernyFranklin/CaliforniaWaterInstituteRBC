@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import Button from './Button.jsx';
 import CalculatorHeader from './calculator/CalculatorHeader.jsx';
 import ProgressBar from './calculator/ProgressBar.jsx';
@@ -43,8 +44,29 @@ function WaterCosts({ formData, handleChange, onSanitize }) {
 
 
 export default function RechargeBasinCalculator() {
-  const [formContent, setFormContent] = useState(0);
+  const { section } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = usePersistentState('formData', defaultFormData);
+  
+  // Section mapping
+  const sectionMap = {
+    'area': 0,
+    'design': 1, 
+    'water': 2,
+    'costs': 3,
+    'pricing': 4,
+    'results': 5
+  };
+  
+  // Get current section index from URL, default to 0
+  const formContent = section ? (sectionMap[section] ?? 0) : 0;
+  
+  // Navigate to default section if on base calculator route
+  useEffect(() => {
+    if (!section) {
+      navigate('/calculator/area', { replace: true });
+    }
+  }, [section, navigate]);
   const styles = {
     container: {
       boxShadow: 'black 0px 0px 10px -1px',
@@ -88,10 +110,10 @@ export default function RechargeBasinCalculator() {
     } catch (error) {
       console.error('Error clearing localStorage:', error);
     }
-    // Reset form data and step index
+    // Reset form data and navigate to first section
     setFormData({ ...defaultFormData });
-    setFormContent(0);
-  }, [setFormData]);
+    navigate('/calculator/area');
+  }, [setFormData, navigate]);
   
   const contents = [
     <AreaOfInterest formData={formData} setFormData={setFormData} />,
@@ -121,7 +143,8 @@ export default function RechargeBasinCalculator() {
         </form>
         <ButtonBar 
           formContent={formContent} 
-          setFormContent={setFormContent}
+          navigate={navigate}
+          sectionMap={sectionMap}
           contents={contents}
           onReset={handleReset}
           validateCurrentSection={validateCurrentSection}

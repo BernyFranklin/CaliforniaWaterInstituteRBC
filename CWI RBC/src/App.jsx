@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Hero from './components/Hero.jsx'
 import AboutSection from './components/About.jsx'
 import ConceptDesign from './components/ConceptDesign.jsx'
@@ -8,19 +8,18 @@ import Footer from './components/Footer.jsx'
 import './App.css'
 
 function App() {
-  const [content, setContent] = useState(0);
-  const contents = [
-    <AboutSection />, <ConceptDesign />, <RechargeBasinCalculator />
-    ]
-  
   return (
-    <>
-      <Navbar setContent={setContent} />
-        {content === 0 && <Hero />}
-        {contents[content]}
+    <Router>
+      <Navbar />
+      <Routes>
+        <Route path="/about" element={<AboutSection />} />
+        <Route path="/concept-design" element={<ConceptDesign />} />
+        <Route path="/calculator" element={<RechargeBasinCalculator />} />
+        <Route path="/calculator/:section" element={<RechargeBasinCalculator />} />
+      </Routes>
       <Footer />
-    </>
-    )
+    </Router>
+  )
 }
 
 export default App
