@@ -1,4 +1,4 @@
-import { findFieldById } from './sectionsSchema.js';
+import { findFieldById, sections } from './sectionsSchema.js';
 
 // Sanitize and clamp an input value based on field schema
 export function sanitizeValue(fieldId, rawValue) {
@@ -37,4 +37,35 @@ export function sanitizeValue(fieldId, rawValue) {
   }
 
   return num;
+}
+
+// Validate if all required fields in a section are filled
+export function validateSection(sectionId, formData) {
+  const section = sections[sectionId];
+  if (!section) return { isValid: true, missingFields: [] };
+
+  const missingFields = [];
+  
+  for (const field of section.fields) {
+    const value = formData[field.id];
+    
+    // Check if field is empty or undefined
+    if (value === '' || value === null || value === undefined) {
+      missingFields.push({
+        id: field.id,
+        text: field.text
+      });
+    }
+  }
+
+  return {
+    isValid: missingFields.length === 0,
+    missingFields
+  };
+}
+
+// Get section ID by index for validation
+export function getSectionIdByIndex(index) {
+  const sectionKeys = ['basinSizeAndDesign', 'waterAvailability', 'developmentCosts', 'waterCosts'];
+  return sectionKeys[index - 1]; // index 0 is AreaOfInterest, not a form section
 }

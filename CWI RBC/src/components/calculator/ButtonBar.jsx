@@ -1,6 +1,9 @@
 import Button from '../Button.jsx';
 
-export default function ButtonBar({ formContent, setFormContent, contents, onReset }) {
+import { useState } from 'react';
+
+export default function ButtonBar({ formContent, setFormContent, contents, onReset, validateCurrentSection }) {
+  const [validationError, setValidationError] = useState(null);
   
   const styles = {
     container: {
@@ -25,6 +28,19 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
       alignItems: 'flex-end',
       padding: '0.5rem',
     },
+    validationError: {
+      color: '#d32f2f',
+      fontSize: '0.9rem',
+      marginTop: '1rem',
+      padding: '1rem',
+      backgroundColor: '#ffebee',
+      border: '1px solid #ffcdd2',
+      borderRadius: '4px',
+    },
+    missingFieldsList: {
+      margin: '0.5rem 0 0 1rem',
+      listStyleType: 'bullet',
+    },
   };
 
   const backButtonColor = formContent === 0 ? 'gray-button' : 'red-button';
@@ -36,19 +52,45 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
   }
 
   const handleBackClick = () => {
+    setValidationError(null); // Clear validation error when going back
     formContent > 0 ? setFormContent(formContent - 1) : setFormContent(formContent);
   };
 
   const handleSubmitClick = () => {
+    setValidationError(null); // Clear validation error when submitting
     setFormContent(lastSectionIndex);
   };
 
   const handleNextClick = () => {
+    setValidationError(null);
+    
+    // Validate current section before proceeding
+    const validation = validateCurrentSection(formContent);
+    
+    if (!validation.isValid) {
+      setValidationError({
+        message: 'Please fill in all required fields before proceeding:',
+        missingFields: validation.missingFields
+      });
+      return;
+    }
+    
     formContent < lastSectionIndex - 1 ? setFormContent(formContent + 1) : handleSubmitClick();
   };
 
   return (
-    <div className="button-bar" style={styles.container}>
+    <>
+      {validationError && (
+        <div style={styles.validationError}>
+          <strong>{validationError.message}</strong>
+          <ul style={styles.missingFieldsList}>
+            {validationError.missingFields.map(field => (
+              <li key={field.id}>{field.text}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="button-bar" style={styles.container}>
       <span className="button-bar-left" style={styles.left}>
         <a onClick={handleBackClick}>
           <Button className={`${backButtonColor}`} text="Back" />
@@ -68,6 +110,7 @@ export default function ButtonBar({ formContent, setFormContent, contents, onRes
           </a>
         </span>
       )}
-    </div>
+      </div>
+    </>
   );
 }

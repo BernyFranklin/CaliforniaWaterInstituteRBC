@@ -9,7 +9,7 @@ import FormSection from './forms/FormSection.jsx';
 import { usePersistentState } from '../utils/hooks/usePersistentState.js';
 import { defaultFormData } from '../utils/form/defaultFormData.js';
 import { sections, soilOptions } from '../utils/form/sectionsSchema.js';
-import { sanitizeValue } from '../utils/form/validate.js';
+import { sanitizeValue, validateSection, getSectionIdByIndex } from '../utils/form/validate.js';
 
 
 function BasinSizeAndDesign({ formData, handleChange, onSanitize }) {
@@ -85,8 +85,8 @@ export default function RechargeBasinCalculator() {
   const handleReset = useCallback(() => {
     try {
       localStorage.removeItem('formData');
-    } catch (e) {
-      // ignore storage errors
+    } catch (error) {
+      console.error('Error clearing localStorage:', error);
     }
     // Reset form data and step index
     setFormData({ ...defaultFormData });
@@ -102,6 +102,15 @@ export default function RechargeBasinCalculator() {
     <RoiResults         formData={formData}/>
   ]
 
+  // Validation function to check if current section is complete
+  const validateCurrentSection = useCallback((currentIndex) => {
+    if (currentIndex === 0) return { isValid: true, missingFields: [] }; // AreaOfInterest doesn't need validation
+    if (currentIndex === 5) return { isValid: true, missingFields: [] }; // Results page doesn't need validation (index 5 is last)
+    
+    const sectionId = getSectionIdByIndex(currentIndex);
+    return validateSection(sectionId, formData);
+  }, [formData]);
+
   return (
     <section id="calculator-section" style={styles.container}>
       <CalculatorHeader />
@@ -115,6 +124,7 @@ export default function RechargeBasinCalculator() {
           setFormContent={setFormContent}
           contents={contents}
           onReset={handleReset}
+          validateCurrentSection={validateCurrentSection}
         />
       </div>
     </section>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, FeatureGroup} from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
 import { soilOptions } from '../utils/form/sectionsSchema.js';
@@ -18,11 +18,11 @@ library.add(fas, far, fab)
 window.type = true; // Fixes leaflet issue for drawing rectangles.
 // https://github.com/Leaflet/Leaflet.draw/issues/1026
 
-export default function AreaOfInterest({ formData, setFormData }) {
+export default function AreaOfInterest({ setFormData }) {
     const [selectedArea, setSelectedArea] = useState(null);
     const [soilData, setSoilData] = useState(null);
     const [isLoadingSoil, setIsLoadingSoil] = useState(false);
-    const [soilError, setSoilError] = useState(null);
+    const [soilError, setSoilError] = useState('');
     const [soilType, setSoilType] = useState(null);
     
     // Styles
@@ -119,7 +119,7 @@ export default function AreaOfInterest({ formData, setFormData }) {
     };
     // Function to fetch soil data from backend
     const fetchSoilData = async (coordinates) => {
-        setIsLoadingSoil(true);
+        if (!isLoadingSoil) setIsLoadingSoil(true);
         setSoilError(null);
         
         try {
@@ -139,8 +139,11 @@ export default function AreaOfInterest({ formData, setFormData }) {
             setSoilData(soilResult.dominantSoil.description);
             
         } catch (error) {
-            console.error('Failed to fetch soil data:', error);
-            setSoilError(error.message);
+            const errMsg = error.message
+            setSoilError(errMsg);
+            console.log(errMsg);
+            console.log(soilError);
+            console.error('Failed to fetch soil data:', errMsg);
         } finally {
             setIsLoadingSoil(false);
         }
@@ -277,7 +280,7 @@ export default function AreaOfInterest({ formData, setFormData }) {
         });
     };
     
-    const onDelete = (e) => {
+    const onDelete = () => {
         // Clear the selected area and soil data when shapes are deleted
         setSelectedArea(null);
         setSoilData(null);
